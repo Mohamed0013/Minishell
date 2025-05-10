@@ -1,55 +1,52 @@
 #include "../includes/minishell.h"
 
-void  multi_to_single_space(char **av, char *res, int ac)
+int main(void)
 {
-  int (i), (j), (k);
+	char *input;
 
-  i = 1;
-  k = 0;
-  while (i < ac)
-  {
-    j = 0;
-    while (av[i][j])
-    {
-      while (av[i][j] && av[i][j] == ' ')
-        j++;
-      while (av[i][j] && av[i][j] != ' ')
-        res[k++] = av[i][j++];
-      while (av[i][j] && av[i][j] == ' ')
-        j++;
-      if (av[i][j] != '\0')
-        res[k++] = ' ';
-    }
-    if (i < ac - 1)
-      res[k++] = ' ';
-    i++;
-  }
-  res[k] = '\0';
-}
+	while (1)
+	{
+		input = readline("minishell> ");
+		if (!validate_syntax(input))
+		{
+			free(input);
+			continue;  // Skip invalid input
+		}
+		if (!input)
+			break;
+		if (*input)
+			add_history(input);
+		if (is_blank_line(input))
+		{
+			free(input);
+			continue;
+		}
+		if (!unclosed_quotes(input) || !pipe_syntax(input)
+			|| !file_syntax(input) || !check_syntax(input))
+		{
+			free(input);
+			continue; // Prompt again if validation fails
+		}
+		t_command *cmd = parse_input(input);
+		if (!cmd)
+		{
+			free(input);
+			continue; // Skip if parsing fails
+		}
+		// char **tokens = ft_split(input, ' ');
+		// if (tokens)
+		// {
+		// 	int i = 0;
 
-int main(int ac, char **av)
-{
-  if (ac < 2)
-  {
-    printf("\n");
-    return 0;
-  }
-  char *res = malloc(1000);
-  if (res == NULL)
-  {
-    perror("malloc");
-    return 1;
-  }
-  multi_to_single_space(av, res, ac);
-  // printf("%s\n", res);
-  t_command *cmd = parse_input(res);
-  if (cmd == NULL)
-  {
-    free(res);
-    return 1;
-  }
-  shell_loop(cmd);
-  free(cmd);
-
-  return 0;
+		// 	while (tokens[i])
+		// 	{
+		// 		free(tokens[i]);
+		// 		i++;
+		// 	}
+		// 	if (tokens)
+		// 		free(tokens);
+		// }
+		// free(input);
+	}
+	return 0;
 }

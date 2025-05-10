@@ -12,38 +12,52 @@ static void remove_newline(char *line) {
     }
 }
 
-void shell_loop(t_command *cmd) {
-    // This function should handle the shell loop, executing commands and managing the shell state.
-    // For now, we'll just print the command for demonstration purposes.
-    char *input = NULL;
-    size_t len = 0;
-    t_command *commands = NULL;
+
+void execute_command(t_command *cmd, char **env) {
+    pid_t pid = fork();
+
+    if (pid == 0) { // Child process
+        if (execvp(cmd->command, cmd->arguments) == -1) {
+            perror("minishell");
+        }
+        exit(EXIT_FAILURE); // Exit if execvp fails
+    } else if (pid < 0) { // Fork failed
+        perror("minishell");
+    } else { // Parent process
+        int status;
+        // waitpid(pid, &status, 0); // Wait for the child process to finish
+    }
+}
+
+void free_command(t_command *cmd) {
+    if (cmd) {
+        free(cmd->command); // Free command string
+        free_split(cmd->arguments); // Free arguments array
+        free(cmd); // Free command structure
+    }
+}
+
+void shell_loop(t_command *cmd, char **env) {
+    char *input;
+    t_command *parsed_cmd;
 
     while (1) {
-        printf("minishell> ");
-        input = readline(NULL); // Read input from stdin
-        if (!input) {
-            printf("\n"); // Handle EOF (Ctrl+D)
+        input = readline("minishell> "); // Prompt for input
+        if (!input) { // Check for EOF
+            printf("\n");
             break;
         }
-
-        // Remove trailing newline
-        remove_newline(input);
-        if (strlen(input) == 0) {
+        remove_newline(input); // Remove newline character
+        if (strlen(input) == 0) { // Ignore empty input
             free(input);
-            continue; // Skip empty input
+            continue;
         }
-
-        // Parse input and add to linked list
-        t_command *cmd = parse_input(input);
-        if (cmd)
-            add_command(&commands, cmd);
-
-        // Exit condition
-        if (strcmp(input, "exit") == 0)
-            break;
+        add_history(input); // Add input to history
+        parsed_cmd = parse_input(input); // Parse the input
+        if (parsed_cmd) {
+            execute_command(parsed_cmd, env); // Execute the parsed command
+            free_command(parsed_cmd); // Free the command structure
+        }
+        free(input); // Free the input string
     }
-
-    free(input);
-    free_commands(commands);
 }
