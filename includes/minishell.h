@@ -18,14 +18,14 @@
 // Structure for linked list nodes to store commands
 typedef struct s_command {
     char *command;
-    char **arguments;
+    char *arguments;
     struct s_command *next;
 } t_command;
 
 // Function prototypes
 void  multi_to_single_space(char **av, char *res, int ac);
 char **ft_split(char const *s, char c);
-t_command *create_command(char *cmd, char **args);
+t_command *create_command(char *cmd);
 void free_command(t_command *cmd);
 void free_split(char **split);
 void free_command_list(t_command *cmd);

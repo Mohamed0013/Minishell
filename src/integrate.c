@@ -13,12 +13,13 @@ static void remove_newline(char *line) {
 }
 
 void shell_loop(t_command *cmd, char **env) {
+    char **full_command = ft_split(cmd->arguments, ' ');
     if (!cmd) {
         return; // If the command is NULL, exit the function
     }
 
     // Exit condition
-    if (strcmp(cmd->command, "exit") == 0) {
+    if (strcmp(full_command[0], "exit") == 0) {
         printf("Exiting minishell...\n");
         free_commands(cmd); // Free the command structure
         exit(0); // Exit the shell
@@ -31,7 +32,7 @@ void shell_loop(t_command *cmd, char **env) {
     }
     if (pid == 0) {
         // Child process: Execute the command
-        if (execve(cmd->command, cmd->arguments, env) == -1) {
+        if (execve(cmd->command, full_command, env) == -1) {
             perror("minishell"); // Print error if execve fails
         }
         exit(EXIT_FAILURE); // Exit child process if execve fails
