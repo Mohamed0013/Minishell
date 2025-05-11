@@ -1,24 +1,30 @@
 #include "../../includes/minishell.h"
 
 bool pipe_syntax(const char *input) {
-    int i = 0;
+    int i, j;
+
+    i = 0;
     bool prev_pipe = false, in_single = false, in_double = false;
 
-    while (input[i]) {
-        // Update quote states
+    while (input[i])
+    {
         if (input[i] == '\'' && !in_double) in_single = !in_single;
         else if (input[i] == '"' && !in_single) in_double = !in_double;
 
-        if (!in_single && !in_double) {
-            if (input[i] == '|') {
-                if (prev_pipe || i == 0 || input[i+1] == '\0') {
+        if (!in_single && !in_double)
+        {
+            if (input[i] == '|')
+            {
+                if (prev_pipe || i == 0 || input[i+1] == '\0')
+                {
                     printf("Syntax error near '|'\n");
                     return false;
                 }
                 // Check next non-space token
-                int j = i + 1;
+                j = i + 1;
                 while (input[j] == ' ' || input[j] == '\t') j++;
-                if (strchr("|><", input[j])) {
+                if (ft_strchr("|><", input[j]))
+                {
                     printf("Syntax error after '|'\n");
                     return false;
                 }

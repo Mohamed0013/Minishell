@@ -71,6 +71,7 @@ bool        file_syntax(const char *input);
 bool        check_syntax(const char *input);
 
 // Function prototypes
+char        *ft_strchr(const char *s, int c);
 void        multi_to_single_space(char **av, char *res, int ac);
 char        **ft_split(char const *s, char c);
 t_command   *create_command(char *cmd, char **args);

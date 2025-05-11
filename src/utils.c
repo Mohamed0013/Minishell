@@ -51,6 +51,20 @@ void free_lexer(const char **str)
 //     *lexer = NULL; // Set the pointer to NULL to avoid dangling references
 // }
 
+char	*ft_strchr(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	while ((char)c != s[i])
+	{
+		if (!s[i])
+			return (NULL);
+		i++;
+	}
+	return ((char *)&s[i]);
+}
+
 void  multi_to_single_space(char **av, char *res, int ac)
 {
 	int (i), (j), (k);

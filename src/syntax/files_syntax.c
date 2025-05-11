@@ -1,27 +1,34 @@
 #include "../../includes/minishell.h"
 
 bool file_syntax(const char *input) {
-    int i = 0;
+    int i;
+
+    i = 0;
     bool in_single = false, in_double = false;
 
     while (input[i]) {
         // Update quote states
-        if (input[i] == '\'' && !in_double) in_single = !in_single;
-        else if (input[i] == '"' && !in_single) in_double = !in_double;
-
-        if (!in_single && !in_double) {
-            if (input[i] == '<' || input[i] == '>') {
+        if (input[i] == '\'' && !in_double)
+            in_single = !in_single;
+        else if (input[i] == '"' && !in_single)
+            in_double = !in_double;
+        if (!in_single && !in_double)
+        {
+            if (input[i] == '<' || input[i] == '>')
+            {
                 // Check for invalid combinations (e.g., <>, >|)
                 if ((input[i] == '<' && input[i+1] == '>') || 
-                    (input[i] == '>' && input[i+1] == '|')) {
-                    printf("Syntax error: invalid operator\n");
-                    return false;
-                }
+                    (input[i] == '>' && input[i+1] == '|'))
+                    {
+                        printf("Syntax error: invalid operator\n");
+                        return false;
+                    }
                 // Handle heredoc (<<)
                 if (input[i] == '<' && input[i+1] == '<') {
                     i += 2;
                     while (input[i] == ' ' || input[i] == '\t') i++;
-                    if (!input[i] || strchr("<>|", input[i])) {
+                    if (!input[i] || ft_strchr("<>|", input[i]))
+                    {
                         printf("Syntax error: missing heredoc delimiter\n");
                         return false;
                     }
@@ -32,7 +39,7 @@ bool file_syntax(const char *input) {
                 // Check filename exists
                 int j = i + 1;
                 while (input[j] == ' ' || input[j] == '\t') j++;
-                if (!input[j] || strchr("<>|&", input[j])) {
+                if (!input[j] || ft_strchr("<>|&", input[j])) {
                     printf("Syntax error: missing filename\n");
                     return false;
                 }
@@ -60,7 +67,7 @@ bool file_syntax(const char *input) {
 //             int j = i + 1;
 //             while (input[j] == ' ' || input[j] == '\t') 
 //                 j++;
-//             if (!input[j] || strchr("<>|&", input[j])) {
+//             if (!input[j] || ft_strchr("<>|&", input[j])) {
 //                 printf("Error: Missing filename after redirection\n");
 //                 return false;
 //             }
