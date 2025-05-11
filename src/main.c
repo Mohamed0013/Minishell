@@ -1,52 +1,85 @@
 #include "../includes/minishell.h"
 
-int main(void)
+void  multi_to_single_space(char **av, char *res, int ac)
 {
-	char *input;
+  int (i), (j), (k);
 
-	while (1)
-	{
-		input = readline("minishell> ");
-		if (!validate_syntax(input))
-		{
-			free(input);
-			continue;  // Skip invalid input
-		}
-		if (!input)
-			break;
-		if (*input)
-			add_history(input);
-		if (is_blank_line(input))
-		{
-			free(input);
-			continue;
-		}
-		if (!unclosed_quotes(input) || !pipe_syntax(input)
-			|| !file_syntax(input) || !check_syntax(input))
-		{
-			free(input);
-			continue; // Prompt again if validation fails
-		}
-		t_command *cmd = parse_input(input);
-		if (!cmd)
-		{
-			free(input);
-			continue; // Skip if parsing fails
-		}
-		// char **tokens = ft_split(input, ' ');
-		// if (tokens)
-		// {
-		// 	int i = 0;
+  i = 1;
+  k = 0;
+  while (i < ac)
+  {
+    j = 0;
+    while (av[i][j])
+    {
+      while (av[i][j] && av[i][j] == ' ')
+        j++;
+      while (av[i][j] && av[i][j] != ' ')
+        res[k++] = av[i][j++];
+      while (av[i][j] && av[i][j] == ' ')
+        j++;
+      if (av[i][j] != '\0')
+        res[k++] = ' ';
+    }
+    if (i < ac - 1)
+      res[k++] = ' ';
+    i++;
+  }
+  res[k] = '\0';
+}
 
-		// 	while (tokens[i])
-		// 	{
-		// 		free(tokens[i]);
-		// 		i++;
-		// 	}
-		// 	if (tokens)
-		// 		free(tokens);
-		// }
-		// free(input);
-	}
-	return 0;
+int main(int ac, char **av, char **env)
+{
+  char *res;
+  int i;
+
+  if (ac < 2)
+    return (1);
+  res = malloc(sizeof(char) * (strlen(av[1]) + 1));
+  if (!res)
+    return (1);
+  multi_to_single_space(av, res, ac);
+  i = 0;
+  while (res[i])
+  {
+    if (res[i] == ' ')
+      res[i] = '\0';
+    i++;
+  }
+  free(res);
+
+  // Initialize the shell
+  signal(SIGINT, SIG_IGN); // Ignore Ctrl+C
+  signal(SIGQUIT, SIG_IGN); // Ignore Ctrl+\
+{
+  char *input;
+  t_command *cmd;
+
+  while (1)
+  {
+    printf("minishell> ");
+    input = readline(NULL); // Read input from the user
+    if (!input) // Handle EOF (Ctrl+D)
+    {
+      printf("\n");
+      break;
+    }
+
+    if (strlen(input) == 0) // Skip empty input
+    {
+      free(input);
+      continue;
+    }
+  
+    cmd = parse_input(input); // Parse the input into a command structure
+    if (cmd == NULL) // Handle parsing errors
+    {
+      free(input);
+      continue;
+    }
+    shell_loop(cmd, env); // Execute the command(s)
+    free_commands(cmd); // Free the command structure
+    free(input);
+  }
+
+  return 0;
 }
