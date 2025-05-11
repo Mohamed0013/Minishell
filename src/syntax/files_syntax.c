@@ -2,24 +2,40 @@
 
 bool file_syntax(const char *input) {
     int i = 0;
+    bool in_single = false, in_double = false;
+
     while (input[i]) {
-        if (input[i] == '<' || input[i] == '>') {
-            // Check for invalid combinations (e.g., <<<, <>, >|)
-            if ((input[i] == '<' && input[i+1] == '>') || 
-                (input[i] == '>' && input[i+1] == '|')) {
-                printf("Error: Invalid redirection syntax\n");
-                return false;
-            }
-            // Skip valid << or >>
-            if (input[i+1] == input[i]) 
-                i++;
-            // Check if next char is a valid filename
-            int j = i + 1;
-            while (input[j] == ' ' || input[j] == '\t') 
-                j++;
-            if (!input[j] || strchr("<>|&", input[j])) {
-                printf("Error: Missing filename after redirection\n");
-                return false;
+        // Update quote states
+        if (input[i] == '\'' && !in_double) in_single = !in_single;
+        else if (input[i] == '"' && !in_single) in_double = !in_double;
+
+        if (!in_single && !in_double) {
+            if (input[i] == '<' || input[i] == '>') {
+                // Check for invalid combinations (e.g., <>, >|)
+                if ((input[i] == '<' && input[i+1] == '>') || 
+                    (input[i] == '>' && input[i+1] == '|')) {
+                    printf("Syntax error: invalid operator\n");
+                    return false;
+                }
+                // Handle heredoc (<<)
+                if (input[i] == '<' && input[i+1] == '<') {
+                    i += 2;
+                    while (input[i] == ' ' || input[i] == '\t') i++;
+                    if (!input[i] || strchr("<>|", input[i])) {
+                        printf("Syntax error: missing heredoc delimiter\n");
+                        return false;
+                    }
+                    continue;
+                }
+                // Skip valid >> or <<
+                if (input[i+1] == input[i]) i++;
+                // Check filename exists
+                int j = i + 1;
+                while (input[j] == ' ' || input[j] == '\t') j++;
+                if (!input[j] || strchr("<>|&", input[j])) {
+                    printf("Syntax error: missing filename\n");
+                    return false;
+                }
             }
         }
         i++;
@@ -27,25 +43,31 @@ bool file_syntax(const char *input) {
     return true;
 }
 
-// bool file_syntax(const char *input)
-// {
+// bool file_syntax(const char *input) {
 //     int i = 0;
-
-//     while (input[i])
-//     {
-//         if ((input[i] == '<' || input[i] == '>') && (input[i + 1] == '<' || input[i + 1] == '>'))
-//         {
-//             printf("Error: Invalid file redirection syntax\n");
-//             return (false);
-//         }
-//         if ((input[i] == '<' || input[i] == '>') && (input[i + 1] == '\0' || input[i + 1] == '|' || input[i + 1] == '&'))
-//         {
-//             printf("Error: Missing file after redirection\n");
-//             return (false);
+//     while (input[i]) {
+//         if (input[i] == '<' || input[i] == '>') {
+//             // Check for invalid combinations (e.g., <<<, <>, >|)
+//             if ((input[i] == '<' && input[i+1] == '>') || 
+//                 (input[i] == '>' && input[i+1] == '|')) {
+//                 printf("Error: Invalid redirection syntax\n");
+//                 return false;
+//             }
+//             // Skip valid << or >>
+//             if (input[i+1] == input[i]) 
+//                 i++;
+//             // Check if next char is a valid filename
+//             int j = i + 1;
+//             while (input[j] == ' ' || input[j] == '\t') 
+//                 j++;
+//             if (!input[j] || strchr("<>|&", input[j])) {
+//                 printf("Error: Missing filename after redirection\n");
+//                 return false;
+//             }
 //         }
 //         i++;
 //     }
-//     return (true);
+//     return true;
 // }
 
 // int files_syntax(t_lexer *lex)
