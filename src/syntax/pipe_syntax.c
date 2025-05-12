@@ -1,6 +1,7 @@
 #include "../../includes/minishell.h"
 
-bool pipe_syntax(const char *input) {
+bool pipe_syntax(const char *input)
+{
     int i, j;
 
     i = 0;
@@ -8,8 +9,10 @@ bool pipe_syntax(const char *input) {
 
     while (input[i])
     {
-        if (input[i] == '\'' && !in_double) in_single = !in_single;
-        else if (input[i] == '"' && !in_single) in_double = !in_double;
+        if (input[i] == '\'' && !in_double)
+            in_single = !in_single;
+        else if (input[i] == '"' && !in_single)
+            in_double = !in_double;
 
         if (!in_single && !in_double)
         {
@@ -22,14 +25,17 @@ bool pipe_syntax(const char *input) {
                 }
                 // Check next non-space token
                 j = i + 1;
-                while (input[j] == ' ' || input[j] == '\t') j++;
+                while (input[j] == ' ' || input[j] == '\t')
+                    j++;
                 if (ft_strchr("|><", input[j]))
                 {
                     printf("Syntax error after '|'\n");
                     return false;
                 }
                 prev_pipe = true;
-            } else prev_pipe = false;
+            }
+            else
+                prev_pipe = false;
         }
         i++;
     }

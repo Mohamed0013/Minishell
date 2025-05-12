@@ -37,14 +37,28 @@ int main(int ac, char **av, char **env)
     return (0);
   while (1)
   {
-    printf("minishell> ");
-    input = readline(NULL); // Read input from the user
+    // printf("minishell> ");
+    input = readline("minishell> "); // Read input from the user
     if (!input) // Handle EOF (Ctrl+D)
     {
       printf("\n");
       break;
     }
-
+    /////////////////////////
+    if (*input)
+			add_history(input);
+		if (is_blank_line(input))
+		{
+			free(input);
+			continue;
+		}
+		if (!unclosed_quotes(input) || !pipe_syntax(input)
+			|| !file_syntax(input))
+		{
+			free(input);
+			continue; // Prompt again if validation fails
+		}
+    /////////////////////////
     if (strlen(input) == 0) // Skip empty input
     {
       free(input);
