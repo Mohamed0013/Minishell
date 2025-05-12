@@ -29,31 +29,12 @@ void  multi_to_single_space(char **av, char *res, int ac)
 
 int main(int ac, char **av, char **env)
 {
-  char *res;
-  int i;
-
-  if (ac < 2)
-    return (1);
-  res = malloc(sizeof(char) * (strlen(av[1]) + 1));
-  if (!res)
-    return (1);
-  multi_to_single_space(av, res, ac);
-  i = 0;
-  while (res[i])
-  {
-    if (res[i] == ' ')
-      res[i] = '\0';
-    i++;
-  }
-  free(res);
-
-  // Initialize the shell
-  signal(SIGINT, SIG_IGN); // Ignore Ctrl+C
-  signal(SIGQUIT, SIG_IGN); // Ignore Ctrl+\
-{
   char *input;
   t_command *cmd;
 
+  (void)av;
+  if (ac > 1)
+    return (0);
   while (1)
   {
     printf("minishell> ");

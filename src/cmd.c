@@ -28,7 +28,7 @@ void free_commands(t_command *head) {
     while (head) {
         temp = head;
         free(head->command);
-        // free(head->arguments);
+        free(head->arguments);
         free(head);
         head = temp->next;
     }
