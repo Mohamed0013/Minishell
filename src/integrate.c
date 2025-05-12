@@ -26,94 +26,121 @@ char	*get_path(char *cmd, char **env)
 	return (cmd);
 }
 
+static void handle_pipes(t_command *cmd, char **env) {
+    int pipefd[2];
+    pid_t pid;
+    char **commands = ft_split(cmd->arguments, '|');
+    int num_commands = 0;
+    
+    // Count commands
+    while (commands[num_commands]) num_commands++;
+
+    int prev_pipe_in = 0;
+    int i = 0;
+    
+    while (i < num_commands) {
+        if (i < num_commands - 1) {
+            if (pipe(pipefd) == -1) {
+                perror("pipe");
+                free_split(commands);
+                return;
+            }
+        }
+
+        pid = fork();
+        if (pid == -1) {
+            perror("fork");
+            free_split(commands);
+            return;
+        }
+
+        if (pid == 0) {  // Child process
+            if (i > 0) {
+                dup2(prev_pipe_in, STDIN_FILENO);
+                close(prev_pipe_in);
+            }
+            
+            if (i < num_commands - 1) {
+                dup2(pipefd[1], STDOUT_FILENO);
+                close(pipefd[1]);
+                close(pipefd[0]);
+            }
+
+            char **args = ft_split(commands[i], ' ');
+            char *path = (str_ichr(args[0], '/') > -1) ? args[0] : get_path(args[0], env);
+            
+            execve(path, args, env);
+            perror("execve");
+            free_split(args);
+            exit(EXIT_FAILURE);
+        } else {  // Parent process
+            if (i > 0) {
+                close(prev_pipe_in);
+            }
+            
+            if (i < num_commands - 1) {
+                close(pipefd[1]);
+                prev_pipe_in = pipefd[0];
+            }
+            
+            i++;
+        }
+    }
+
+    // Wait for all child processes
+    for (i = 0; i < num_commands; i++) {
+        wait(NULL);
+    }
+
+    free_split(commands);
+}
+
 void shell_loop(t_command *cmd, char **env) {
-    if (!cmd) {
+    if (!cmd) return;
+
+    // Handle exit command
+    if (strcmp(cmd->command, "exit") == 0) {
+        printf("Exiting minishell...\n");
+        free_commands(cmd);
+        exit(0);
+    }
+
+    // Check for pipes in the command
+    if (strchr(cmd->arguments, '|')) {
+        handle_pipes(cmd, env);
         return;
     }
 
-    // Check if there is a pipe in the command
-    t_command *current = cmd;
-    int has_pipe = 0;
-    while (current) {
-        if (strchr(current->arguments, '|')) {
-            has_pipe = 1;
-            break;
-        }
-        current = current->next;
+    // Regular command execution (non-piped)
+    char **full_command = ft_split(cmd->arguments, ' ');
+    if (!full_command) {
+        perror("minishell");
+        return;
     }
-    if (!has_pipe) {
-        // No pipe: Execute the command normally
+
+    pid_t pid = fork();
+    if (pid < 0) {
+        perror("fork");
+        free_split(full_command);
+        return;
+    }
+
+    if (pid == 0) {  // Child process
         char *path;
-        char **full_command = ft_split(cmd->arguments, ' ');
-        if (strcmp(full_command[0], "exit") == 0) {
-            printf("Exiting minishell...\n");
-            free_commands(cmd);
-            exit(0);
-        }
-
-        pid_t pid = fork();
-        if (pid < 0) {
-            perror("fork");
-            return;
-        }
-        if (str_ichr(cmd->command, '/') > -1)
+        if (str_ichr(cmd->command, '/') > -1) {
             path = cmd->command;
-        else
-            path = get_path(cmd->command, env);
-        if (pid == 0) {
-            if (execve(path, full_command, env) == -1) {
-                perror("minishell");
-            }
-            exit(EXIT_FAILURE);
         } else {
-            // Parent process: Wait for the child process to finish
-            int status;
-            waitpid(pid, &status, 0);
+            path = get_path(cmd->command, env);
         }
-    } else {
-        // Handle commands with pipes
-        int pipe_fd[2];
-        int prev_fd = -1; // To store the read end of the previous pipe
-        pid_t pid;
 
-        while (cmd) {
-            if (cmd->next) {
-                if (pipe(pipe_fd) == -1) {
-                    perror("pipe");
-                    return;
-                }
-            }
-
-            pid = fork();
-            if (pid == -1) {
-                perror("fork");
-                return;
-            }
-
-            if (pid == 0) { // Child process
-                if (prev_fd != -1) {
-                    dup2(prev_fd, STDIN_FILENO); // Read from the previous pipe
-                    close(prev_fd);
-                }
-                if (cmd->next) {
-                    dup2(pipe_fd[1], STDOUT_FILENO); // Write to the current pipe
-                    close(pipe_fd[1]);
-                    close(pipe_fd[0]);
-                }
-                char **full_command = ft_split(cmd->arguments, ' ');
-                execve(get_path(cmd->command, env), full_command, env);
-                perror("execve");
-                exit(EXIT_FAILURE);
-            } else { // Parent process
-                if (prev_fd != -1)
-                    close(prev_fd);
-                if (cmd->next) {
-                    close(pipe_fd[1]);
-                    prev_fd = pipe_fd[0];
-                }
-                waitpid(pid, NULL, 0);
-            }
-            cmd = cmd->next;
+        if (execve(path, full_command, env) == -1) {
+            perror("minishell");
+            free_split(full_command);
+            exit(EXIT_FAILURE);
         }
+    } else {  // Parent process
+        int status;
+        waitpid(pid, &status, 0);
+        free_split(full_command);
     }
 }
