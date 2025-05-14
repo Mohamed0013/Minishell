@@ -29,7 +29,7 @@ void  multi_to_single_space(char **av, char *res, int ac)
 
 int main(int ac, char **av, char **env)
 {
-  char *input;
+  char      *input;
   t_command *cmd;
 
   (void)av;
@@ -37,16 +37,16 @@ int main(int ac, char **av, char **env)
     return (0);
   while (1)
   {
-    // printf("minishell> ");
     input = readline("minishell> "); // Read input from the user
-    if (!input) // Handle EOF (Ctrl+D)
-    {
-      printf("\n");
-      break;
-    }
     /////////////////////////
-    if (*input)
-			add_history(input);
+    if (input == NULL) // Handle EOF (Ctrl+D)
+      break;
+    if (*input == '\0') // Handle empty input
+    {
+      free(input);
+      continue;
+    }
+    add_history(input);
 		if (is_blank_line(input))
 		{
 			free(input);
@@ -59,12 +59,6 @@ int main(int ac, char **av, char **env)
 			continue; // Prompt again if validation fails
 		}
     /////////////////////////
-    if (strlen(input) == 0) // Skip empty input
-    {
-      free(input);
-      continue;
-    }
-  
     cmd = parse_input(input); // Parse the input into a command structure
     if (cmd == NULL) // Handle parsing errors
     {
@@ -75,6 +69,5 @@ int main(int ac, char **av, char **env)
     free_commands(cmd); // Free the command structure
     free(input);
   }
-
   return 0;
 }

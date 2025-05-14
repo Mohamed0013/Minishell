@@ -45,7 +45,7 @@ bool file_syntax(const char *input)
                 int j = i + 1;
                 while (input[j] == ' ' || input[j] == '\t')
                     j++;
-                if (!input[j] || ft_strchr("<>|&", input[j]))
+                if (!input[j] || ft_strchr("<>|", input[j]))
                 {
                     printf("Syntax error: missing filename\n");
                     return false;
@@ -56,33 +56,6 @@ bool file_syntax(const char *input)
     }
     return true;
 }
-
-// bool file_syntax(const char *input) {
-//     int i = 0;
-//     while (input[i]) {
-//         if (input[i] == '<' || input[i] == '>') {
-//             // Check for invalid combinations (e.g., <<<, <>, >|)
-//             if ((input[i] == '<' && input[i+1] == '>') || 
-//                 (input[i] == '>' && input[i+1] == '|')) {
-//                 printf("Error: Invalid redirection syntax\n");
-//                 return false;
-//             }
-//             // Skip valid << or >>
-//             if (input[i+1] == input[i]) 
-//                 i++;
-//             // Check if next char is a valid filename
-//             int j = i + 1;
-//             while (input[j] == ' ' || input[j] == '\t') 
-//                 j++;
-//             if (!input[j] || ft_strchr("<>|&", input[j])) {
-//                 printf("Error: Missing filename after redirection\n");
-//                 return false;
-//             }
-//         }
-//         i++;
-//     }
-//     return true;
-// }
 
 // int files_syntax(t_lexer *lex)
 // {

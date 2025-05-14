@@ -13,6 +13,33 @@
 #include <sys/wait.h>
 #include "../libft/libft.h"
 
+// typedef enum
+// {
+//     HEREDOC,
+//     REDIR_IN,
+//     REDIR_OUT,
+//     APPEND,
+//     PIPE,
+//     CMD,
+// } t_type;
+
+// typedef struct s_io 
+// {
+//     char *file;
+//     t_type type;
+//     struct s_io *next;
+// } t_io;
+
+
+// typedef struct s_node
+// {
+//     char *argument; // command to exucute ls -a
+//     char *path; // path to the command /bin/ls
+//     char **args; // arguments to the command [ls][-a]
+//     t_io *io; // input/output redirection
+
+// }t_node;
+
 // Define the maximum length for command input
 #define MAX_CMD_LENGTH 1024
 
