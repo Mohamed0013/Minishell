@@ -37,7 +37,7 @@ int main(int ac, char **av, char **env)
     return (0);
   while (1)
   {
-    input = readline("minishell> "); // Read input from the user
+    input = readline("minishell> ");
     /////////////////////////
     if (input == NULL) // Handle EOF (Ctrl+D)
       break;

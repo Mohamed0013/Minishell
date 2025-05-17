@@ -23,13 +23,12 @@
 //     CMD,
 // } t_type;
 
-// typedef struct s_io 
+// typedef struct s_io
 // {
 //     char *file;
 //     t_type type;
 //     struct s_io *next;
 // } t_io;
-
 
 // typedef struct s_node
 // {
@@ -40,18 +39,35 @@
 
 // }t_node;
 
+typedef struct s_env
+{
+	char            *name;
+	char            *value;
+	struct s_env    *next;
+} t_env;
+
+// Global variable to store the exit status of the last command
+extern int g_exit_status;
+// Global variable to store the environment variables
+extern t_env *g_env;
+// Global variable to store the current working directory
+extern char *g_cwd;
+// Global variable to store the shell prompt
+extern char *g_prompt;
+
 // Define the maximum length for command input
 #define MAX_CMD_LENGTH 1024
 
 // Structure for linked list nodes to store commands
-typedef struct s_command {
+typedef struct s_command
+{
     char *command;
     char *arguments;
     struct s_command *next;
 } t_command;
 
 /* Command parsing and execution */
-void  multi_to_single_space(char **av, char *res, int ac);
+void multi_to_single_space(char **av, char *res, int ac);
 t_command *create_command(char *cmd);
 // void free_command(t_command *cmd);
 // void free_command_list(t_command *cmd);
@@ -70,11 +86,12 @@ bool unclosed_quotes(const char *input);
 bool is_blank_line(const char *s);
 bool pipe_syntax(const char *input);
 
+int	ft_strcmp(const char *s1, const char *s2);
 /* Minishell-specific utils */
 char *join_path(char *path, char *bin);
 char *str_ndup(char *str, unsigned int n);
 int str_ichr(char *str, char c);
 
-void    free_split(char **split);
+void free_split(char **split);
 
 #endif // MINISHELL_H

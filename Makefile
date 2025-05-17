@@ -18,6 +18,7 @@ SRC = src/main.c \
       src/syntax/files_syntax.c \
       src/syntax/pipe_syntax.c \
       src/syntax/syntax.c\
+	  builtins/export.c
 
 # Object files
 OBJ = $(SRC:.c=.o)
