@@ -38,7 +38,6 @@ int main(int ac, char **av, char **env)
   while (1)
   {
     input = readline("minishell> ");
-    /////////////////////////
     if (input == NULL) // Handle EOF (Ctrl+D)
       break;
     if (*input == '\0') // Handle empty input
@@ -47,18 +46,11 @@ int main(int ac, char **av, char **env)
       continue;
     }
     add_history(input);
-		if (is_blank_line(input))
+		if (is_blank_line(input) || check_syntax(input))
 		{
 			free(input);
 			continue;
 		}
-		if (!unclosed_quotes(input) || !pipe_syntax(input)
-			|| !file_syntax(input))
-		{
-			free(input);
-			continue; // Prompt again if validation fails
-		}
-    /////////////////////////
     cmd = parse_input(input); // Parse the input into a command structure
     if (cmd == NULL) // Handle parsing errors
     {

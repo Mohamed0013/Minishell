@@ -26,10 +26,11 @@ void add_command(t_command **head, t_command *new_node) {
 void free_commands(t_command *head) {
     t_command *temp;
     while (head) {
-        temp = head;
+        // Bug....
+        temp = head->next;
         free(head->command);
         free(head->arguments);
         free(head);
-        head = temp->next;
+        head = temp;
     }
 }

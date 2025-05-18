@@ -2,17 +2,20 @@
 
 bool    check_syntax(const char *input)
 {
-    int i = 0;
-    while (input[i])
-    {
-        if (input[i] == '|' && unclosed_quotes(input) == 0 && pipe_syntax(input))
-            return 2;
-        if ((input[i] == '<' || input[i] == '>') && unclosed_quotes(input) == 0
-            && file_syntax(input))
-            return 2;
-        i++;
-    }
-    return 0;
+    // int i = 0;
+    return (!unclosed_quotes(input) || !pipe_syntax(input)
+    || !file_syntax(input));
+
+    // while (input[i])
+    // {
+    //     if (input[i] == '|' && unclosed_quotes(input) == 0 && pipe_syntax(input))
+    //         return 2;
+    //     if ((input[i] == '<' || input[i] == '>') && unclosed_quotes(input) == 0
+    //         && file_syntax(input))
+    //         return 2;
+    //     i++;
+    // }
+    // return 0;
 }
 
 // int check_syntax(t_lexer *lex)
