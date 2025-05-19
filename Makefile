@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline -Llibft -lft
 
 # Directories
@@ -18,6 +18,9 @@ SRC = src/main.c \
       src/syntax/files_syntax.c \
       src/syntax/pipe_syntax.c \
       src/syntax/syntax.c\
+	  src/special_commands/execute_cd.c\
+	  src/special_commands/execute_echo.c\
+	  src/pipes/handle_pipes.c
 
 # Object files
 OBJ = $(SRC:.c=.o)

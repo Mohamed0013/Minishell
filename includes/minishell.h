@@ -11,34 +11,9 @@
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <errno.h>
+#include <sys/stat.h>
 #include "../libft/libft.h"
-
-// typedef enum
-// {
-//     HEREDOC,
-//     REDIR_IN,
-//     REDIR_OUT,
-//     APPEND,
-//     PIPE,
-//     CMD,
-// } t_type;
-
-// typedef struct s_io 
-// {
-//     char *file;
-//     t_type type;
-//     struct s_io *next;
-// } t_io;
-
-
-// typedef struct s_node
-// {
-//     char *argument; // command to exucute ls -a
-//     char *path; // path to the command /bin/ls
-//     char **args; // arguments to the command [ls][-a]
-//     t_io *io; // input/output redirection
-
-// }t_node;
 
 // Define the maximum length for command input
 #define MAX_CMD_LENGTH 1024
@@ -46,7 +21,8 @@
 // Structure for linked list nodes to store commands
 typedef struct s_command {
     char *command;
-    char *arguments;
+    char **arguments;
+    char *full_command;
     struct s_command *next;
 } t_command;
 
@@ -75,6 +51,18 @@ char *join_path(char *path, char *bin);
 char *str_ndup(char *str, unsigned int n);
 int str_ichr(char *str, char c);
 
+//special commands
+void execute_echo(char **arguments);
+void execute_cd(char **arguments);
+
+//pipes
+void handle_pipes(t_command *cmd, char **env);
+
 void    free_split(char **split);
+int     get_len(char **s);
+
+//execution
+char	*get_path(char *cmd, char **env);
+void    execute_command(t_command *cmd, char **env);
 
 #endif // MINISHELL_H
