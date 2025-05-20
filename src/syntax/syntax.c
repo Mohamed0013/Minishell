@@ -3,9 +3,9 @@
 bool    check_syntax(const char *input)
 {
     // int i = 0;
-    return (!unclosed_quotes(input) || !pipe_syntax(input)
-    || !file_syntax(input));
-
+    if (!unclosed_quotes(input) || !pipe_syntax(input)
+    || !file_syntax(input))
+        return false;
     // while (input[i])
     // {
     //     if (input[i] == '|' && unclosed_quotes(input) == 0 && pipe_syntax(input))
@@ -16,6 +16,7 @@ bool    check_syntax(const char *input)
     //     i++;
     // }
     // return 0;
+    return true;
 }
 
 // int check_syntax(t_lexer *lex)
