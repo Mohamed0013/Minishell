@@ -29,11 +29,29 @@ void multi_to_single_space(char **av, char *res, int ac)
   res[k] = '\0';
 }
 
+void handle_sigint(int sig)
+{
+  (void)sig;
+  printf("\n");
+  rl_replace_line("", 0);
+  rl_on_new_line();
+  rl_redisplay();
+}
+
+void handle_sigquit(int sig)
+{
+  (void)sig;
+  // Ignore SIGQUIT (Ctrl-\)
+  write(1, "\b\b  \b\b", 6);
+}
+
 int main(int ac, char **av, char **env)
 {
   char *input;
   t_command *cmd;
 
+  signal(SIGINT, handle_sigint);
+  signal(SIGQUIT, handle_sigquit);
   (void)av;
   if (ac > 1)
     return (0);
