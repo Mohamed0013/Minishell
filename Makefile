@@ -20,7 +20,9 @@ SRC = src/main.c \
       src/syntax/syntax.c\
 	  src/special_commands/execute_cd.c\
 	  src/special_commands/execute_echo.c\
-	  src/pipes/handle_pipes.c
+	  src/pipes/handle_pipes.c\
+	  src/redirect/handle_append.c\
+	  src/redirect/handle_output.c\
 
 # Object files
 OBJ = $(SRC:.c=.o)

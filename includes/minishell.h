@@ -13,6 +13,7 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include "../libft/libft.h"
 
 // Define the maximum length for command input
@@ -20,10 +21,13 @@
 
 // Structure for linked list nodes to store commands
 typedef struct s_command {
-    char *command;
-    char **arguments;
-    char *full_command;
-    struct s_command *next;
+    char *full_command;  // Full command string
+    char *command;       // Command name (e.g., "ls")
+    char **arguments;    // Command arguments
+    char *input_file;    // For '<' (not implemented yet)
+    char *output_file;   // For '>' or '>>'
+    int append;          // 1 if '>>', 0 otherwise
+    struct s_command *next; // Pointer to the next command (for pipelines)
 } t_command;
 
 /* Command parsing and execution */
@@ -64,5 +68,14 @@ int     get_len(char **s);
 //execution
 char	*get_path(char *cmd, char **env);
 void    execute_command(t_command *cmd, char **env);
+
+
+t_command *parse_command(char *input);
+void free_commands(t_command *head);
+void  free_command(t_command *cmd);
+
+//redirections
+void handle_append_redirection(char *command, char **env);
+void handle_output_redirection(char *command, char **env);
 
 #endif // MINISHELL_H

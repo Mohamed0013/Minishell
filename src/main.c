@@ -1,68 +1,84 @@
 #include "../includes/minishell.h"
 
-void  multi_to_single_space(char **av, char *res, int ac)
-{
-  int (i), (j), (k);
-
-  i = 1;
-  k = 0;
-  while (i < ac)
-  {
-    j = 0;
-    while (av[i][j])
-    {
-      while (av[i][j] && av[i][j] == ' ')
-        j++;
-      while (av[i][j] && av[i][j] != ' ')
-        res[k++] = av[i][j++];
-      while (av[i][j] && av[i][j] == ' ')
-        j++;
-      if (av[i][j] != '\0')
-        res[k++] = ' ';
+void  free_command(t_command *cmd) {
+    if (cmd) {
+        free(cmd->full_command);
+        free(cmd->command);
+        if (cmd->arguments) {
+            for (int i = 0; cmd->arguments[i]; i++) {
+                free(cmd->arguments[i]);
+            }
+            free(cmd->arguments);
+        }
+        free(cmd);
     }
-    if (i < ac - 1)
-      res[k++] = ' ';
-    i++;
-  }
-  res[k] = '\0';
 }
 
-int main(int ac, char **av, char **env)
-{
-  char *input;
-  t_command *cmd;
-
-  (void)av;
-  if (ac > 1)
-    return (0);
-  while (1)
-  {
-    // printf("minishell> ");
-    input = readline("minishell> "); // Read input from the user
-    if (!input) // Handle EOF (Ctrl+D)
-    {
-      printf("\n");
-      break;
+void parse_and_execute(char *input, char **env) {
+    // Check for redirection operators first
+    if (strstr(input, ">>")) {
+        handle_append_redirection(input, env);
+        return;
+    } else if (strstr(input, ">")) {
+        handle_output_redirection(input, env);
+        return;
     }
 
-    if (strlen(input) == 0) // Skip empty input
-    {
-      free(input);
-      continue;
+    // Split the input by '|'
+    char **pipeline_commands = ft_split(input, '|');
+    if (!pipeline_commands) {
+        perror("minishell");
+        return;
     }
 
-    add_history(input);
-  
-    cmd = parse_input(input); // Parse the input into a command structure
-    if (cmd == NULL) // Handle parsing errors
-    {
-      free(input);
-      continue;
-    }
-    shell_loop(cmd, env); // Execute the command(s)
-    free_commands(cmd); // Free the command structure
-    free(input);
-  }
+    for (int i = 0; pipeline_commands[i]; i++) {
+        char *command = ft_strtrim(pipeline_commands[i], " \t\n");
+        if (!command || *command == '\0') {
+            fprintf(stderr, "minishell: syntax error near unexpected token `|`\n");
+            free(command);
+            free_split(pipeline_commands);
+            return;
+        }
 
-  return 0;
+        // Parse and execute the command
+        t_command *cmd = parse_command(command);
+        if (!cmd) {
+            fprintf(stderr, "minishell: failed to parse command\n");
+            free(command);
+            free_split(pipeline_commands);
+            return;
+        }
+
+        shell_loop(cmd, env);
+        free_command(cmd);
+        free(command);
+    }
+
+    free_split(pipeline_commands);
+}
+
+int main(int ac, char **av, char **env) {
+    char *input;
+    (void)ac;
+    (void)av;
+    if (!env) {
+        fprintf(stderr, "No environment variables found.\n");
+        return 1;
+    }
+    while (1) {
+        input = readline("minishell> ");
+        if (!input) {
+            printf("\n");
+            break;
+        }
+
+        if (*input) {
+            add_history(input);
+            parse_and_execute(input, env);
+        }
+
+        free(input);
+    }
+
+    return 0;
 }
