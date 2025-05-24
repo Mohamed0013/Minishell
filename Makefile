@@ -23,6 +23,7 @@ SRC = src/main.c \
 	  src/pipes/handle_pipes.c\
 	  src/redirect/handle_append.c\
 	  src/redirect/handle_output.c\
+	  src/pipes/utils.c
 
 # Object files
 OBJ = $(SRC:.c=.o)

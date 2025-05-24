@@ -60,16 +60,16 @@ void execute_echo(char **arguments);
 void execute_cd(char **arguments);
 
 //pipes
-void handle_pipes(t_command *cmd, char **env);
-
-void    free_split(char **split);
-int     get_len(char **s);
+void handle_pipes(char *input, char **env);
+char **split_commands(char *input);
 
 //execution
 char	*get_path(char *cmd, char **env);
 void    execute_command(t_command *cmd, char **env);
 
-
+//parsing
+void parse_and_execute(char *input, char **env);
+// Function to parse a single command from input
 t_command *parse_command(char *input);
 void free_commands(t_command *head);
 void  free_command(t_command *cmd);
@@ -77,5 +77,13 @@ void  free_command(t_command *cmd);
 //redirections
 void handle_append_redirection(char *command, char **env);
 void handle_output_redirection(char *command, char **env);
+
+
+//hado 39l 3lihom
+void execute_single_command(t_command *cmd, char **env);
+void    free_split(char **split);
+int     get_len(char **s);
+int is_builtin(t_command *cmd);
+void execute_builtin(t_command *cmd);
 
 #endif // MINISHELL_H
