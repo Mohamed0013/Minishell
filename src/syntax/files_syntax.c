@@ -1,12 +1,14 @@
 #include "../../includes/minishell.h"
 
-bool file_syntax(const char *input) {
+bool file_syntax(const char *input)
+{
     int i;
 
     i = 0;
     bool in_single = false, in_double = false;
 
-    while (input[i]) {
+    while (input[i])
+    {
         // Update quote states
         if (input[i] == '\'' && !in_double)
             in_single = !in_single;
@@ -24,9 +26,11 @@ bool file_syntax(const char *input) {
                         return false;
                     }
                 // Handle heredoc (<<)
-                if (input[i] == '<' && input[i+1] == '<') {
+                if (input[i] == '<' && input[i+1] == '<')
+                {
                     i += 2;
-                    while (input[i] == ' ' || input[i] == '\t') i++;
+                    while (input[i] == ' ' || input[i] == '\t')
+                        i++;
                     if (!input[i] || ft_strchr("<>|", input[i]))
                     {
                         printf("Syntax error: missing heredoc delimiter\n");
@@ -35,11 +39,14 @@ bool file_syntax(const char *input) {
                     continue;
                 }
                 // Skip valid >> or <<
-                if (input[i+1] == input[i]) i++;
+                if (input[i+1] == input[i])
+                    i++;
                 // Check filename exists
                 int j = i + 1;
-                while (input[j] == ' ' || input[j] == '\t') j++;
-                if (!input[j] || ft_strchr("<>|&", input[j])) {
+                while (input[j] == ' ' || input[j] == '\t')
+                    j++;
+                if (!input[j] || ft_strchr("<>|", input[j]))
+                {
                     printf("Syntax error: missing filename\n");
                     return false;
                 }
@@ -49,33 +56,6 @@ bool file_syntax(const char *input) {
     }
     return true;
 }
-
-// bool file_syntax(const char *input) {
-//     int i = 0;
-//     while (input[i]) {
-//         if (input[i] == '<' || input[i] == '>') {
-//             // Check for invalid combinations (e.g., <<<, <>, >|)
-//             if ((input[i] == '<' && input[i+1] == '>') || 
-//                 (input[i] == '>' && input[i+1] == '|')) {
-//                 printf("Error: Invalid redirection syntax\n");
-//                 return false;
-//             }
-//             // Skip valid << or >>
-//             if (input[i+1] == input[i]) 
-//                 i++;
-//             // Check if next char is a valid filename
-//             int j = i + 1;
-//             while (input[j] == ' ' || input[j] == '\t') 
-//                 j++;
-//             if (!input[j] || ft_strchr("<>|&", input[j])) {
-//                 printf("Error: Missing filename after redirection\n");
-//                 return false;
-//             }
-//         }
-//         i++;
-//     }
-//     return true;
-// }
 
 // int files_syntax(t_lexer *lex)
 // {

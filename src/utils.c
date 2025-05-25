@@ -71,3 +71,35 @@ char	*ft_strchr(const char *s, int c)
 	}
 	return ((char *)&s[i]);
 }
+
+int ft_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && (*s1 == *s2))
+	{
+		s1++;
+		s2++;
+	}
+	return (*(unsigned char *)s1 - *(unsigned char *)s2);
+}
+
+t_env *env_from_array(char **env)
+{
+	t_env *head = NULL;
+	t_env *new;
+	int i = 0;
+	char *eq;
+	while (env[i])
+	{
+		eq = ft_strchr(env[i], '=');
+		if (eq)
+		{
+			new = malloc(sizeof(t_env));
+			new->name = str_ndup(env[i], eq - env[i]);
+			new->value = ft_strdup(eq + 1);
+			new->next = head;
+			head = new;
+		}
+		i++;
+	}
+	return head;
+}

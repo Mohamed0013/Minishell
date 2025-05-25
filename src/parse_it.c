@@ -1,29 +1,22 @@
 #include "../includes/minishell.h"
 
-void parse_and_execute(char *input, char **env)
-{
-    if (!validate_syntax(input))
-        return;
+t_command *parse_input(char *input, char **env) {
+    t_command   *cmd;
+
     if (strstr(input, ">>"))
     {
         handle_append_redirection(input, env);
-        return ;
+        return (NULL);
     }
     else if (strstr(input, ">"))
     {
         handle_output_redirection(input, env);
-        return ;
+        return (NULL);
     }
-    if (strchr(input, '|')) {
-        handle_pipes(input, env);  // Modified function
-        return ;
-    }
-    // Handle single commands
-    t_command *cmd = parse_command(input);
-    if (cmd) {
-        shell_loop(cmd, env);
-        free_command(cmd);
-    }
+    cmd = create_command(input);
+    if (!cmd)
+        return (NULL);
+    return (cmd);
 }
 
 t_command *parse_command(char *command) {

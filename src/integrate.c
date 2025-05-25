@@ -26,61 +26,83 @@ char	*get_path(char *cmd, char **env)
 	return (cmd);
 }
 
-int is_builtin(t_command *cmd) {
-    if (!cmd || !cmd->command) return 0;
+// static int is_empty(char *str) {
+//     while (*str) {
+//         if (!isspace(*str)) return 0;
+//         str++;
+//     }
+//     return 1;
+// }
 
-    const char *builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
-    for (size_t i = 0; i < sizeof(builtins) / sizeof(builtins[0]); i++) {
-        if (strcmp(cmd->command, builtins[i]) == 0) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-void execute_builtin(t_command *cmd) {
-    if (strcmp(cmd->command, "echo") == 0) {
-        execute_echo(cmd->arguments);
-    } else if (strcmp(cmd->command, "cd") == 0) {
-        execute_cd(cmd->arguments);
-    } else if (strcmp(cmd->command, "pwd") == 0) {
-        // Implement pwd
-    } else if (strcmp(cmd->command, "export") == 0) {
-        // Implement export
-    } else if (strcmp(cmd->command, "unset") == 0) {
-        // Implement unset
-    } else if (strcmp(cmd->command, "env") == 0) {
-        // Implement env
-    } else if (strcmp(cmd->command, "exit") == 0) {
-        // Implement exit
-    }
-}
-
-void execute_single_command(t_command *cmd, char **env) {
-    if (!cmd || !cmd->command) return;
-
-    char *path = get_path(cmd->command, env);
-    if (execve(path, cmd->arguments, env) == -1) {
-        perror("execve");
-        free(path);
-        exit(EXIT_FAILURE);
-    }
-    free(path);
-}
-
-void shell_loop(t_command *cmd, char **env) {
+void shell_loop(t_command *cmd, char **env)
+{
     if (!cmd) return;
 
-    if (is_builtin(cmd)) {
-        execute_builtin(cmd);
+    // Handle exit command
+    if (strcmp(cmd->command, "exit") == 0) {
+        printf("Exiting minishell...\n");
+        free_commands(cmd);
+        exit(0);
+    }
+
+    if (strcmp(cmd->command, "cd") == 0) {
+        execute_cd(cmd->arguments);
+        return ;
+    }
+
+    if (strcmp(cmd->command, "echo") == 0)
+    {
+        execute_echo(cmd->arguments);
+        return ;
+    }
+    // Handle export as a built-in
+    if (strcmp(cmd->command, "export") == 0) {
+        ft_export(&g_data.env_list, cmd->arguments);
         return;
     }
 
-    pid_t pid = fork();
-    if (pid == 0) {
-        execute_single_command(cmd, env);
-        exit(EXIT_SUCCESS);
-    } else {
-        waitpid(pid, NULL, 0);
+    // Handle env as a built-in
+    if (strcmp(cmd->command, "env") == 0) {
+        ft_env(g_data.env_list, cmd->arguments);
+        return;
     }
+    // Check for pipes in the command
+    if (strchr(cmd->full_command, '|')) {
+        handle_pipes(cmd, env);
+        return;
+    }
+
+    // Regular command execution (non-piped)
+    char **full_command = ft_split(cmd->full_command, ' ');
+    if (!full_command) {
+        perror("minishell");
+        return;
+    }
+
+    // pid_t pid = fork();
+    // if (pid < 0) {
+    //     perror("fork");
+    //     free_split(full_command);
+    //     return;
+    // }
+
+    // if (pid == 0) {  // Child process
+    //     char *path;
+    //     if (str_ichr(cmd->command, '/') > -1) {
+    //         path = cmd->command;
+    //     } else {
+    //         path = get_path(cmd->command, env);
+    //     }
+
+    //     if (execve(path, full_command, env) == -1) {
+    //         perror("minishell");
+    //         free_split(full_command);
+    //         exit(EXIT_FAILURE);
+    //     }
+    // } else {  // Parent process
+    //     int status;
+    //     waitpid(pid, &status, 0);
+    //     free_split(full_command);
+    // }
+    execute(cmd, env); // This will handle built-ins and external commands
 }

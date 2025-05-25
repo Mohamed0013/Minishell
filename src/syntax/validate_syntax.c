@@ -60,8 +60,8 @@ bool unclosed_quotes(const char *input)
   }
   if (single_q || double_q)
   {
-	printf("Error: Unclosed quotes\n");
-	return (false);
+    printf("Error: Unclosed quotes\n");
+    return (false);
   }
   return (true);
 }
