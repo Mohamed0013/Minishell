@@ -39,35 +39,35 @@ void shell_loop(t_command *cmd, char **env)
     if (!cmd) return;
 
     // Handle exit command
-    if (strcmp(cmd->command, "exit") == 0) {
+    if (ft_strcmp(cmd->command, "exit") == 0) {
         printf("Exiting minishell...\n");
         free_commands(cmd);
         exit(0);
     }
 
-    if (strcmp(cmd->command, "cd") == 0) {
+    if (ft_strcmp(cmd->command, "cd") == 0) {
         execute_cd(cmd->arguments);
         return ;
     }
 
-    if (strcmp(cmd->command, "echo") == 0)
+    if (ft_strcmp(cmd->command, "echo") == 0)
     {
         execute_echo(cmd->arguments);
         return ;
     }
     // Handle export as a built-in
-    if (strcmp(cmd->command, "export") == 0) {
+    if (ft_strcmp(cmd->command, "export") == 0) {
         ft_export(&g_data.env_list, cmd->arguments);
         return;
     }
 
     // Handle env as a built-in
-    if (strcmp(cmd->command, "env") == 0) {
+    if (ft_strcmp(cmd->command, "env") == 0) {
         ft_env(g_data.env_list, cmd->arguments);
         return;
     }
     // Check for pipes in the command
-    if (strchr(cmd->full_command, '|')) {
+    if (ft_strchr(cmd->full_command, '|')) {
         handle_pipes(cmd, env);
         return;
     }

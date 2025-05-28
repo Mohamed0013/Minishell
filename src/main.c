@@ -46,6 +46,40 @@ void handle_sigquit(int sig)
   write(1, "\b\b  \b\b", 6);
 }
 
+void print_argv(t_command *cmd)
+{
+  t_command *current = cmd;
+
+  while (current)
+  {
+    // printf("Command: %s\n", current->command);
+    if (current->arguments)
+    {
+      printf("Arguments: \n");
+      for (int i = 0; current->arguments[i]; i++)
+      {
+        printf("argv[%d]: %s\n", i, current->arguments[i]);
+      }
+      printf("\n");
+    }
+    current = current->next;
+  }
+  printf("=================================\n");
+}
+
+void free_env_list(t_env *env)
+{
+    t_env *tmp;
+    while (env)
+    {
+        tmp = env->next;
+        free(env->name);
+        free(env->value);
+        free(env);
+        env = tmp;
+    }
+}
+
 int main(int ac, char **av, char **env)
 {
   char *input;
@@ -80,9 +114,21 @@ int main(int ac, char **av, char **env)
       free(input);
       continue;
     }
+    // print_argv(cmd);
     shell_loop(cmd, env); // Execute the command(s)
     free_commands(cmd);   // Free the command structure
     free(input);
   }
+  free_env_list(g_data.env_list); // Free the environment list
+  // printf("exit\n");
+  // Free any remaining resources
+  // Note: You may want to implement a proper cleanup function
+  // to free all allocated memory in g_data if necessary.
+  // for (int i = 0; i < g_data.env_count; i++)
+  // {
+  //   free(g_data.env[i]);
+  // }
+  // free(g_data.env);
+  // free(g_data.env_list);
   return 0;
 }
