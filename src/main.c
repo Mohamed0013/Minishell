@@ -2,6 +2,7 @@
 
 t_data g_data;
 
+/*
 void multi_to_single_space(char **av, char *res, int ac)
 {
   int(i), (j), (k);
@@ -28,7 +29,7 @@ void multi_to_single_space(char **av, char *res, int ac)
   }
   res[k] = '\0';
 }
-
+*/
 void handle_sigint(int sig)
 {
   (void)sig;
@@ -43,6 +44,40 @@ void handle_sigquit(int sig)
   (void)sig;
   // Ignore SIGQUIT (Ctrl-\)
   write(1, "\b\b  \b\b", 6);
+}
+
+void print_argv(t_command *cmd)
+{
+  t_command *current = cmd;
+
+  while (current)
+  {
+    // printf("Command: %s\n", current->command);
+    if (current->arguments)
+    {
+      printf("Arguments: \n");
+      for (int i = 0; current->arguments[i]; i++)
+      {
+        printf("argv[%d]: %s\n", i, current->arguments[i]);
+      }
+      printf("\n");
+    }
+    current = current->next;
+  }
+  printf("=================================\n");
+}
+
+void free_env_list(t_env *env)
+{
+    t_env *tmp;
+    while (env)
+    {
+        tmp = env->next;
+        free(env->name);
+        free(env->value);
+        free(env);
+        env = tmp;
+    }
 }
 
 int main(int ac, char **av, char **env)
@@ -73,55 +108,27 @@ int main(int ac, char **av, char **env)
       free(input);
       continue;
     }
-    cmd = parse_input(input); // Parse the input into a command structure
+    cmd = parse_input(input, env); // Parse the input into a command structure
     if (cmd == NULL)          // Handle parsing errors
     {
       free(input);
       continue;
     }
+    // print_argv(cmd);
     shell_loop(cmd, env); // Execute the command(s)
     free_commands(cmd);   // Free the command structure
     free(input);
   }
+  free_env_list(g_data.env_list); // Free the environment list
+  // printf("exit\n");
+  // Free any remaining resources
+  // Note: You may want to implement a proper cleanup function
+  // to free all allocated memory in g_data if necessary.
+  // for (int i = 0; i < g_data.env_count; i++)
+  // {
+  //   free(g_data.env[i]);
+  // }
+  // free(g_data.env);
+  // free(g_data.env_list);
   return 0;
 }
-
-// int main(int ac, char **av, char **env)
-// {
-//   char *input;
-//   t_command *cmd;
-
-//   (void)av;
-//   if (ac > 1)
-//     return (0);
-//   while (1)
-//   {
-//     // printf("minishell> ");
-//     input = readline("minishell> "); // Read input from the user
-//     if (!input)                      // Handle EOF (Ctrl+D)
-//     {
-//       printf("\n");
-//       break;
-//     }
-
-//     if (strlen(input) == 0) // Skip empty input
-//     {
-//       free(input);
-//       continue;
-//     }
-
-//     add_history(input);
-
-//     cmd = parse_input(input); // Parse the input into a command structure
-//     if (cmd == NULL)          // Handle parsing errors
-//     {
-//       free(input);
-//       continue;
-//     }
-//     shell_loop(cmd, env); // Execute the command(s)
-//     free_commands(cmd);   // Free the command structure
-//     free(input);
-//   }
-
-//   return 0;
-// }

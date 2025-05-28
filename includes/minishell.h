@@ -13,6 +13,7 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include "../libft/libft.h"
 
 // Define the maximum length for command input
@@ -58,7 +59,7 @@ t_command *create_command(char *cmd);
 // void free_command_list(t_command *cmd);
 void print_command(t_command *cmd);
 void print_command_list(t_command *cmd);
-t_command *parse_input(char *input);
+t_command *parse_input(char *input, char **env);
 void add_command(t_command **head, t_command *new_cmd);
 void free_commands(t_command *cmd);
 void shell_loop(t_command *cmd, char **env);
@@ -96,11 +97,21 @@ void execute_cd(char **arguments);
 // pipes
 void handle_pipes(t_command *cmd, char **env);
 
+//redirections
+void handle_append_redirection(char *command, char **env);
+void handle_output_redirection(char *command, char **env);
+
 void free_split(char **split);
 int get_len(char **s);
 
 // execution
 char *get_path(char *cmd, char **env);
-void execute_command(t_command *cmd, char **env);
+
+//cmd
+t_command *parse_command(char *command);
+void  free_command(t_command *cmd);
+void free_commands(t_command *head);
+int ft_split_size(char **split);
+int get_len(char **s);
 
 #endif // MINISHELL_H
