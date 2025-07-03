@@ -1,33 +1,29 @@
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
-LDFLAGS = -lreadline -Llibft -lft -fsanitize=address
-
+CFLAGS = 
+LDFLAGS = -lreadline -Llibft -lft
+#-fsanitize=address
 # Directories
 LIBFT_DIR = libft
 INCLUDES = -Iincludes -I$(LIBFT_DIR)/includes
 
 # Source files (removed libft functions)
-SRC = src/main.c \
-      src/integrate.c \
-      src/parse_it.c \
-      src/utils.c \
-	  src/libft_utils.c\
-      src/syntax/validate_syntax.c \
-      src/syntax/files_syntax.c \
-      src/syntax/pipe_syntax.c \
-      src/syntax/syntax.c\
-	  src/special_commands/execute_cd.c\
-	  src/special_commands/execute_echo.c\
-	  src/pipes/handle_pipes.c\
-	  builtins/env.c  builtins/export.c  builtins/export_utils.c \
-	  src/executor.c \
-	  src/redirect/handle_append.c\
-	  src/redirect/handle_output.c\
-	  src/cmd/create_command.c\
-	  src/cmd/free_command.c\
-	  src/cmd/free_commands.c\
-	  src/cmd/utils.c\
+SRC = parsing/parsing.c\
+	  tokens/tokenizer.c\
+	  tokens/test_tokenizer.c\
+	  expansion/expansion.c\
+	  expansion/test_expansion.c\
+	  main.c\
+	  utils/env.c\
+	  utils/empty_line.c\
+	  execution/shell.c\
+	  execution/builtins/cd.c\
+	  execution/builtins/utils.c\
+	  execution/utils.c\
+	  execution/builtins/echo.c\
+	  execution/builtins/env.c\
+	  execution/builtins/export.c\
+	  execution/utils2.c\
 
 # Object files
 OBJ = $(SRC:.c=.o)
@@ -40,7 +36,7 @@ all: libft $(NAME)
 
 # Build libft first
 libft:
-	@$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) bonus
 
 # Linking the binary
 $(NAME): $(OBJ)

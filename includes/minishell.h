@@ -18,6 +18,13 @@
 
 // Define the maximum length for command input
 #define MAX_CMD_LENGTH 1024
+
+typedef struct execute_s
+{
+    int exit_status;
+    int **pipfds; // Pipe file descriptors
+    int nb_pipes; // Number of pipes
+}               t_execute;
 //
 typedef struct s_env
 {
@@ -41,9 +48,10 @@ typedef struct s_global
     int exit_status; // Last exit status
 } t_global;
 // Structure for linked list nodes to store commands
+
 typedef struct s_command
 {
-    char *command;
+    // char *command;
     char **arguments;
     char *full_command;
     struct s_command *next;
@@ -55,13 +63,10 @@ void lst_add_env(t_env **lst, t_env *new);
 /* Command parsing and execution */
 void multi_to_single_space(char **av, char *res, int ac);
 t_command *create_command(char *cmd);
-// void free_command(t_command *cmd);
-// void free_command_list(t_command *cmd);
 void print_command(t_command *cmd);
 void print_command_list(t_command *cmd);
 t_command *parse_input(char *input, char **env);
 void add_command(t_command **head, t_command *new_cmd);
-void free_commands(t_command *cmd);
 void shell_loop(t_command *cmd, char **env);
 
 /* Syntax validation */
@@ -75,11 +80,11 @@ bool pipe_syntax(const char *input);
 /* Minishell-specific utils */
 char *join_path(char *path, char *bin);
 char *str_ndup(char *str, unsigned int n);
-int str_ichr(char *str, char c);
+int str_ichr(const char *str, char c);
 
 // builtins
 // int ft_env(t_env *env_list);
-int ft_strcmp(const char *s1, const char *s2);
+int	ft_strcmp(char *s1, char *s2);
 int is_valid_env_name(const char *name);
 void update_or_add_env(t_env **env, char *name, char *value);
 int validate_and_split(char *arg, char **name, char **value);
@@ -91,15 +96,15 @@ int ft_unset(t_env **env, char **args);
 void execute(t_command *cmd, char **env);
 
 // special commands
-void execute_echo(char **arguments);
-void execute_cd(char **arguments);
+void execute_echo(char **arguments, int status);
 
-// pipes
-void handle_pipes(t_command *cmd, char **env);
 
-//redirections
+
+// redirections
 void handle_append_redirection(char *command, char **env);
 void handle_output_redirection(char *command, char **env);
+void handle_input_redirection(char *command, char **env);
+void handle_heredoc(char *command, char **env);
 
 void free_split(char **split);
 int get_len(char **s);
@@ -107,11 +112,23 @@ int get_len(char **s);
 // execution
 char *get_path(char *cmd, char **env);
 
-//cmd
+// cmd
 t_command *parse_command(char *command);
-void  free_command(t_command *cmd);
-void free_commands(t_command *head);
 int ft_split_size(char **split);
 int get_len(char **s);
+
+/* Quote handling */
+char *process_quotes(const char *input);
+bool has_unclosed_quotes(const char *input);
+
+// cleaup
+void free_env_list(t_env *env);
+void cleanup(void);
+
+
+bool	is_blank_line(const char *s);
+t_env   *env_from_array(char **env);
+char	*str_ndup(char *str, unsigned int n);
+char	*ft_strchr(const char *s, int c);
 
 #endif // MINISHELL_H
