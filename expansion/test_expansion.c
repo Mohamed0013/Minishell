@@ -10,7 +10,7 @@ int ft_keycmp(char * keyvalue,char* key)
     if (keyvalue == NULL || key == NULL)
         return 0;
     key_len = ft_strlen(key);
-    return strncmp(keyvalue, key,key_len) == 0 && keyvalue[key_len] == '=';
+    return (strncmp(keyvalue, key,key_len) == 0 && keyvalue[key_len] == '=');
 
 }
 int ft_keyvalcmp(char * k1,char* k2)
@@ -111,7 +111,7 @@ void test_expansion(const char *input, t_list *env)
         return;
     }
     print_args(tokens);
-    expand(ast, env, tokens);
+    // expand(ast, env, tokens);
     printf("After expansion:\n");
     print_args(tokens);
     // free_ast(ast);

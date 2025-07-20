@@ -9,7 +9,7 @@ void execute_cd(char **arguments)
     struct stat	parent_stat;
     if (get_len(arguments) == 0) {
         // No argument provided, default to HOME
-        *home = *getenv("HOME");
+        *home = getenv("HOME");
         if (!home) {
             fprintf(stderr, "minishell: cd: HOME not set\n");
             return ;
@@ -18,7 +18,8 @@ void execute_cd(char **arguments)
             perror("minishell: cd");
         }
     }
-    else if (strcmp(arguments[1], "..") == 0) {
+    else if (strcmp(arguments[1], "..") == 0)
+    {
         // Check if the parent directory exists
         if (stat("..", &parent_stat) == -1) {
             // Parent directory does not exist
@@ -32,7 +33,6 @@ void execute_cd(char **arguments)
             printf("minishell: cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
             return;
         }
-
         if (chdir("..") == -1) {
             perror("minishell: cd");
             free(current_dir);

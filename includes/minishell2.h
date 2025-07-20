@@ -38,6 +38,20 @@ typedef struct  s_token
     struct s_token *next; // Pointer to the next token in the list
 }               t_token;
 
+typedef struct s_ddate {
+	t_token     *head;
+	const char  *ptr;
+    size_t      len;
+}				t_ddata;
+
+#ifndef PATH_MAX
+# ifdef _POSIX_PATH_MAX
+#  define PATH_MAX _POSIX_PATH_MAX
+# else
+#  define PATH_MAX 4096
+# endif
+#endif
+
 // Token functions
 
 t_token *create_token(char *value, t_token_type type, int in_quote);

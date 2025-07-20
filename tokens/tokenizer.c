@@ -12,146 +12,199 @@ t_token	*create_token(char *value, t_token_type type, int is_quoted)
 	new_token->type = type;
 	new_token->is_quoted = is_quoted;
 	new_token->next = NULL;
+	new_token->prev = NULL;
 	return (new_token);
 }
+
 void add_token(t_token **head, t_token *new_token)
 {
+	t_token *current;
+
 	if (!head || !new_token)
 		return ;
 	if (!*head) {
 		*head = new_token;
 	} else {
-		t_token *current;
-
 		current = *head;
 		while (current->next) {
 			current = current->next;
 		}
 		current->next = new_token;
-		new_token->prev = current; // Set the previous pointer
-		// new_token->next = NULL; // Ensure the new token's next pointer is NULL
+		new_token->prev = current;
 	}
 }
+
 void free_tokens(t_token *head)
 {
 	t_token *current;
+	t_token *next;
 
 	current = head;
 	while (current) {
-		t_token *next = current->next;
+		next = current->next;
 		free(current->value);
 		free(current);
 		current = next;
 	}
 }
+
+int	condition6(t_ddata *ddata, const char *input, int *i, int in_quote)
+{
+	if (ddata->len > 0)
+	{
+		add_token(&ddata->head, create_token(ft_substr(input, *i, ddata->len), TOKEN_WORD, in_quote));
+		*i += ddata->len;
+		ddata->len = 0;
+	}
+	if (ddata->ptr[*i + 1] == '>')
+	{
+		add_token(&ddata->head, create_token(NULL, TOKEN_APPEND, 0));
+		*i += 2;
+	}
+	else
+	{
+		add_token(&ddata->head, create_token(NULL, TOKEN_REDIRECT_OUT, 0));
+		(*i)++;
+	}
+	return (1);
+}
+
+int	condition5(t_ddata *ddata, const char *input, int *i, int in_quote)
+{
+	if (ddata->len > 0)
+	{
+		add_token(&ddata->head, create_token(ft_substr(input, *i, ddata->len), TOKEN_WORD, in_quote));
+		*i += ddata->len;
+		ddata->len = 0;
+	}
+	if (ddata->ptr[*i + 1] == '<')
+	{
+		add_token(&ddata->head, create_token(NULL, TOKEN_HEREDOC, 0));
+		*i += 2;
+	}
+	else
+	{
+		add_token(&ddata->head, create_token(NULL, TOKEN_REDIRECT_IN, 0));
+		(*i)++;
+	}
+	return (1);
+}
+
+int	condition4(t_ddata *ddata, const char *input, int *i, int in_quote)
+{
+	if (ddata->len > 0)
+	{
+		add_token(&ddata->head, create_token(ft_substr(input, *i, ddata->len), TOKEN_WORD, in_quote));
+		*i += ddata->len;
+		ddata->len = 0;
+	}
+	add_token(&ddata->head, create_token(NULL, TOKEN_PIPE, 0));
+	(*i)++;
+	return (1);
+}
+
+int	condition3(t_ddata *ddata, const char *input, int *i, int in_quote)
+{
+	if (ddata->len > 0)
+	{
+		add_token(&ddata->head, create_token(ft_substr(input, *i, ddata->len), TOKEN_WORD, in_quote));
+		*i += ddata->len;
+		ddata->len = 0;
+	}
+	while (ddata->ptr[*i] == ' ' || ddata->ptr[*i] == '\t')
+		(*i)++;
+	return (1);
+}
+
+int	condition2(t_ddata *ddata, int *i, int *in_quote)
+{
+	char	quote_char;
+
+	if (ddata->ptr[*i + ddata->len] == '\'')
+		*in_quote = 1;
+	else
+		*in_quote = 2;
+	quote_char = ddata->ptr[*i + ddata->len];
+	ddata->len++;
+	while (ddata->ptr[*i + ddata->len] && ddata->ptr[*i + ddata->len] != quote_char)
+		ddata->len++;
+	if (ddata->ptr[*i + ddata->len] == quote_char)
+		ddata->len++;
+	return (1);
+}
+
+int	condition1(t_ddata *ddata, const char *input, int *i, int in_quote)
+{
+	if (ddata->len > 0)
+		add_token(&ddata->head, create_token(ft_substr(input, *i, ddata->len), TOKEN_WORD, in_quote));
+	add_token(&ddata->head, create_token(NULL, TOKEN_EOF, 0));
+	return (1);
+}
+
+t_token	*tokenize_loop(t_ddata *ddata, const char *input)
+{
+	int	i;
+	int	in_quote;
+
+	i = 0;
+	in_quote = 0;
+	while (1)
+	{
+		if (ddata->ptr[i + ddata->len] == '\0' && condition1(ddata, input, &i, in_quote))
+			break;
+		if ((ddata->ptr[i + ddata->len] == '\'' || ddata->ptr[i + ddata->len] == '\"')
+			&& (condition2(ddata, &i, &in_quote)))
+			continue;
+		if ((ddata->ptr[i + ddata->len] == ' ' || ddata->ptr[i + ddata->len] == '\t')
+			&& (condition3(ddata, input, &i, in_quote)))
+			continue;
+		if(ddata->ptr[i + ddata->len] == '|' && condition4(ddata, input, &i, in_quote))
+			continue;
+		if(ddata->ptr[i + ddata->len] == '<' && condition5(ddata, input, &i, in_quote))
+			continue;
+		if(ddata->ptr[i + ddata->len] == '>' && condition6(ddata, input, &i, in_quote))
+			continue;
+		ddata->len++;
+	}
+	return (ddata->head);
+}
+
 t_token *tokenize_input(const char *input)
 {
-	t_token *head = NULL;
-	const char *ptr = input;
-	size_t i = 0;
-	size_t len = 0;
-	int in_quote = 0; // Track if we are inside quotes
-	while (1) {
-		if (ptr[i + len] == '\0') {
-			if (len > 0) {
-				add_token(&head, create_token(ft_substr(input, i, len), TOKEN_WORD, in_quote));
-			}
-			add_token(&head, create_token(NULL, TOKEN_EOF, in_quote)); // Add EOF token
-			break; // End of input
-		}
-		if (ptr[i + len] == '\'' || ptr[i + len] == '\"')
-		{
-			if (ptr[i + len] == '\'')
-				in_quote = 1;
-			else
-				in_quote = 2;
-			char quote_char = ptr[i + len];
-			len++;
-			while (ptr[len + i] && ptr[i + len] != quote_char) {
-				len++;
-			}
-			if (ptr[i + len] == quote_char) {
-				len++; // Move past the closing quote
-			}
-			continue; // Skip the rest of the loop
-		}
-		if (ptr[i + len] == ' ' || ptr[i + len] == '\t')
-		{
-			if (len > 0)
-			{
-				add_token(&head, create_token(ft_substr(input, i, len), TOKEN_WORD, in_quote));
-				i += len; // Move past the word
-				len = 0; // Reset length for the next word
-			}
-			while (ptr[i + len] == ' ' || ptr[i + len] == '\t') {
-				i++; // Skip spaces and tabs
-			}
-			continue; // Skip to the next iteration
-		}
-		if(ptr[i + len] == '|') {
-			if (len > 0) {
-				add_token(&head, create_token(ft_substr(input, i, len), TOKEN_WORD, in_quote));
-				i += len; // Move past the word
-				len = 0; // Reset length for the next word
-			}
-			add_token(&head, create_token(NULL, TOKEN_PIPE, in_quote));
-			i++;
-			continue;
-		}
-		if(ptr[i + len] == '<') {
-			if (len > 0) {
-				add_token(&head, create_token(ft_substr(input, i, len), TOKEN_WORD, in_quote));
-				i += len; // Move past the word
-				len = 0; // Reset length for the next word
-			}
-			if (ptr[i + 1] == '<') {
-				add_token(&head, create_token(NULL, TOKEN_HEREDOC, in_quote));
-				i += 2;
-			} else {
-				add_token(&head, create_token(NULL, TOKEN_REDIRECT_IN, in_quote));
-				i++;
-			}
-			continue;
-		}
-		if(ptr[i + len] == '>') {
-			if (len > 0) {
-				add_token(&head, create_token(ft_substr(input, i, len), TOKEN_WORD, in_quote));
-				i += len; // Move past the word
-				len = 0; // Reset length for the next word
-			}
-			if (ptr[i + 1] == '>') {
-				add_token(&head, create_token(NULL, TOKEN_APPEND, in_quote));
-				i += 2;
-			} else {
-				add_token(&head, create_token(NULL, TOKEN_REDIRECT_OUT, in_quote));
-				i++;
-			}
-			continue;
-		}
-		len++;
-		// ptr++;
-	}
-	return head;
+	t_ddata		*ddata;
+	t_token		*head;
+	
+	ddata = malloc(sizeof(t_ddata));
+	if (!ddata)
+		return (NULL);
+	ddata->head = NULL;
+	ddata->len = 0;
+	ddata->ptr = input;
+	head = tokenize_loop(ddata, input);
+	free(ddata);
+	return (head);
 }
 
 t_token *tokenize(const char *input)
 {
-	if (!input || !*input) return NULL;
+	t_token *tokens;
 
-	// Check for unclosed quotes
-	if (unclosed_quotes(input)) {
+	if (!input || !*input)
+		return (NULL);
+	if (unclosed_quotes(input))
+	{
 		ft_putstr_fd("minishell: unclosed quotes\n", 2);
-		return NULL;
+		return (NULL);
 	}
-
-	// Tokenize the input
-	t_token *tokens = tokenize_input(input);
-	if (!tokens) {
+	tokens = tokenize_input(input);
+	if (!tokens)
+	{
 		ft_putstr_fd("minishell: error tokenizing input\n", 2);
-		return NULL;
+		return (NULL);
 	}
-
-	return tokens;
+	// DON'T FREE INPUT HERE - it's likely managed elsewhere
+	// free(input);
+	return (tokens);
 }
 
 char *ft_token_gettype(t_token_type type)
@@ -171,17 +224,18 @@ char *ft_token_gettype(t_token_type type)
 
 void print_tokens(t_token *tokens)
 {
-	t_token *current = tokens;
-	int i = 0;
-	if (!current)
-	{
-		printf("No tokens to display.\n");
-		return;
-	}
-	while (current)
-	{
-		printf("Token[%d]: Type: %20s : value : %s, in_quote: %d\n", i++,
-			ft_token_gettype(current->type), current->value, current->is_quoted);
-		current = current->next;
-	}
+	(void)tokens; // Suppress unused parameter warning
+	// t_token *current = tokens;
+	// int i = 0;
+	// if (!current)
+	// {
+	// 	printf("No tokens to display.\n");
+	// 	return;
+	// }
+	// while (current)
+	// {
+	// 	printf("Token[%d]: Type: %20s : value : %s, in_quote: %d\n", i++,
+	// 		ft_token_gettype(current->type), current->value, current->is_quoted);
+	// 	current = current->next;
+	// }
 }

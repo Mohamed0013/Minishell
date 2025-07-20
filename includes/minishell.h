@@ -83,6 +83,9 @@ char *str_ndup(char *str, unsigned int n);
 int str_ichr(const char *str, char c);
 
 // builtins
+int execute_pwd(void);
+
+
 // int ft_env(t_env *env_list);
 int	ft_strcmp(char *s1, char *s2);
 int is_valid_env_name(const char *name);
@@ -130,5 +133,13 @@ bool	is_blank_line(const char *s);
 t_env   *env_from_array(char **env);
 char	*str_ndup(char *str, unsigned int n);
 char	*ft_strchr(const char *s, int c);
+
+
+//new
+void initial_signals(void);
+void handle_sigint(int sig);
+void handle_sigquit(int sig);
+int	free_input(char *input);
+int free_env_and_input(char *input, int value);
 
 #endif // MINISHELL_H

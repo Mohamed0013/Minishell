@@ -14,6 +14,8 @@
 
 size_t	ft_strlen(const char *str)
 {
+	if (!str || !str[0])
+		return (0); // Handle NULL pointer case
 	size_t	len;
 
 	len = 0;

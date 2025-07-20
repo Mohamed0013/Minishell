@@ -2,25 +2,9 @@
 #include "includes/minishell2.h"
 #include "includes/minishell.h"
 
-t_data g_data;
+t_data	g_data;
 
-void handle_sigint(int sig)
-{
-	(void)sig;
-	printf("\n");
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
-void handle_sigquit(int sig)
-{
-	(void)sig;
-	// Ignore SIGQUIT (Ctrl-\)
-	write(1, "\b\b	\b\b", 6);
-}
-
-void free_env_list(t_env *env)
+void	free_env_list(t_env *env)
 {
 	t_env *tmp;
 	while (env)
@@ -33,51 +17,38 @@ void free_env_list(t_env *env)
 	}
 }
 
-int main(int ac, char **av, char **env)
+void	minishell(int *value, char **env, char *input, t_ast *cmd)
 {
-	char		*input;
-	t_ast		*cmd;
-	int 		value;
-
-	value = 0;
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);
-	(void)av;
-	if (ac > 1)
-		return (0);
-
-	g_data.env_list = env_from_array(env);
 	while (1)
 	{
 		input = readline("minishell> ");
-		if (input == NULL) // Handle EOF (Ctrl+D)
-			break;
-		if (*input == '\0') // Handle empty input
-		{
-			free(input);
-			continue;
-		}
+		if (input == NULL)
+			break ;
+		if (*input == '\0' && free_input(input))
+			continue ;
 		add_history(input);
-		if (is_blank_line(input))
-		{
-			free(input);
-			continue;
-		}
+		if (is_blank_line(input) && free_input(input))
+			continue ;
 		cmd = parser(input);
-		free(input);
-		if (cmd == NULL)
-		{
-			free(input);
+		if (cmd == NULL && free_input(input))
 			continue;
-		}
-		// print_argv(cmd);
-		// free_commands(cmd);	 // Free the command structure
-		value = shell_execute(cmd, env, value);
-		if (value == 2) // Handle special return value
+		if (shell_execute(cmd, env, value) == 2)
 			break ;
 	}
-	free_commands(cmd);
-	free_env_list(g_data.env_list); // Free the environment list
-	if (value != 2)
-		return value;
+}
+
+int	main(int ac, char **av, char **env)
+{
+	char	*input;
+	t_ast	*cmd;
+	int 	value;
+
+	value = 0;
+	(void)av;
+	if (ac > 1)
+		return (0);
+	initial_signals();
+	g_data.env_list = env_from_array(env);
+	minishell(&value, env, input, cmd);
+	// return (free_env_and_input(input, value));
 }

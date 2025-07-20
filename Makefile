@@ -1,7 +1,7 @@
 # Compiler and flags
 CC = cc
-CFLAGS = 
-LDFLAGS = -lreadline -Llibft -lft
+CFLAGS = -Wall -Wextra -g3 #-Werror
+LDFLAGS = -lreadline -Llibft -lft #-fsanitize=address -g3
 #-fsanitize=address
 # Directories
 LIBFT_DIR = libft
@@ -14,6 +14,7 @@ SRC = parsing/parsing.c\
 	  expansion/expansion.c\
 	  expansion/test_expansion.c\
 	  main.c\
+	  main_utils.c\
 	  utils/env.c\
 	  utils/empty_line.c\
 	  execution/shell.c\
@@ -24,6 +25,7 @@ SRC = parsing/parsing.c\
 	  execution/builtins/env.c\
 	  execution/builtins/export.c\
 	  execution/utils2.c\
+	  execution/builtins/pwd.c\
 
 # Object files
 OBJ = $(SRC:.c=.o)

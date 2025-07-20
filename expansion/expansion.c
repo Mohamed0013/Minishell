@@ -4,12 +4,19 @@
 #include "../includes/parsing.h"
 #include "../includes/expansion.h"
 
-char *get_env_value(t_list *env,  char *var_name)
+char *get_env_value(t_env *env,  char *var_name)
 {
+    if (!env || !var_name || !*var_name)
+        return NULL; // Return NULL if env or var_name is NULL or empty
     while (env)
     {
-        if (ft_keycmp(env->content, var_name))
-            return ft_strchr(env->content,'=') + 1; // Return the value of the variable
+        // if (!env->name || !var_name)
+        //     continue ;
+
+        if (ft_strlen(env->name) == ft_strlen(var_name) && ft_strncmp(env->name, var_name, ft_strlen(var_name)) == 0)
+        {
+            return (env->value); // Return the value of the variable
+        }
         env = env->next;
     }
     return NULL; // Variable not found
@@ -88,7 +95,9 @@ bool prev_not_redirect(t_token *token) {
 }
 
 // Helper: expand a single argument string
-static char *expand_arg(const char *arg, t_list *env, t_token *token) {
+static char *expand_arg(const char *arg, t_env *env, t_token *token) {
+    if (!arg || !*arg || !env)
+        return NULL; // Return NULL if arg is empty or env is NULL
     size_t len = ft_strlen(arg);
     char *result = malloc(len * 4 + 1); // Generous allocation
     if (!result) return NULL;
@@ -144,20 +153,22 @@ static char *expand_arg(const char *arg, t_list *env, t_token *token) {
     return result;
 }
 
-void expand(t_ast *ast, t_list *env, t_token *token)
+void expand(t_env *env, t_token *token)
 {
-    if (!ast || !env || !token)
+    if (!env || !token)
         return;
     t_token *current = token;
     while (current && current->type != TOKEN_EOF)
     {
         if (current->type == TOKEN_WORD)
         {
+            // printf("Expanding token: %s\n", current->value); // Debug output
             char *expanded = expand_arg(current->value, env, current);
             if (expanded)
             {
                 free(current->value); // Free the old value
                 current->value = expanded; // Assign the new expanded value
+                // printf("Expanded token: %s\n", current->value); // Debug output
             }
         }
         current = current->next; // Move to the next token
