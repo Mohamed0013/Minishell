@@ -42,7 +42,8 @@ void free_tokens(t_token *head)
 	current = head;
 	while (current) {
 		next = current->next;
-		free(current->value);
+		if (current->value)
+			free(current->value);
 		free(current);
 		current = next;
 	}
@@ -50,9 +51,21 @@ void free_tokens(t_token *head)
 
 int	condition6(t_ddata *ddata, const char *input, int *i, int in_quote)
 {
+	t_token *new_token;
+	char *substr;
+
 	if (ddata->len > 0)
 	{
-		add_token(&ddata->head, create_token(ft_substr(input, *i, ddata->len), TOKEN_WORD, in_quote));
+		substr = ft_substr(input, *i, ddata->len);
+		if (!substr)
+			return (0);
+		new_token = create_token(substr, TOKEN_WORD, in_quote);
+		if (!new_token)
+		{
+			free(substr);
+			return (0);
+		}
+		add_token(&ddata->head, new_token);
 		*i += ddata->len;
 		ddata->len = 0;
 	}
@@ -71,9 +84,21 @@ int	condition6(t_ddata *ddata, const char *input, int *i, int in_quote)
 
 int	condition5(t_ddata *ddata, const char *input, int *i, int in_quote)
 {
+	t_token *new_token;
+	char *substr;
+
 	if (ddata->len > 0)
 	{
-		add_token(&ddata->head, create_token(ft_substr(input, *i, ddata->len), TOKEN_WORD, in_quote));
+		substr = ft_substr(input, *i, ddata->len);
+		if (!substr)
+			return (0);
+		new_token = create_token(substr, TOKEN_WORD, in_quote);
+		if (!new_token)
+		{
+			free(substr);
+			return (0);
+		}
+		add_token(&ddata->head, new_token);
 		*i += ddata->len;
 		ddata->len = 0;
 	}
@@ -92,9 +117,21 @@ int	condition5(t_ddata *ddata, const char *input, int *i, int in_quote)
 
 int	condition4(t_ddata *ddata, const char *input, int *i, int in_quote)
 {
+	t_token *new_token;
+	char *substr;
+
 	if (ddata->len > 0)
 	{
-		add_token(&ddata->head, create_token(ft_substr(input, *i, ddata->len), TOKEN_WORD, in_quote));
+		substr = ft_substr(input, *i, ddata->len);
+		if (!substr)
+			return (0);
+		new_token = create_token(substr, TOKEN_WORD, in_quote);
+		if (!new_token)
+		{
+			free(substr);
+			return (0);
+		}
+		add_token(&ddata->head, new_token);
 		*i += ddata->len;
 		ddata->len = 0;
 	}
@@ -105,9 +142,21 @@ int	condition4(t_ddata *ddata, const char *input, int *i, int in_quote)
 
 int	condition3(t_ddata *ddata, const char *input, int *i, int in_quote)
 {
+	t_token *new_token;
+	char *substr;
+
 	if (ddata->len > 0)
 	{
-		add_token(&ddata->head, create_token(ft_substr(input, *i, ddata->len), TOKEN_WORD, in_quote));
+		substr = ft_substr(input, *i, ddata->len);
+		if (!substr)
+			return (0);
+		new_token = create_token(substr, TOKEN_WORD, in_quote);
+		if (!new_token)
+		{
+			free(substr);
+			return (0);
+		}
+		add_token(&ddata->head, new_token);
 		*i += ddata->len;
 		ddata->len = 0;
 	}
@@ -135,9 +184,27 @@ int	condition2(t_ddata *ddata, int *i, int *in_quote)
 
 int	condition1(t_ddata *ddata, const char *input, int *i, int in_quote)
 {
+	t_token *new_token;
+	t_token *eof_token;
+	char *substr;
+
 	if (ddata->len > 0)
-		add_token(&ddata->head, create_token(ft_substr(input, *i, ddata->len), TOKEN_WORD, in_quote));
-	add_token(&ddata->head, create_token(NULL, TOKEN_EOF, 0));
+	{
+		substr = ft_substr(input, *i, ddata->len);
+		if (!substr)
+			return (0);
+		new_token = create_token(substr, TOKEN_WORD, in_quote);
+		if (!new_token)
+		{
+			free(substr);
+			return (0);
+		}
+		add_token(&ddata->head, new_token);
+	}
+	eof_token = create_token(NULL, TOKEN_EOF, 0);
+	if (!eof_token)
+		return (0);
+	add_token(&ddata->head, eof_token);
 	return (1);
 }
 
@@ -150,20 +217,54 @@ t_token	*tokenize_loop(t_ddata *ddata, const char *input)
 	in_quote = 0;
 	while (1)
 	{
-		if (ddata->ptr[i + ddata->len] == '\0' && condition1(ddata, input, &i, in_quote))
+		if (ddata->ptr[i + ddata->len] == '\0')
+		{
+			if (!condition1(ddata, input, &i, in_quote))
+			{
+				free_tokens(ddata->head);
+				return (NULL);
+			}
 			break;
+		}
 		if ((ddata->ptr[i + ddata->len] == '\'' || ddata->ptr[i + ddata->len] == '\"')
 			&& (condition2(ddata, &i, &in_quote)))
 			continue;
-		if ((ddata->ptr[i + ddata->len] == ' ' || ddata->ptr[i + ddata->len] == '\t')
-			&& (condition3(ddata, input, &i, in_quote)))
+		if ((ddata->ptr[i + ddata->len] == ' ' || ddata->ptr[i + ddata->len] == '\t'))
+		{
+			if (!condition3(ddata, input, &i, in_quote))
+			{
+				free_tokens(ddata->head);
+				return (NULL);
+			}
 			continue;
-		if(ddata->ptr[i + ddata->len] == '|' && condition4(ddata, input, &i, in_quote))
+		}
+		if(ddata->ptr[i + ddata->len] == '|')
+		{
+			if (!condition4(ddata, input, &i, in_quote))
+			{
+				free_tokens(ddata->head);
+				return (NULL);
+			}
 			continue;
-		if(ddata->ptr[i + ddata->len] == '<' && condition5(ddata, input, &i, in_quote))
+		}
+		if(ddata->ptr[i + ddata->len] == '<')
+		{
+			if (!condition5(ddata, input, &i, in_quote))
+			{
+				free_tokens(ddata->head);
+				return (NULL);
+			}
 			continue;
-		if(ddata->ptr[i + ddata->len] == '>' && condition6(ddata, input, &i, in_quote))
+		}
+		if(ddata->ptr[i + ddata->len] == '>')
+		{
+			if (!condition6(ddata, input, &i, in_quote))
+			{
+				free_tokens(ddata->head);
+				return (NULL);
+			}
 			continue;
+		}
 		ddata->len++;
 	}
 	return (ddata->head);

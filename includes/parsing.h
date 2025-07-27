@@ -25,7 +25,7 @@ void add_ast_node(t_ast **head, t_ast *new_node);
 char *ft_token_gettype(t_token_type type);
 bool ft_token_is_redirection(t_token_type type);
 void print_ast(t_ast *ast);
-void ft_lst_push(t_list **head, void *value);
+int ft_lst_push(t_list **head, void *value);
 void add_token(t_token **head, t_token *new_token);
 void free_tokens(t_token *head);
 t_token *tokenize_input(const char *input);

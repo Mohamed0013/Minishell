@@ -9,7 +9,7 @@ void execute_cd(char **arguments)
     struct stat	parent_stat;
     if (get_len(arguments) == 0) {
         // No argument provided, default to HOME
-        *home = getenv("HOME");
+        home = getenv("HOME");
         if (!home) {
             fprintf(stderr, "minishell: cd: HOME not set\n");
             return ;

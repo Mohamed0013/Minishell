@@ -27,33 +27,11 @@ int	ft_strcmp(char *s1, char *s2)
 
 void	free_commands(t_ast *cmd)
 {
-	t_ast *current;
-	t_list *args;
-	t_list *redirs;
-
 	if (!cmd)
 		return;
-	current = cmd;
-	while (current)
-	{
-		args = current->args;
-		while (args)
-		{
-			free(args->content);
-			args = args->next;
-		}
-		redirs = current->redirections;
-		while (redirs)
-		{
-			t_token *token = (t_token *)redirs->content;
-			free(token->value);
-			free(token);
-			redirs = redirs->next;
-		}
-		t_ast *next = current->next;
-		free(current);
-		current = next;
-	}
+	
+	// Use the existing free_ast function which is more comprehensive
+	free_ast(cmd);
 }
 
 int	str_ichr(const char *str, char c)

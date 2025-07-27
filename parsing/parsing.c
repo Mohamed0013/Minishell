@@ -38,12 +38,13 @@ bool ft_token_is_redirection(t_token_type type)
             || type == TOKEN_HEREDOC);
 }
 
-void    ft_lst_push(t_list **head, void *value)
+int    ft_lst_push(t_list **head, void *value)
 {
     t_list *new_node = ft_lstnew(value);
     if (!new_node)
-        return;
+        return (0);
     ft_lstadd_back(head, new_node);
+    return (1);
 }
 
 void free_ast(t_ast *ast)
@@ -81,17 +82,19 @@ t_ast *parser(const char *input)
 {
     t_token *tokens = tokenize(input);
     t_token *current = tokens;
+    t_token *print_token;
     if (!tokens)
     {
         ft_putstr_fd("Error tokenizing input.\n", 2);
         return NULL;
     }
     expand(g_data.env_list, tokens);
-    while (tokens && tokens->type != TOKEN_EOF)
+    print_token = tokens;
+    while (print_token && print_token->type != TOKEN_EOF)
     {
-        // t_token *temp = tokens;
-        printf("- %-20s\t %s\n", ft_token_gettype(tokens->type), tokens->value);
-        tokens = tokens->next;
+        // t_token *temp = print_token;
+        printf("- %-20s\t %s\n", ft_token_gettype(print_token->type), print_token->value);
+        print_token = print_token->next;
     }
     t_ast *ast = NULL;
     t_ast *curr = create_ast_node();
@@ -109,7 +112,24 @@ t_ast *parser(const char *input)
         if (current->type == TOKEN_EOF)
             break;
         else if (current->type == TOKEN_WORD)
-            ft_lst_push(&curr->args, current->value);
+        {
+            char *arg_copy = ft_strdup(current->value);
+            if (!arg_copy)
+            {
+                if (ast)
+                    free_ast(ast);
+                free_tokens(tokens);
+                return NULL;
+            }
+            if (!ft_lst_push(&curr->args, arg_copy))
+            {
+                free(arg_copy);
+                if (ast)
+                    free_ast(ast);
+                free_tokens(tokens);
+                return NULL;
+            }
+        }
         else if (ft_token_is_redirection(current->type))
         {
             if (current->next && current->next->type == TOKEN_WORD)
@@ -124,7 +144,23 @@ t_ast *parser(const char *input)
                 }
                 redir->type = current->type;
                 redir->filename = ft_strdup(current->next->value); // For heredoc, this is the delimiter
-                ft_lst_push(&curr->redirections, redir);
+                if (!redir->filename)
+                {
+                    free(redir);
+                    if (ast)
+                        free_ast(ast);
+                    free_tokens(tokens);
+                    return NULL;
+                }
+                if (!ft_lst_push(&curr->redirections, redir))
+                {
+                    free(redir->filename);
+                    free(redir);
+                    if (ast)
+                        free_ast(ast);
+                    free_tokens(tokens);
+                    return NULL;
+                }
                 current = current->next; // Skip the next word as it's already processed
             }
             else

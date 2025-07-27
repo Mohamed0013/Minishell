@@ -9,9 +9,14 @@ void	free_exec(t_execute *exec)
 		return;
 	if (exec->pipfds)
 	{
-		for (int i = 0; exec->pipfds[i]; i++)
+		for (int i = 0; i < exec->nb_pipes; i++)
 		{
-			free(exec->pipfds[i]);
+			if (exec->pipfds[i])
+			{
+				close(exec->pipfds[i][0]);
+				close(exec->pipfds[i][1]);
+				free(exec->pipfds[i]);
+			}
 		}
 		free(exec->pipfds);
 	}
@@ -306,7 +311,16 @@ char	**get_args(t_list *args)
 	current = args;
 	while (current)
 	{
-		result[i++] = ft_strdup((char *)current->content);
+		result[i] = ft_strdup((char *)current->content);
+		if (!result[i])
+		{
+			// Free previously allocated strings if strdup fails
+			while (--i >= 0)
+				free(result[i]);
+			free(result);
+			return (NULL);
+		}
+		i++;
 		current = current->next;
 	}
 	result[i] = NULL; // Null-terminate the array
@@ -361,7 +375,24 @@ void	fill_pipes(int **pipfds, int nb_pipes)
 	for (int i = 0; i < nb_pipes; i++)
 	{
 		pipfds[i] = malloc(2 * sizeof(int));
+		if (!pipfds[i]) {
+			// Free previously allocated pipes
+			for (int j = 0; j < i; j++) {
+				close(pipfds[j][0]);
+				close(pipfds[j][1]);
+				free(pipfds[j]);
+			}
+			perror("malloc failed for pipe");
+			exit(EXIT_FAILURE);
+		}
 		if (pipe(pipfds[i]) == -1) {
+			// Free current pipe and all previously allocated pipes
+			free(pipfds[i]);
+			for (int j = 0; j < i; j++) {
+				close(pipfds[j][0]);
+				close(pipfds[j][1]);
+				free(pipfds[j]);
+			}
 			perror("pipe failed");
 			exit(EXIT_FAILURE);
 		}
@@ -370,6 +401,7 @@ void	fill_pipes(int **pipfds, int nb_pipes)
 
 int	set_pipefds(int nb_pipes, t_execute *exec)
 {
+	exec->nb_pipes = nb_pipes;
 	if (nb_pipes > 0)
 	{
 		exec->pipfds = malloc((nb_pipes + 1) * sizeof(int *));
@@ -542,6 +574,8 @@ int shell_execute(t_ast *ast, char **env, int status)
 		return (1);
 		
 	exec->exit_status = status;
+	exec->nb_pipes = 0;
+	exec->pipfds = NULL;
 	if (!ast || !env)
 	{
 		free(exec);
@@ -562,7 +596,6 @@ int shell_execute(t_ast *ast, char **env, int status)
 		
 		int ret = execute_command(exec, full_command, ast->redirections, env, 0); // is_piped = 0
 		free_split(full_command);
-		free_ast(ast);
 		int exit_status = exec->exit_status;
 		free(exec);
 		return (ret == 2 ? 2 : exit_status); // Return 2 for exit command
@@ -571,9 +604,8 @@ int shell_execute(t_ast *ast, char **env, int status)
 	{
 		// Handle pipeline
 		int ret = handle_pipes(ast, nb_pipes, exec, env);
-		free_ast(ast);
 		int exit_status = exec->exit_status;
-		free(exec);
+		free_exec(exec);
 		return (exit_status);
 	}
 }

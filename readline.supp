@@ -1,0 +1,79 @@
+# Valgrind suppression file for readline library leaks
+# These are known leaks from the readline library that are not our responsibility
+
+{
+   readline_malloc_leak
+   Memcheck:Leak
+   match-leak-kinds:definite,indirect
+   fun:malloc
+   ...
+   obj:*/libreadline.so*
+}
+
+{
+   readline_malloc_leak2
+   Memcheck:Leak
+   match-leak-kinds:definite,indirect
+   fun:malloc
+   fun:xmalloc
+   ...
+   obj:*/libreadline.so*
+}
+
+{
+   readline_realloc_leak
+   Memcheck:Leak
+   match-leak-kinds:definite,indirect
+   fun:realloc
+   ...
+   obj:*/libreadline.so*
+}
+
+{
+   readline_calloc_leak
+   Memcheck:Leak
+   match-leak-kinds:definite,indirect
+   fun:calloc
+   ...
+   obj:*/libreadline.so*
+}
+
+{
+   readline_strdup_leak
+   Memcheck:Leak
+   match-leak-kinds:definite,indirect
+   fun:malloc
+   fun:strdup
+   ...
+   obj:*/libreadline.so*
+}
+
+{
+   readline_history_leak
+   Memcheck:Leak
+   match-leak-kinds:definite,indirect
+   fun:malloc
+   ...
+   fun:add_history
+   ...
+}
+
+{
+   readline_internal_leak
+   Memcheck:Leak
+   match-leak-kinds:definite,indirect
+   fun:malloc
+   fun:xmalloc
+   fun:readline_internal_teardown
+   ...
+}
+
+{
+   readline_completion_leak
+   Memcheck:Leak
+   match-leak-kinds:definite,indirect
+   fun:malloc
+   ...
+   fun:rl_*
+   ...
+}

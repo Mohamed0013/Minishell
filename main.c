@@ -32,8 +32,14 @@ void	minishell(int *value, char **env, char *input, t_ast *cmd)
 		cmd = parser(input);
 		if (cmd == NULL && free_input(input))
 			continue;
-		if (shell_execute(cmd, env, value) == 2)
+		if (shell_execute(cmd, env, *value) == 2)
+		{
+			free_ast(cmd);
+			free(input);
 			break ;
+		}
+		free_ast(cmd);
+		free(input);
 	}
 }
 
@@ -43,6 +49,8 @@ int	main(int ac, char **av, char **env)
 	t_ast	*cmd;
 	int 	value;
 
+	input = NULL;
+	cmd = NULL;
 	value = 0;
 	(void)av;
 	if (ac > 1)
@@ -50,5 +58,6 @@ int	main(int ac, char **av, char **env)
 	initial_signals();
 	g_data.env_list = env_from_array(env);
 	minishell(&value, env, input, cmd);
-	// return (free_env_and_input(input, value));
+	free_env_list(g_data.env_list);
+	return (value);
 }
