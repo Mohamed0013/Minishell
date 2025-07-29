@@ -1,2 +1,3 @@
 libft fiha strjoin3
 return (in_single_quote || in_double_quote); in unclosed cotes function
+flags = O_WRONLY | O_CREAT | O_TRUNC;

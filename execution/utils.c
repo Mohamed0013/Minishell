@@ -1,4 +1,4 @@
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
 int	ft_strcmp(char *s1, char *s2)
 {
@@ -10,27 +10,10 @@ int	ft_strcmp(char *s1, char *s2)
 	return (*(unsigned char *)s1 - *(unsigned char *)s2);
 }
 
-// void	free_split(char **split)
-// {
-// 	int i;
-
-// 	if (!split)
-// 		return;
-// 	i = 0;
-// 	while (split[i])
-// 	{
-// 		free(split[i]);
-// 		i++;
-// 	}
-// 	free(split);
-// }
-
 void	free_commands(t_ast *cmd)
 {
 	if (!cmd)
 		return;
-	
-	// Use the existing free_ast function which is more comprehensive
 	free_ast(cmd);
 }
 

@@ -1,5 +1,3 @@
-#include "includes/parsing.h"
-#include "includes/minishell2.h"
 #include "includes/minishell.h"
 
 t_data	g_data;

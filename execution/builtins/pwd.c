@@ -1,5 +1,4 @@
 #include "../includes/minishell.h"
-#include "../includes/minishell2.h"
 
 // Function to implement pwd builtin
 int execute_pwd(void)

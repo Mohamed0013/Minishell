@@ -12,20 +12,29 @@ SRC = parsing/parsing.c\
 	  tokens/tokenizer.c\
 	  tokens/test_tokenizer.c\
 	  expansion/expansion.c\
-	  expansion/test_expansion.c\
 	  main.c\
 	  main_utils.c\
 	  utils/env.c\
 	  utils/empty_line.c\
 	  execution/shell.c\
 	  execution/builtins/cd.c\
-	  execution/builtins/utils.c\
 	  execution/utils.c\
 	  execution/builtins/echo.c\
 	  execution/builtins/env.c\
 	  execution/builtins/export.c\
 	  execution/utils2.c\
 	  execution/builtins/pwd.c\
+	  execution/utils3.c\
+	  execution/shell_utils/pipeutils.c\
+	  execution/shell_utils/pipeutils2.c\
+	  execution/shell_utils/pipeutils3.c\
+	  execution/shell_utils/pipeutils4.c\
+	  execution/shell_utils/utils1.c\
+	  execution/shell_utils/utils2.c\
+	  execution/redir_utils/utils.c\
+	  execution/builtins/utils/utils1.c\
+	  execution/builtins/utils/utils2.c\
+
 
 # Object files
 OBJ = $(SRC:.c=.o)

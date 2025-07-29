@@ -1,4 +1,3 @@
-#include "../includes/minishell2.h"
 #include "../includes/minishell.h"
 
 t_token	*create_token(char *value, t_token_type type, int is_quoted)

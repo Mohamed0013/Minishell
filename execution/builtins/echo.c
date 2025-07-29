@@ -1,4 +1,4 @@
-#include "../../includes/parsing.h"
+#include "../../includes/minishell.h"
 
 void execute_echo(char **arguments, int status)
 {

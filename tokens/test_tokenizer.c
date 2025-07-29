@@ -1,4 +1,3 @@
-#include "../includes/minishell2.h"
 #include "../includes/minishell.h"
 
 // Forward declarations

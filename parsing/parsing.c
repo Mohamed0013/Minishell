@@ -1,7 +1,4 @@
-#include "../includes/minishell2.h"
 #include "../includes/minishell.h"
-#include "../includes/parsing.h"
-#include "../includes/expansion.h"
 
 // char * ft_token_gettype(t_token_type type);
 t_ast *create_ast_node(void)

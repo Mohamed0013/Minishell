@@ -1,4 +1,4 @@
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
 int is_valid_env_name(const char *name)
 {
@@ -124,7 +124,11 @@ int ft_export(t_env **env, char **args)
             update_or_add_env(env, name, value);
             // update_or_add_env takes ownership of name and value
         }
+        if (value)
+            free(value);
+        if (name)
+            free(name);
         i++;
     }
-    return ret;
+    return (ret);
 }

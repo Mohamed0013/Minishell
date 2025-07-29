@@ -1,5 +1,3 @@
-#include "includes/parsing.h"
-#include "includes/minishell2.h"
 #include "includes/minishell.h"
 
 int free_env_and_input(char *input, int value)

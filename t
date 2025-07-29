@@ -1,22 +1,34 @@
-total 592
--rw-rw-rw-  1 codespace codespace   1333 Jul 27 17:17 MEMORY_FIXES.md
--rw-rw-rw-  1 codespace root        1346 Jul 27 16:46 Makefile
-drwxrwxrwx+ 3 codespace root        4096 Jul 27 17:51 execution
-drwxrwxrwx+ 2 codespace root        4096 Jul 27 17:00 expansion
-drwxrwxrwx+ 2 codespace root        4096 Jul 27 16:46 includes
-drwxrwxrwx+ 2 codespace root        4096 Jul 27 17:53 libft
--rw-rw-rw-  1 codespace root        1074 Jul 27 17:10 main.c
--rw-rw-rw-  1 codespace codespace 165992 Jul 27 17:14 main.o
--rw-rw-rw-  1 codespace root         623 Jul 27 16:46 main_utils.c
--rw-rw-rw-  1 codespace codespace 165080 Jul 27 17:00 main_utils.o
--rwxrwxrwx  1 codespace codespace   2453 Jul 27 17:54 memory_report.sh
--rwxrwxrwx  1 codespace codespace 198280 Jul 27 17:53 minishell
--rwxrwxrwx  1 codespace root        2765 Jul 27 16:46 minishell_test.sh
-drwxrwxrwx+ 2 codespace root        4096 Jul 27 17:53 parsing
--rw-rw-rw-  1 codespace codespace   1235 Jul 27 17:17 readline.supp
--rw-rw-rw-  1 codespace root          91 Jul 27 16:46 readme
--rw-r--r--  1 codespace codespace      0 Jul 27 17:56 t
--rwxrwxrwx  1 codespace codespace   1704 Jul 27 17:53 test_memory.sh
-drwxrwxrwx+ 2 codespace root        4096 Jul 27 17:14 tokens
-drwxrwxrwx+ 2 codespace root        4096 Jul 27 17:00 utils
--rwxrwxrwx  1 codespace codespace    203 Jul 27 17:17 valgrind_run.sh
+execution
+expansion
+includes
+libft
+main.c
+main_utils.c
+Makefile
+minishell
+parsing
+readme
+t
+tokens
+utils
+main.c
+main_utils.c
+minishell
+readme
+execution
+expansion
+includes
+libft
+main.c
+main_utils.c
+Makefile
+minishell
+parsing
+readline.supp
+readme
+t
+tokens
+utils
+
+
+this is new`

@@ -1,8 +1,4 @@
-// #include "expansion.h"
-#include "../includes/minishell2.h"
 #include "../includes/minishell.h"
-#include "../includes/parsing.h"
-#include "../includes/expansion.h"
 
 char *get_env_value(t_env *env,  char *var_name)
 {
@@ -68,19 +64,6 @@ int mask_len(t_token *token)
     }
     return len;
 }
-
-// // Helper: get variable value from env (returns "" if not found)
-// static const char *get_env_val(t_env *env, const char *name) {
-//     while (env) {
-//         if (strcmp(env->name, name) == 0)
-//         {
-//             // return ft_strchr(env->value, '=') + 1;
-//             return env->value; // Return the value of the variable
-//         }
-//         env = env->next;
-//     }
-//     return "";
-// }
 
 bool prev_not_heredoc(t_token *token) {
     if (!token || !token->prev)
@@ -173,109 +156,4 @@ void expand(t_env *env, t_token *token)
         }
         current = current->next; // Move to the next token
     }
-        
-    // t_list *args = ast->args;
-    // while (args)
-    // {
-    //     t_token *token = NULL;
-    //     token->value = (char *)args->content; // Assuming args->content is a string
-    //     printf("Expanding token: %s\n", (char *)args->content);
-    //     char *arg = token->value;
-    //     // if (token->type == TOKEN_WORD && !arg && !token->value)
-    //     // {
-    //     //     args = args->next;
-    //     //     continue; // Skip empty tokens
-    //     // }
-    //     if (!arg) {
-    //         args = args->next;
-    //         continue;
-    //     }
-    //     char *expanded = expand_arg(arg, env);
-    //     if (expanded) {
-    //         free(token->value);
-    //         token->value = expanded;
-    //     }
-    //     args = args->next;
-    // }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-void    expand
-
-
-
-                IS IN DOUBLE QUOTE
-                v
-             00011
-                 ^
-                 EXPANDED OR NOT
-0000  ORIGINAL
-0001  EXPANDED
-0010  ORIGINAL IN DOUBLE QUOTE
-0011  EXPANDED IN DOUBLE QUOTE
-0100  ORIGINAL IN SINGLE QUOTE
-
-
-x="a b"
-
-lsa b"a b"'$x' 
-00111033300440
-*/
-
-// a="ls  -l"
-
-
-// {
-//     int  type ;
-//     char * value ;
-//     t_list fields;
-// }
-
-// t_ast {
-//     t_list args;
-//     t_list redirect;
-//     next; 
-// }
-
-
-// $a  
-
-
-// {
-//     type = TOKEN_WORD;
-//     value = "$a"
-//     fields = ls -> -l
-
-// }
-
-
-// [ls,-l]

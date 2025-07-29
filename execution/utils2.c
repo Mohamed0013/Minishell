@@ -1,4 +1,4 @@
-#include "../includes/parsing.h"
+#include "../includes/minishell.h"
 
 t_env *lst_new_env(char *name, char *value)
 {
