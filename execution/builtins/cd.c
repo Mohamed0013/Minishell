@@ -85,7 +85,7 @@ void	execute_cd(char **arguments)
 
 	current_dir = NULL;
 	new_dir = NULL;
-	if (get_len(arguments) == 0)
+	if (!arguments || !arguments[1])
 	{
 		f_check();
 		return ;

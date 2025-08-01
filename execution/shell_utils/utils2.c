@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 char	*dup_and_check(t_list *current, char **result, int *i)
 {

@@ -301,4 +301,8 @@ int	exec_builtin_part2(char **args, t_list *redirections);
 void	free_exec(t_execute *exec);
 int	is_builtin(char *command);
 
+//exec_utils
+void	exec_utils(t_exec_data *data, t_ast *ast, int status);
+int	exec_utils2(t_exec_data *data, t_ast *ast, char **current_env, char **env);
+
 #endif // MINISHELL_H

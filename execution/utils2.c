@@ -6,7 +6,7 @@ t_env	*lst_new_env(char *name, char *value)
 
 	new = malloc(sizeof(t_env));
 	if (!new)
-		return NULL;
+		return (NULL);
 	new->name = ft_strdup(name);
 	new->value = ft_strdup(value);
 	new->next = NULL;
@@ -18,11 +18,11 @@ void	lst_add_env(t_env **lst, t_env *new)
 	t_env	*cur;
 
 	if (!lst || !new)
-		return;
+		return ;
 	if (!*lst)
 	{
 		*lst = new;
-		return;
+		return ;
 	}
 	cur = *lst;
 	while (cur->next)
@@ -30,34 +30,7 @@ void	lst_add_env(t_env **lst, t_env *new)
 	cur->next = new;
 }
 
-int	validate_and_split(char *arg, char **name, char **value)
-{
-	char	*eq_pos;
-
-	eq_pos = ft_strchr(arg, '=');
-	if (eq_pos)
-	{
-		*name = ft_substr(arg, 0, eq_pos - arg);
-		*value = ft_strdup(eq_pos + 1);
-	}
-	else
-	{
-		*name = ft_strdup(arg);
-		*value = NULL;
-	}
-	if (!is_valid_env_name(*name))
-	{
-		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-		ft_putstr_fd(arg, STDERR_FILENO);
-		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-		free(*name);
-		free(*value);
-		return (1);
-	}
-	return (0);
-}
-
-void update_or_add_env(t_env **env, char *name, char *value)
+void	update_or_add_env(t_env **env, char *name, char *value)
 {
 	t_env	*current;
 	t_env	*new;
@@ -98,13 +71,13 @@ void	ft_swap(t_env *current, t_env *prev, t_env **env)
 	free(current->value);
 	free(current);
 }
-//unset PATH
-int ft_unset(t_env **env, char **args)
+
+int	ft_unset(t_env **env, char **args)
 {
-	int		(i) = 1;
 	t_env	*current;
 	t_env	*prev;
 
+	int (i) = 1;
 	if (!args)
 		return (0);
 	while (args[i])

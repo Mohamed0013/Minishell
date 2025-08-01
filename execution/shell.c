@@ -59,17 +59,9 @@ int	shell_execute(t_ast *ast, char **env, int status)
 	current_env = env_to_array(g_data.env_list);
 	if (!current_env)
 		current_env = env;
-	data.exec->exit_status = status;
-	data.exec->nb_pipes = 0;
-	data.exec->pipfds = NULL;
-	data.nb_pipes = count_pipes(ast);
-	if (data.nb_pipes == 0)
-	{
-		data.ret = execute_single_command(&data, ast, current_env);
-		if (current_env != env)
-			free_split(current_env);
+	exec_utils(&data, ast, status);
+	if (data.nb_pipes == 0 && exec_utils2(&data, ast, current_env, env) == 1)
 		return (data.ret);
-	}
 	data.ret = handle_pipes(ast, data.nb_pipes, data.exec, current_env);
 	data.exit_status = data.exec->exit_status;
 	free_exec(data.exec);

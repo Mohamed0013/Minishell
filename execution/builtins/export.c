@@ -43,41 +43,6 @@ void	update_env(t_env **env_list, char *name, char *value)
 	*env_list = new;
 }
 
-void	fill_one(int i, int count, t_env *temp, t_env **arr)
-{
-	while (i < count)
-	{
-		arr[i] = temp;
-		temp = temp->next;
-		i++;
-	}
-}
-
-void	fill_arr(t_env **arr, t_env *temp, t_env *swap, int count)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	fill_one(i, count, temp, arr);
-	while (i < count - 1)
-	{
-		j = 0;
-		while (j < count - i - 1)
-		{
-			if (ft_strcmp(arr[j]->name, arr[j + 1]->name) > 0)
-			{
-				swap = arr[j];
-				arr[j] = arr[j + 1];
-				arr[j + 1] = swap;
-			}
-			j++;
-		}
-		i++;
-	}
-}
-
 t_env	**utils(int count, t_env *temp, t_env *env_list)
 {
 	t_env	**arr;
@@ -90,18 +55,6 @@ t_env	**utils(int count, t_env *temp, t_env *env_list)
 	temp = env_list;
 	fill_arr(arr, temp, swap, count);
 	return (arr);
-}
-
-void	print_util(int i, int count, t_env **arr)
-{
-	while (i < count)
-	{
-		if (arr[i]->value)
-			printf("declare -x %s=\"%s\"\n", arr[i]->name, arr[i]->value);
-		else
-			printf("declare -x %s\n", arr[i]->name);
-		i++;
-	}
 }
 
 void	print_env_sorted(t_env *env_list)
@@ -122,14 +75,6 @@ void	print_env_sorted(t_env *env_list)
 		return ;
 	print_util(0, count, arr);
 	free(arr);
-}
-
-void	check_and_free(char *value, char *name)
-{
-	if (value)
-		free(value);
-	if (name)
-		free(name);
 }
 
 int	ft_export(t_env **env, char **args)

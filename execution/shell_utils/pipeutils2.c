@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	set_pipefds(int nb_pipes, t_execute *exec)
 {

@@ -1,15 +1,15 @@
 #include "../../../includes/minishell.h"
 
-int get_len(char **s)
+int	get_len(char **s)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    if (!s || !*s)
-        return (0);
-    while (s[i])
-        i++;
-    return (i);
+	i = 0;
+	if (!s || !*s)
+		return (0);
+	while (s[i])
+		i++;
+	return (i);
 }
 
 int	execute_builtin_piped(t_execute *exec, char **cmd, t_list *redir)

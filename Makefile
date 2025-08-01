@@ -34,6 +34,7 @@ SRC = parsing/parsing.c\
 	  execution/redir_utils/utils.c\
 	  execution/builtins/utils/utils1.c\
 	  execution/builtins/utils/utils2.c\
+	  execution/exec_utils.c\
 
 
 # Object files

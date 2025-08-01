@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 static int	handle_child_process(
 	t_ast *current, t_execute *exec, int i, char **env)

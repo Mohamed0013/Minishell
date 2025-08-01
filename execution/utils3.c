@@ -22,7 +22,7 @@ void	exec_error(int err, char **cmd)
 static void	execute_child_external(
 	t_external_data *data, char **cmd, t_list *redir, char **env)
 {
-	int err;
+	int	err;
 
 	if (redir && handle_redirections(redir) != 0)
 	{
@@ -80,4 +80,31 @@ int	execute_command(t_execute *exec, char **cmd, t_list *redir, char **env)
 	{
 		return (execute_external_cmd(exec, cmd, redir, env));
 	}
+}
+
+int	validate_and_split(char *arg, char **name, char **value)
+{
+	char	*eq_pos;
+
+	eq_pos = ft_strchr(arg, '=');
+	if (eq_pos)
+	{
+		*name = ft_substr(arg, 0, eq_pos - arg);
+		*value = ft_strdup(eq_pos + 1);
+	}
+	else
+	{
+		*name = ft_strdup(arg);
+		*value = NULL;
+	}
+	if (!is_valid_env_name(*name))
+	{
+		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+		free(*name);
+		free(*value);
+		return (1);
+	}
+	return (0);
 }

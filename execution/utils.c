@@ -13,7 +13,7 @@ int	ft_strcmp(char *s1, char *s2)
 void	free_commands(t_ast *cmd)
 {
 	if (!cmd)
-		return;
+		return ;
 	free_ast(cmd);
 }
 
