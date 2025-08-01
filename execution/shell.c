@@ -47,22 +47,33 @@ char	*get_path(char *cmd, char **env)
 int	shell_execute(t_ast *ast, char **env, int status)
 {
 	t_exec_data	data;
+	char		**current_env;
 
 	data.exec = malloc(sizeof(t_execute));
-	if (!data.exec || !ast || !env)
+	if (!data.exec || !ast)
 	{
 		if (data.exec)
 			free(data.exec);
 		return (1);
 	}
+	current_env = env_to_array(g_data.env_list);
+	if (!current_env)
+		current_env = env;
 	data.exec->exit_status = status;
 	data.exec->nb_pipes = 0;
 	data.exec->pipfds = NULL;
 	data.nb_pipes = count_pipes(ast);
 	if (data.nb_pipes == 0)
-		return (execute_single_command(&data, ast, env));
-	data.ret = handle_pipes(ast, data.nb_pipes, data.exec, env);
+	{
+		data.ret = execute_single_command(&data, ast, current_env);
+		if (current_env != env)
+			free_split(current_env);
+		return (data.ret);
+	}
+	data.ret = handle_pipes(ast, data.nb_pipes, data.exec, current_env);
 	data.exit_status = data.exec->exit_status;
 	free_exec(data.exec);
+	if (current_env != env)
+		free_split(current_env);
 	return (data.exit_status);
 }

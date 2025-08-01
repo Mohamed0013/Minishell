@@ -48,3 +48,49 @@ t_env *env_from_array(char **env)
 	}
 	return head;
 }
+
+char **env_to_array(t_env *env_list)
+{
+	t_env	*current;
+	char	**env_array;
+	char	*temp;
+	int		count;
+	int		i;
+
+	count = 0;
+	current = env_list;
+	while (current)
+	{
+		if (current->name && current->value)
+			count++;
+		current = current->next;
+	}
+	env_array = malloc(sizeof(char *) * (count + 1));
+	if (!env_array)
+		return (NULL);
+	i = 0;
+	current = env_list;
+	while (current && i < count)
+	{
+		if (current->name && current->value)
+		{
+			temp = ft_strjoin(current->name, "=");
+			if (!temp)
+			{
+				free_split(env_array);
+				return (NULL);
+			}
+			env_array[i] = ft_strjoin(temp, current->value);
+			free(temp);
+			if (!env_array[i])
+			{
+				free_split(env_array);
+				return (NULL);
+			}
+			i++;
+		}
+		current = current->next;
+	}
+	env_array[i] = NULL;
+	return (env_array);
+}

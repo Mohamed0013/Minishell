@@ -168,6 +168,7 @@ int is_valid_env_name(const char *name);
 void update_or_add_env(t_env **env, char *name, char *value);
 int validate_and_split(char *arg, char **name, char **value);
 t_env *env_from_array(char **env);
+char **env_to_array(t_env *env_list);
 int ft_export(t_env **env, char **args);
 int ft_env(t_env *env_list, char **args);
 int ft_unset(t_env **env, char **args);
@@ -207,6 +208,7 @@ void cleanup(void);
 
 bool	is_blank_line(const char *s);
 t_env   *env_from_array(char **env);
+char	**env_to_array(t_env *env_list);
 char	*str_ndup(char *str, unsigned int n);
 char	*ft_strchr(const char *s, int c);
 
