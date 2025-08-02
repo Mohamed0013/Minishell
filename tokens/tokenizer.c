@@ -4,7 +4,7 @@ t_token	*create_token(char *value, t_token_type type, int is_quoted)
 {
 	t_token	*new_token;
 
-	new_token = malloc(sizeof(t_token));
+	new_token = ft_malloc(sizeof(t_token));
 	if (!new_token)
 		return (NULL);
 	new_token->value = value;
@@ -46,9 +46,9 @@ void	free_tokens(t_token *head)
 	while (current)
 	{
 		next = current->next;
-		if (current->value)
-			free(current->value);
-		free(current);
+		// if (current->value)
+		// 	free(current->value);
+		// free(current);
 		current = next;
 	}
 }
@@ -226,7 +226,7 @@ t_token	*tokenize_loop(t_ddata *ddata, const char *input)
 		{
 			if (!condition1(ddata, input, &i, in_quote))
 			{
-				free_tokens(ddata->head);
+				// free_tokens(ddata->head);
 				return (NULL);
 			}
 			break ;
@@ -239,7 +239,7 @@ t_token	*tokenize_loop(t_ddata *ddata, const char *input)
 		{
 			if (!condition3(ddata, input, &i, in_quote))
 			{
-				free_tokens(ddata->head);
+				// free_tokens(ddata->head);
 				return (NULL);
 			}
 			continue ;
@@ -248,7 +248,7 @@ t_token	*tokenize_loop(t_ddata *ddata, const char *input)
 		{
 			if (!condition4(ddata, input, &i, in_quote))
 			{
-				free_tokens(ddata->head);
+				// free_tokens(ddata->head);
 				return (NULL);
 			}
 			continue ;
@@ -257,7 +257,7 @@ t_token	*tokenize_loop(t_ddata *ddata, const char *input)
 		{
 			if (!condition5(ddata, input, &i, in_quote))
 			{
-				free_tokens(ddata->head);
+				// free_tokens(ddata->head);
 				return (NULL);
 			}
 			continue ;
@@ -266,7 +266,7 @@ t_token	*tokenize_loop(t_ddata *ddata, const char *input)
 		{
 			if (!condition6(ddata, input, &i, in_quote))
 			{
-				free_tokens(ddata->head);
+				// free_tokens(ddata->head);
 				return (NULL);
 			}
 			continue ;
@@ -281,14 +281,14 @@ t_token	*tokenize_input(const char *input)
 	t_ddata	*ddata;
 	t_token	*head;
 
-	ddata = malloc(sizeof(t_ddata));
+	ddata = ft_malloc(sizeof(t_ddata));
 	if (!ddata)
 		return (NULL);
 	ddata->head = NULL;
 	ddata->len = 0;
 	ddata->ptr = input;
 	head = tokenize_loop(ddata, input);
-	free(ddata);
+	// free(ddata);
 	return (head);
 }
 

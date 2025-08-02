@@ -87,17 +87,18 @@ static char	*expand_arg(const char *arg, t_env *env, t_token *token)
 	size_t	len;
 	char	*result;
 	size_t	i = 0, j;
-	int		in_squote = 0, in_dquote;
+	int		in_squote = 0, in_dquote = 0;
 	size_t	var_start;
 	size_t	var_len;
-			char var_name[128];
-			const char *val = get_env_value(env, var_name);
+	char var_name[128];
+	const char *val;
 	size_t	vlen;
 
+	printf("args : %s\n",arg);
 	if (!arg || !*arg || !env)
 		return (NULL);
 	len = ft_strlen(arg);
-	result = malloc(len * 4 + 1);
+	result = ft_malloc(len * 4 + 1);
 	if (!result)
 		return (NULL);
 	i = 0, j = 0;
@@ -127,6 +128,7 @@ static char	*expand_arg(const char *arg, t_env *env, t_token *token)
 				var_len++;
 			}
 			ft_strlcpy(var_name, arg + var_start, var_len + 1);
+			val = get_env_value(env, var_name);
 			vlen = ft_strlen(val);
 			ft_memcpy(result + j, val, vlen);
 			j += vlen;

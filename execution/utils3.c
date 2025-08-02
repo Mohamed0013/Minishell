@@ -5,17 +5,17 @@ void	exec_error(int err, char **cmd)
 	if (err == ENOENT)
 	{
 		printf("minishell: %s: command not found\n", cmd[0]);
-		exit(127);
+		ft_exit_withclear(127);
 	}
 	else if (err == EACCES)
 	{
 		printf("minishell: %s: Permission denied\n", cmd[0]);
-		exit(126);
+		ft_exit_withclear(126);
 	}
 	else
 	{
 		perror("minishell");
-		exit(1);
+		ft_exit_withclear(1);
 	}
 }
 
@@ -26,8 +26,8 @@ static void	execute_child_external(t_external_data *data, char **cmd,
 
 	if (redir && handle_redirections(redir) != 0)
 	{
-		free_split(cmd);
-		exit(1);
+		// free_split(cmd);
+		ft_exit_withclear(1);
 	}
 	if (str_ichr(cmd[0], '/') > -1)
 		data->path = cmd[0];
@@ -37,7 +37,6 @@ static void	execute_child_external(t_external_data *data, char **cmd,
 	{
 		err = errno;
 		exec_error(err, cmd);
-		free_split(cmd);
 	}
 }
 
@@ -53,10 +52,26 @@ static int	execute_external_cmd(t_execute *exec, char **cmd, t_list *redir,
 		return (-1);
 	}
 	else if (data.pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
 		execute_child_external(&data, cmd, redir, env);
+		// free_split(cmd);
+		ft_exit_withclear(0);
+	}
 	waitpid(data.pid, &data.status, 0);
 	if (WIFEXITED(data.status))
 		exec->exit_status = WEXITSTATUS(data.status);
+	else if (WIFSIGNALED(data.status))
+	{
+		exec->exit_status = 128 + WTERMSIG(data.status);	
+		if(exec->exit_status == 128 + SIGINT || exec->exit_status == 128 + SIGQUIT)
+			write(1, "\n", 1);
+	}
+	else if (WIFSTOPPED(data.status))
+	{
+		exec->exit_status = 128 + WSTOPSIG(data.status);
+	}
+
 	return (exec->exit_status);
 }
 

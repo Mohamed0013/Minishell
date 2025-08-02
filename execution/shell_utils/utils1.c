@@ -30,13 +30,10 @@ void	free_exec(t_execute *exec)
 			{
 				close(exec->pipfds[i][0]);
 				close(exec->pipfds[i][1]);
-				free(exec->pipfds[i]);
 			}
 			i++;
 		}
-		free(exec->pipfds);
 	}
-	free(exec);
 }
 
 int	execute_single_command(t_exec_data *data, t_ast *ast, char **env)
@@ -44,14 +41,13 @@ int	execute_single_command(t_exec_data *data, t_ast *ast, char **env)
 	data->full_command = get_args(ast->args);
 	if (!data->full_command)
 	{
-		free(data->exec);
+		// free(data->exec);
 		return (1);
 	}
 	data->ret = execute_command(data->exec, data->full_command,
 			ast->redirections, env);
-	free_split(data->full_command);
+	// free_split(data->full_command);
 	data->exit_status = data->exec->exit_status;
-	free(data->exec);
 	if (data->ret == 2)
 		return (2);
 	else

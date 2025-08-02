@@ -22,7 +22,6 @@ static char	*check_path_directory(char *path, char *cmd)
 	free(dir);
 	if (access(bin, F_OK) == 0)
 		return (bin);
-	free(bin);
 	return (NULL);
 }
 
@@ -49,11 +48,9 @@ int	shell_execute(t_ast *ast, char **env, int status)
 	t_exec_data	data;
 	char		**current_env;
 
-	data.exec = malloc(sizeof(t_execute));
+	data.exec = ft_malloc(sizeof(t_execute));
 	if (!data.exec || !ast)
 	{
-		if (data.exec)
-			free(data.exec);
 		return (1);
 	}
 	current_env = env_to_array(g_data.env_list);
@@ -61,11 +58,15 @@ int	shell_execute(t_ast *ast, char **env, int status)
 		current_env = env;
 	exec_utils(&data, ast, status);
 	if (data.nb_pipes == 0 && exec_utils2(&data, ast, current_env, env) == 1)
+	{
+		// if (current_env)
+		// 	free_split(current_env);
 		return (data.ret);
+	}
 	data.ret = handle_pipes(ast, data.nb_pipes, data.exec, current_env);
 	data.exit_status = data.exec->exit_status;
 	free_exec(data.exec);
-	if (current_env != env)
-		free_split(current_env);
+	// if (current_env)
+	// 	free_split(current_env);
 	return (data.exit_status);
 }

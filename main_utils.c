@@ -1,11 +1,11 @@
 #include "includes/minishell.h"
 
-int	free_env_and_input(char *input, int value)
-{
-	free(input);
-	free_env_list(g_data.env_list);
-	return (value);
-}
+// int	free_env_and_input(char *input, int value)
+// {
+// 	free(input);
+// 	free_env_list(g_data.env_list);
+// 	return (value);
+// }
 
 int	free_input(char *input)
 {

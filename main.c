@@ -20,7 +20,9 @@ void	minishell(int *value, char **env, char *input, t_ast *cmd)
 {
 	while (1)
 	{
+		initial_signals();
 		input = readline("minishell> ");
+		signal(SIGINT, SIG_IGN);
 		if (input == NULL)
 			break ;
 		if (*input == '\0' && free_input(input))
@@ -29,16 +31,11 @@ void	minishell(int *value, char **env, char *input, t_ast *cmd)
 		if (is_blank_line(input) && free_input(input))
 			continue ;
 		cmd = parser(input);
-		if (cmd == NULL && free_input(input))
-			continue ;
-		if (shell_execute(cmd, env, *value) == 2)
-		{
-			free_ast(cmd);
-			free(input);
-			break ;
-		}
-		free_ast(cmd);
+		if (cmd)
+			shell_execute(cmd, env, *value);
+		// free_ast(cmd);
 		free(input);
+		ft_gc_clear();
 	}
 }
 
@@ -54,9 +51,8 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	if (ac > 1)
 		return (0);
-	initial_signals();
 	g_data.env_list = env_from_array(env);
 	minishell(&value, env, input, cmd);
-	free_env_list(g_data.env_list);
-	return (value);
+	clear_history();
+	ft_exit_withclear(value);
 }

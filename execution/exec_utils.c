@@ -10,8 +10,9 @@ void	exec_utils(t_exec_data *data, t_ast *ast, int status)
 
 int	exec_utils2(t_exec_data *data, t_ast *ast, char **current_env, char **env)
 {
+	(void) env;
 	data->ret = execute_single_command(data, ast, current_env);
-	if (current_env != env)
-		free_split(current_env);
+	// if (current_env != env)
+	// 	free_split(current_env);
 	return (1);
 }

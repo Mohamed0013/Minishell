@@ -5,7 +5,7 @@ int	set_pipefds(int nb_pipes, t_execute *exec)
 	exec->nb_pipes = nb_pipes;
 	if (nb_pipes > 0)
 	{
-		exec->pipfds = malloc((nb_pipes + 1) * sizeof(int *));
+		exec->pipfds = ft_malloc((nb_pipes + 1) * sizeof(int *));
 		if (!exec->pipfds)
 			return (1);
 		exec->pipfds[nb_pipes] = NULL;
@@ -61,9 +61,9 @@ void	execute_child_builtin(t_child_data *data, t_ast *current,
 	data->status = execute_builtin(data->full_command, current->redirections,
 			exec->exit_status);
 	if (data->status == 2)
-		exit(exec->exit_status);
+		ft_exit_withclear(exec->exit_status);
 	else
-		exit(data->status);
+		ft_exit_withclear(data->status);
 }
 
 void	execute_child_external_pipe(t_child_data *data, char **env)
@@ -75,10 +75,10 @@ void	execute_child_external_pipe(t_child_data *data, char **env)
 	if (execve(data->path, data->full_command, env) == -1)
 	{
 		if (errno == ENOENT)
-			exit(127);
+			ft_exit_withclear(127);
 		else if (errno == EACCES)
-			exit(126);
+			ft_exit_withclear(126);
 		else
-			exit(1);
+			ft_exit_withclear(1);
 	}
 }

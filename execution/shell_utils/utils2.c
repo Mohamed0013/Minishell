@@ -6,11 +6,12 @@ char	*dup_and_check(t_list *current, char **result, int *i)
 
 	index = *i;
 	result[index] = ft_strdup((char *)current->content);
+	ft_gc_add(result[index]); // Assuming ft_gc_add is a custom garbage collector function
 	if (!result[index])
 	{
-		while (--i >= 0)
-			free(result[index]);
-		free(result);
+		// while (--index >= 0)
+		// 	free(result[index]);
+		// free(result);
 		return (NULL);
 	}
 	*i = index;
@@ -25,7 +26,7 @@ char	**get_args(t_list *args)
 
 	if (!args)
 		return (NULL);
-	result = malloc(sizeof(char *) * (ft_lstsize(args) + 1));
+	result = ft_malloc(sizeof(char *) * (ft_lstsize(args) + 1));
 	if (!result)
 		return (NULL);
 	i = 0;
@@ -69,7 +70,7 @@ char	*ft_strconcat(char **args, const char *sep)
 	total_length = calculate_total_length(args, sep);
 	if (total_length == 0)
 		return (NULL);
-	result = malloc(total_length + 1);
+	result = ft_malloc(total_length + 1);
 	if (!result)
 		return (NULL);
 	result[0] = '\0';

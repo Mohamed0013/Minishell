@@ -36,7 +36,9 @@ SRC = ./execution/builtins/cd.c \
 ./tokens/test_tokenizer.c \
 ./tokens/tokenizer.c \
 ./utils/empty_line.c \
-./utils/env.c 
+./utils/env.c \
+./execution/exit_clear.c \
+./garbage_collector/ft_malloc.c
 
 
 # Object files

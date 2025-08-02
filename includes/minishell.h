@@ -290,4 +290,13 @@ void					fill_arr(t_env **arr, t_env *temp, t_env *swap,
 							int count);
 void					check_and_free(char *value, char *name);
 void					print_util(int i, int count, t_env **arr);
+int ft_exit_withclear(int code);
+
+
+//// garbge collector 
+t_list ** gc_ptr();
+void * ft_malloc(size_t size);
+void ft_gc_clear();
+void ft_gc_add(void *ptr);
+
 #endif

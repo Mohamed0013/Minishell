@@ -25,7 +25,7 @@ void	cleanup_pipes_on_error(int **pipfds, int i)
 	{
 		close(pipfds[j][0]);
 		close(pipfds[j][1]);
-		free(pipfds[j]);
+		// free(pipfds[j]);
 		j++;
 	}
 }
@@ -57,19 +57,19 @@ void	fill_pipes(int **pipfds, int nb_pipes)
 	i = 0;
 	while (i < nb_pipes)
 	{
-		pipfds[i] = malloc(2 * sizeof(int));
+		pipfds[i] = ft_malloc(2 * sizeof(int));
 		if (!pipfds[i])
 		{
 			cleanup_pipes_on_error(pipfds, i);
-			perror("malloc failed for pipe");
-			exit(EXIT_FAILURE);
+			perror("ft_malloc failed for pipe");
+			ft_exit_withclear(EXIT_FAILURE);
 		}
 		if (pipe(pipfds[i]) == -1)
 		{
-			free(pipfds[i]);
+			// free(pipfds[i]);
 			cleanup_pipes_on_error(pipfds, i);
 			perror("pipe failed");
-			exit(EXIT_FAILURE);
+			ft_exit_withclear(EXIT_FAILURE);
 		}
 		i++;
 	}
