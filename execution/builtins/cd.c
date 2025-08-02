@@ -38,7 +38,8 @@ static int	check(char **current_dir, char **new_dir)
 	if (stat("..", &parent_stat) == -1)
 	{
 		printf("minishell: cd: error retrieving parent directory:\
-			 %s\n", strerror(errno));
+				%s\n",
+				strerror(errno));
 		return (1);
 	}
 	*current_dir = getcwd(NULL, 0);
@@ -46,7 +47,7 @@ static int	check(char **current_dir, char **new_dir)
 	{
 		printf("minishell: cd: error retrieving current directory\
 			: getcwd: cannot access parent directories: No such\
-			 file or directory\n");
+				file or directory\n");
 		return (1);
 	}
 	if (check2() == 1)
@@ -100,6 +101,6 @@ void	execute_cd(char **arguments)
 		return ;
 	}
 	if (chdir(arguments[1]) == -1)
-		fprintf(stderr, "minishell: cd: %s: %s\n",
-			arguments[1], strerror(errno));
+		fprintf(stderr, "minishell: cd: %s: %s\n", arguments[1],
+			strerror(errno));
 }

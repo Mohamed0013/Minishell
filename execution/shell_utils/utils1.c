@@ -47,8 +47,8 @@ int	execute_single_command(t_exec_data *data, t_ast *ast, char **env)
 		free(data->exec);
 		return (1);
 	}
-	data->ret = execute_command(data->exec,
-			data->full_command, ast->redirections, env);
+	data->ret = execute_command(data->exec, data->full_command,
+			ast->redirections, env);
 	free_split(data->full_command);
 	data->exit_status = data->exec->exit_status;
 	free(data->exec);

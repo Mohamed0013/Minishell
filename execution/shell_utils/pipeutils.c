@@ -1,7 +1,7 @@
 #include "../../includes/minishell.h"
 
-static int	handle_child_process(
-	t_ast *current, t_execute *exec, int i, char **env)
+static int	handle_child_process(t_ast *current, t_execute *exec, int i,
+		char **env)
 {
 	t_child_data	data;
 
@@ -53,8 +53,8 @@ static int	wait_for_processes(pid_t *pids, int count, t_execute *exec)
 	return (exec->exit_status);
 }
 
-static int	initialize_pipe_data(
-	t_pipe_data *data, t_ast *ast, int nb_pipes, t_execute *exec)
+static int	initialize_pipe_data(t_pipe_data *data, t_ast *ast, int nb_pipes,
+		t_execute *exec)
 {
 	data->i = 0;
 	data->current = ast;

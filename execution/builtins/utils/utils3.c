@@ -1,4 +1,4 @@
-#include "../../../includes/minishell.h"
+#include "minishell.h"
 
 void	check_and_free(char *value, char *name)
 {

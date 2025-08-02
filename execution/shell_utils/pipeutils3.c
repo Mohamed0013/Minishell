@@ -30,8 +30,7 @@ void	cleanup_pipes_on_error(int **pipfds, int i)
 	}
 }
 
-int	check_redirect_types(
-	t_list *redirections, int *has_output, int *has_input)
+int	check_redirect_types(t_list *redirections, int *has_output, int *has_input)
 {
 	t_list	*redir;
 	t_token	*token;

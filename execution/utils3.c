@@ -19,8 +19,8 @@ void	exec_error(int err, char **cmd)
 	}
 }
 
-static void	execute_child_external(
-	t_external_data *data, char **cmd, t_list *redir, char **env)
+static void	execute_child_external(t_external_data *data, char **cmd,
+		t_list *redir, char **env)
 {
 	int	err;
 
@@ -41,8 +41,8 @@ static void	execute_child_external(
 	}
 }
 
-static int	execute_external_cmd(
-	t_execute *exec, char **cmd, t_list *redir, char **env)
+static int	execute_external_cmd(t_execute *exec, char **cmd, t_list *redir,
+		char **env)
 {
 	t_external_data	data;
 

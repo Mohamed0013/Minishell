@@ -18,8 +18,7 @@ int	set_pipefds(int nb_pipes, t_execute *exec)
 	return (0);
 }
 
-void	setup_child_pipes(
-	t_execute *exec, int i, int nb_pipes, t_list *redir)
+void	setup_child_pipes(t_execute *exec, int i, int nb_pipes, t_list *redir)
 {
 	int	has_output;
 	int	has_input;
@@ -45,8 +44,7 @@ void	setup_child_pipes(
 	}
 }
 
-void	close_parent_pipes(
-	t_execute *exec, int i, int nb_pipes)
+void	close_parent_pipes(t_execute *exec, int i, int nb_pipes)
 {
 	if (nb_pipes > 0)
 	{
@@ -57,11 +55,11 @@ void	close_parent_pipes(
 	}
 }
 
-void	execute_child_builtin(
-	t_child_data *data, t_ast *current, t_execute *exec)
+void	execute_child_builtin(t_child_data *data, t_ast *current,
+		t_execute *exec)
 {
-	data->status = execute_builtin(data->full_command,
-			current->redirections, exec->exit_status);
+	data->status = execute_builtin(data->full_command, current->redirections,
+			exec->exit_status);
 	if (data->status == 2)
 		exit(exec->exit_status);
 	else

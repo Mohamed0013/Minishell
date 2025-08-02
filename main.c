@@ -4,7 +4,8 @@ t_data	g_data;
 
 void	free_env_list(t_env *env)
 {
-	t_env *tmp;
+	t_env	*tmp;
+
 	while (env)
 	{
 		tmp = env->next;
@@ -29,7 +30,7 @@ void	minishell(int *value, char **env, char *input, t_ast *cmd)
 			continue ;
 		cmd = parser(input);
 		if (cmd == NULL && free_input(input))
-			continue;
+			continue ;
 		if (shell_execute(cmd, env, *value) == 2)
 		{
 			free_ast(cmd);
@@ -45,7 +46,7 @@ int	main(int ac, char **av, char **env)
 {
 	char	*input;
 	t_ast	*cmd;
-	int 	value;
+	int		value;
 
 	input = NULL;
 	cmd = NULL;

@@ -14,10 +14,10 @@
 
 size_t	ft_strlen(const char *str)
 {
-	if (!str || !str[0])
-		return (0); // Handle NULL pointer case
 	size_t	len;
 
+	if (!str || !str[0])
+		return (0);
 	len = 0;
 	while (str[len])
 		len++;

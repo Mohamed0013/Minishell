@@ -27,12 +27,15 @@ char	*str_ndup(char *str, unsigned int n)
 	return (s);
 }
 
-t_env *env_from_array(char **env)
+t_env	*env_from_array(char **env)
 {
-	t_env *head = NULL;
-	t_env *new;
-	int i = 0;
-	char *eq;
+	t_env	*head;
+	t_env	*new;
+	int		i;
+	char	*eq;
+
+	head = NULL;
+	i = 0;
 	while (env[i])
 	{
 		eq = ft_strchr(env[i], '=');
@@ -46,10 +49,10 @@ t_env *env_from_array(char **env)
 		}
 		i++;
 	}
-	return head;
+	return (head);
 }
 
-char **env_to_array(t_env *env_list)
+char	**env_to_array(t_env *env_list)
 {
 	t_env	*current;
 	char	**env_array;

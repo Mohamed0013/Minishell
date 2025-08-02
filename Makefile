@@ -8,33 +8,35 @@ LIBFT_DIR = libft
 INCLUDES = -Iincludes -I$(LIBFT_DIR)/includes
 
 # Source files (removed libft functions)
-SRC = parsing/parsing.c\
-	  tokens/tokenizer.c\
-	  tokens/test_tokenizer.c\
-	  expansion/expansion.c\
-	  main.c\
-	  main_utils.c\
-	  utils/env.c\
-	  utils/empty_line.c\
-	  execution/shell.c\
-	  execution/builtins/cd.c\
-	  execution/utils.c\
-	  execution/builtins/echo.c\
-	  execution/builtins/env.c\
-	  execution/builtins/export.c\
-	  execution/utils2.c\
-	  execution/builtins/pwd.c\
-	  execution/utils3.c\
-	  execution/shell_utils/pipeutils.c\
-	  execution/shell_utils/pipeutils2.c\
-	  execution/shell_utils/pipeutils3.c\
-	  execution/shell_utils/pipeutils4.c\
-	  execution/shell_utils/utils1.c\
-	  execution/shell_utils/utils2.c\
-	  execution/redir_utils/utils.c\
-	  execution/builtins/utils/utils1.c\
-	  execution/builtins/utils/utils2.c\
-	  execution/exec_utils.c\
+SRC = ./execution/builtins/cd.c \
+./execution/builtins/echo.c \
+./execution/builtins/env.c \
+./execution/builtins/export.c \
+./execution/builtins/pwd.c \
+./execution/builtins/utils/utils1.c \
+./execution/builtins/utils/utils2.c \
+./execution/builtins/utils/utils3.c \
+./execution/exec_utils.c \
+./execution/redir_utils/utils.c \
+./execution/shell.c \
+./execution/shell_utils/pipeutils.c \
+./execution/shell_utils/pipeutils2.c \
+./execution/shell_utils/pipeutils3.c \
+./execution/shell_utils/pipeutils4.c \
+./execution/shell_utils/utils1.c \
+./execution/shell_utils/utils2.c \
+./execution/utils.c \
+./execution/utils2.c \
+./execution/utils3.c \
+./expansion/expansion.c \
+./main.c \
+./main_utils.c \
+./parsing/parsing.c \
+./parsing/test_parsing.c \
+./tokens/test_tokenizer.c \
+./tokens/tokenizer.c \
+./utils/empty_line.c \
+./utils/env.c 
 
 
 # Object files
@@ -52,11 +54,11 @@ libft:
 
 # Linking the binary
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
+	$(CC) $(OBJ) -o $(NAME) $(INCLUDES) $(LDFLAGS) 
 
 # Compiling object files
 %.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@  $(INCLUDES)
 
 # Cleaning object files
 clean:

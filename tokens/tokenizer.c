@@ -15,17 +15,21 @@ t_token	*create_token(char *value, t_token_type type, int is_quoted)
 	return (new_token);
 }
 
-void add_token(t_token **head, t_token *new_token)
+void	add_token(t_token **head, t_token *new_token)
 {
-	t_token *current;
+	t_token	*current;
 
 	if (!head || !new_token)
 		return ;
-	if (!*head) {
+	if (!*head)
+	{
 		*head = new_token;
-	} else {
+	}
+	else
+	{
 		current = *head;
-		while (current->next) {
+		while (current->next)
+		{
 			current = current->next;
 		}
 		current->next = new_token;
@@ -33,13 +37,14 @@ void add_token(t_token **head, t_token *new_token)
 	}
 }
 
-void free_tokens(t_token *head)
+void	free_tokens(t_token *head)
 {
-	t_token *current;
-	t_token *next;
+	t_token	*current;
+	t_token	*next;
 
 	current = head;
-	while (current) {
+	while (current)
+	{
 		next = current->next;
 		if (current->value)
 			free(current->value);
@@ -50,8 +55,8 @@ void free_tokens(t_token *head)
 
 int	condition6(t_ddata *ddata, const char *input, int *i, int in_quote)
 {
-	t_token *new_token;
-	char *substr;
+	t_token	*new_token;
+	char	*substr;
 
 	if (ddata->len > 0)
 	{
@@ -83,8 +88,8 @@ int	condition6(t_ddata *ddata, const char *input, int *i, int in_quote)
 
 int	condition5(t_ddata *ddata, const char *input, int *i, int in_quote)
 {
-	t_token *new_token;
-	char *substr;
+	t_token	*new_token;
+	char	*substr;
 
 	if (ddata->len > 0)
 	{
@@ -116,8 +121,8 @@ int	condition5(t_ddata *ddata, const char *input, int *i, int in_quote)
 
 int	condition4(t_ddata *ddata, const char *input, int *i, int in_quote)
 {
-	t_token *new_token;
-	char *substr;
+	t_token	*new_token;
+	char	*substr;
 
 	if (ddata->len > 0)
 	{
@@ -141,8 +146,8 @@ int	condition4(t_ddata *ddata, const char *input, int *i, int in_quote)
 
 int	condition3(t_ddata *ddata, const char *input, int *i, int in_quote)
 {
-	t_token *new_token;
-	char *substr;
+	t_token	*new_token;
+	char	*substr;
 
 	if (ddata->len > 0)
 	{
@@ -174,7 +179,8 @@ int	condition2(t_ddata *ddata, int *i, int *in_quote)
 		*in_quote = 2;
 	quote_char = ddata->ptr[*i + ddata->len];
 	ddata->len++;
-	while (ddata->ptr[*i + ddata->len] && ddata->ptr[*i + ddata->len] != quote_char)
+	while (ddata->ptr[*i + ddata->len] && ddata->ptr[*i
+		+ ddata->len] != quote_char)
 		ddata->len++;
 	if (ddata->ptr[*i + ddata->len] == quote_char)
 		ddata->len++;
@@ -183,9 +189,9 @@ int	condition2(t_ddata *ddata, int *i, int *in_quote)
 
 int	condition1(t_ddata *ddata, const char *input, int *i, int in_quote)
 {
-	t_token *new_token;
-	t_token *eof_token;
-	char *substr;
+	t_token	*new_token;
+	t_token	*eof_token;
+	char	*substr;
 
 	if (ddata->len > 0)
 	{
@@ -223,57 +229,58 @@ t_token	*tokenize_loop(t_ddata *ddata, const char *input)
 				free_tokens(ddata->head);
 				return (NULL);
 			}
-			break;
+			break ;
 		}
-		if ((ddata->ptr[i + ddata->len] == '\'' || ddata->ptr[i + ddata->len] == '\"')
-			&& (condition2(ddata, &i, &in_quote)))
-			continue;
-		if ((ddata->ptr[i + ddata->len] == ' ' || ddata->ptr[i + ddata->len] == '\t'))
+		if ((ddata->ptr[i + ddata->len] == '\'' || ddata->ptr[i
+				+ ddata->len] == '\"') && (condition2(ddata, &i, &in_quote)))
+			continue ;
+		if ((ddata->ptr[i + ddata->len] == ' ' || ddata->ptr[i
+				+ ddata->len] == '\t'))
 		{
 			if (!condition3(ddata, input, &i, in_quote))
 			{
 				free_tokens(ddata->head);
 				return (NULL);
 			}
-			continue;
+			continue ;
 		}
-		if(ddata->ptr[i + ddata->len] == '|')
+		if (ddata->ptr[i + ddata->len] == '|')
 		{
 			if (!condition4(ddata, input, &i, in_quote))
 			{
 				free_tokens(ddata->head);
 				return (NULL);
 			}
-			continue;
+			continue ;
 		}
-		if(ddata->ptr[i + ddata->len] == '<')
+		if (ddata->ptr[i + ddata->len] == '<')
 		{
 			if (!condition5(ddata, input, &i, in_quote))
 			{
 				free_tokens(ddata->head);
 				return (NULL);
 			}
-			continue;
+			continue ;
 		}
-		if(ddata->ptr[i + ddata->len] == '>')
+		if (ddata->ptr[i + ddata->len] == '>')
 		{
 			if (!condition6(ddata, input, &i, in_quote))
 			{
 				free_tokens(ddata->head);
 				return (NULL);
 			}
-			continue;
+			continue ;
 		}
 		ddata->len++;
 	}
 	return (ddata->head);
 }
 
-t_token *tokenize_input(const char *input)
+t_token	*tokenize_input(const char *input)
 {
-	t_ddata		*ddata;
-	t_token		*head;
-	
+	t_ddata	*ddata;
+	t_token	*head;
+
 	ddata = malloc(sizeof(t_ddata));
 	if (!ddata)
 		return (NULL);
@@ -285,9 +292,9 @@ t_token *tokenize_input(const char *input)
 	return (head);
 }
 
-t_token *tokenize(const char *input)
+t_token	*tokenize(const char *input)
 {
-	t_token *tokens;
+	t_token	*tokens;
 
 	if (!input || !*input)
 		return (NULL);
@@ -302,40 +309,33 @@ t_token *tokenize(const char *input)
 		ft_putstr_fd("minishell: error tokenizing input\n", 2);
 		return (NULL);
 	}
-	// DON'T FREE INPUT HERE - it's likely managed elsewhere
-	// free(input);
 	return (tokens);
 }
 
-char *ft_token_gettype(t_token_type type)
+char	*ft_token_gettype(t_token_type type)
 {
 	switch (type)
 	{
-		case TOKEN_WORD: return "WORD";
-		case TOKEN_PIPE: return "PIPE";
-		case TOKEN_REDIRECT_IN: return "REDIRECT_IN";
-		case TOKEN_REDIRECT_OUT: return "REDIRECT_OUT";
-		case TOKEN_APPEND: return "APPEND";
-		case TOKEN_HEREDOC: return "HEREDOC";
-		case TOKEN_EOF: return "EOF";
-		default: return "UNKNOWN";
+	case TOKEN_WORD:
+		return ("WORD");
+	case TOKEN_PIPE:
+		return ("PIPE");
+	case TOKEN_REDIRECT_IN:
+		return ("REDIRECT_IN");
+	case TOKEN_REDIRECT_OUT:
+		return ("REDIRECT_OUT");
+	case TOKEN_APPEND:
+		return ("APPEND");
+	case TOKEN_HEREDOC:
+		return ("HEREDOC");
+	case TOKEN_EOF:
+		return ("EOF");
+	default:
+		return ("UNKNOWN");
 	}
 }
 
-void print_tokens(t_token *tokens)
+void	print_tokens(t_token *tokens)
 {
-	(void)tokens; // Suppress unused parameter warning
-	// t_token *current = tokens;
-	// int i = 0;
-	// if (!current)
-	// {
-	// 	printf("No tokens to display.\n");
-	// 	return;
-	// }
-	// while (current)
-	// {
-	// 	printf("Token[%d]: Type: %20s : value : %s, in_quote: %d\n", i++,
-	// 		ft_token_gettype(current->type), current->value, current->is_quoted);
-	// 	current = current->next;
-	// }
+	(void)tokens;
 }

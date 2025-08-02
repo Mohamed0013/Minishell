@@ -77,7 +77,7 @@ int	ft_unset(t_env **env, char **args)
 	t_env	*current;
 	t_env	*prev;
 
-	int (i) = 1;
+	int(i) = 1;
 	if (!args)
 		return (0);
 	while (args[i])

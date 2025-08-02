@@ -19,7 +19,7 @@ char	*ft_strdup(const char *s)
 	int		len;
 
 	if (!s)
-		return NULL;
+		return (NULL);
 	len = 0;
 	while (s[len])
 		len++;
