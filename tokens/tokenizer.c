@@ -46,9 +46,6 @@ void	free_tokens(t_token *head)
 	while (current)
 	{
 		next = current->next;
-		// if (current->value)
-		// 	free(current->value);
-		// free(current);
 		current = next;
 	}
 }
@@ -225,10 +222,7 @@ t_token	*tokenize_loop(t_ddata *ddata, const char *input)
 		if (ddata->ptr[i + ddata->len] == '\0')
 		{
 			if (!condition1(ddata, input, &i, in_quote))
-			{
-				// free_tokens(ddata->head);
 				return (NULL);
-			}
 			break ;
 		}
 		if ((ddata->ptr[i + ddata->len] == '\'' || ddata->ptr[i
@@ -238,37 +232,25 @@ t_token	*tokenize_loop(t_ddata *ddata, const char *input)
 				+ ddata->len] == '\t'))
 		{
 			if (!condition3(ddata, input, &i, in_quote))
-			{
-				// free_tokens(ddata->head);
 				return (NULL);
-			}
 			continue ;
 		}
 		if (ddata->ptr[i + ddata->len] == '|')
 		{
 			if (!condition4(ddata, input, &i, in_quote))
-			{
-				// free_tokens(ddata->head);
 				return (NULL);
-			}
 			continue ;
 		}
 		if (ddata->ptr[i + ddata->len] == '<')
 		{
 			if (!condition5(ddata, input, &i, in_quote))
-			{
-				// free_tokens(ddata->head);
 				return (NULL);
-			}
 			continue ;
 		}
 		if (ddata->ptr[i + ddata->len] == '>')
 		{
 			if (!condition6(ddata, input, &i, in_quote))
-			{
-				// free_tokens(ddata->head);
 				return (NULL);
-			}
 			continue ;
 		}
 		ddata->len++;
@@ -288,7 +270,6 @@ t_token	*tokenize_input(const char *input)
 	ddata->len = 0;
 	ddata->ptr = input;
 	head = tokenize_loop(ddata, input);
-	// free(ddata);
 	return (head);
 }
 

@@ -1,8 +1,8 @@
-# include "minishell.h"
+#include "minishell.h"
 
-int ft_exit_withclear(int code)
+int	ft_exit_withclear(int code)
 {
-	t_env * env;
+	t_env	*env;
 
 	env = g_data.env_list;
 	ft_gc_clear();

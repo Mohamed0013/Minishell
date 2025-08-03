@@ -14,7 +14,6 @@ void	free_commands(t_ast *cmd)
 {
 	if (!cmd)
 		return ;
-	// free_ast(cmd);
 }
 
 int	str_ichr(const char *str, char c)
@@ -32,10 +31,12 @@ int	str_ichr(const char *str, char c)
 char	*join_path(char *path, char *bin)
 {
 	char	*joined;
+	int		to_x;
 	int		i;
 	int		j;
 
-	joined = ft_malloc(sizeof(char) * (str_ichr(path, 0) + str_ichr(bin, 0) + 2));
+	to_x = (str_ichr(path, 0) + str_ichr(bin, 0));
+	joined = ft_malloc(sizeof(char) * to_x + 2);
 	i = 0;
 	j = 0;
 	while (path[j])

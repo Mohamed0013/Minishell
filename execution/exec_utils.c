@@ -12,7 +12,24 @@ int	exec_utils2(t_exec_data *data, t_ast *ast, char **current_env, char **env)
 {
 	(void) env;
 	data->ret = execute_single_command(data, ast, current_env);
-	// if (current_env != env)
-	// 	free_split(current_env);
 	return (1);
+}
+
+void	exec_error(int err, char **cmd)
+{
+	if (err == ENOENT)
+	{
+		printf("minishell: %s: command not found\n", cmd[0]);
+		ft_exit_withclear(127);
+	}
+	else if (err == EACCES)
+	{
+		printf("minishell: %s: Permission denied\n", cmd[0]);
+		ft_exit_withclear(126);
+	}
+	else
+	{
+		perror("minishell");
+		ft_exit_withclear(1);
+	}
 }

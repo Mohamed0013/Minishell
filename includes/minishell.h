@@ -293,7 +293,7 @@ void					print_util(int i, int count, t_env **arr);
 int ft_exit_withclear(int code);
 
 
-//// garbge collector 
+// garbge collector 
 t_list ** gc_ptr();
 void * ft_malloc(size_t size);
 void ft_gc_clear();

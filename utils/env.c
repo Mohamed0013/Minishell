@@ -69,7 +69,7 @@ char	**env_to_array(t_env *env_list)
 		current = current->next;
 	}
 	env_array = malloc(sizeof(char *) * (count + 1));
-	ft_gc_add(env_array); // Assuming ft_gc_add is a custom garbage collector function
+	ft_gc_add(env_array);
 	if (!env_array)
 		return (NULL);
 	i = 0;
@@ -80,18 +80,12 @@ char	**env_to_array(t_env *env_list)
 		{
 			temp = ft_strjoin(current->name, "=");
 			if (!temp)
-			{
-				// free_split(env_array);
 				return (NULL);
-			}
 			env_array[i] = ft_strjoin(temp, current->value);
-			ft_gc_add(env_array[i]); // Assuming ft_gc_add is a custom garbage collector function
+			ft_gc_add(env_array[i]);
 			free(temp);
 			if (!env_array[i])
-			{
-				// free_split(env_array);
 				return (NULL);
-			}
 			i++;
 		}
 		current = current->next;

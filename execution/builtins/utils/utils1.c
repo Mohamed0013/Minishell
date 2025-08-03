@@ -26,25 +26,17 @@ int	execute_builtin_piped(t_execute *exec, char **cmd, t_list *redir)
 	else if (pid == 0)
 	{
 		if (redir && handle_redirections(redir) != 0)
-		{
-			// free_split(cmd);
 			ft_exit_withclear(1);
-		}
 		exec->exit_status = execute_builtin(cmd, redir, exec->exit_status);
-		// free_split(cmd);
 		ft_exit_withclear(exec->exit_status);
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		exec->exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-	{	
 		exec->exit_status = 128 + WTERMSIG(status);
-	}
 	else if (WIFSTOPPED(status))
-	{
 		exec->exit_status = 128 + WSTOPSIG(status);
-	}
 	return (exec->exit_status);
 }
 

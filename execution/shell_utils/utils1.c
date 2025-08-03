@@ -40,16 +40,8 @@ int	execute_single_command(t_exec_data *data, t_ast *ast, char **env)
 {
 	data->full_command = get_args(ast->args);
 	if (!data->full_command)
-	{
-		// free(data->exec);
 		return (1);
-	}
 	data->ret = execute_command(data->exec, data->full_command,
 			ast->redirections, env);
-	// free_split(data->full_command);
-	data->exit_status = data->exec->exit_status;
-	if (data->ret == 2)
-		return (2);
-	else
-		return (data->exit_status);
+	return (data->ret);
 }

@@ -41,7 +41,7 @@ int	ft_lst_push(t_list **head, void *value)
 	t_list	*new_node;
 
 	new_node = ft_lstnew(value);
-	ft_gc_add(new_node); // Assuming ft_gc_add is a custom garbage collector function
+	ft_gc_add(new_node);
 	if (!new_node)
 		return (0);
 	ft_lstadd_back(head, new_node);
@@ -96,20 +96,13 @@ t_ast	*parser(const char *input)
 	expand(g_data.env_list, tokens);
 	print_token = tokens;
 	while (print_token && print_token->type != TOKEN_EOF)
-	{
-		printf("- %-20s\t %s\n", ft_token_gettype(print_token->type),
-			print_token->value);
 		print_token = print_token->next;
-	}
 	ast = NULL;
 	curr = create_ast_node();
 	ast = curr;
 	if (!curr)
 	{
 		ft_putstr_fd("Error creating AST node.\n", 2);
-		// free_tokens(tokens);
-		// if (ast)
-		// 	free_ast(ast);
 		return (NULL);
 	}
 	while (current)
@@ -133,41 +126,18 @@ t_ast	*parser(const char *input)
 			{
 				redir = ft_malloc(sizeof(t_redir));
 				if (!redir)
-				{
-					// if (ast)
-					// 	free_ast(ast);
-					// free_tokens(tokens);
 					return (NULL);
-				}
 				redir->type = current->type;
 				redir->filename = ft_strdup(current->next->value);
 				ft_gc_add(redir->filename);
 				if (!redir->filename)
-				{
-					// free(redir);
-					// if (ast)
-					// 	free_ast(ast);
-					// free_tokens(tokens);
 					return (NULL);
-				}
 				if (!ft_lst_push(&curr->redirections, redir))
-				{
-					// free(redir->filename);
-					// free(redir);
-					// if (ast)
-					// 	free_ast(ast);
-					// free_tokens(tokens);
 					return (NULL);
-				}
 				current = current->next;
 			}
 			else
-			{
-				// if (ast)
-				// 	free_ast(ast);
-				// free_tokens(tokens);
 				return (NULL);
-			}
 		}
 		else if (current->type == TOKEN_PIPE)
 		{
@@ -176,18 +146,12 @@ t_ast	*parser(const char *input)
 			{
 				ft_putstr_fd("Syntax error: Pipe not followed by a command or redirection.\n",
 					2);
-				// if (ast)
-				// 	free_ast(ast);
-				// free_tokens(tokens);
 				return (NULL);
 			}
 			new_node = create_ast_node();
 			if (!new_node)
 			{
 				ft_putstr_fd("Error creating new AST node for pipe.\n", 2);
-				// if (ast)
-				// 	free_ast(ast);
-				// free_tokens(tokens);
 				return (NULL);
 			}
 			add_ast_node(&ast, new_node);
@@ -198,9 +162,6 @@ t_ast	*parser(const char *input)
 			ft_putstr_fd("Unexpected token type: ", 2);
 			ft_putnbr_fd(current->type, 2);
 			ft_putstr_fd("\n", 2);
-			// if (ast)
-			// 	free_ast(ast);
-			// free_tokens(tokens);
 			return (NULL);
 		}
 		current = current->next;

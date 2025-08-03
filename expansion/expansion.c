@@ -94,7 +94,6 @@ static char	*expand_arg(const char *arg, t_env *env, t_token *token)
 	const char *val;
 	size_t	vlen;
 
-	printf("args : %s\n",arg);
 	if (!arg || !*arg || !env)
 		return (NULL);
 	len = ft_strlen(arg);

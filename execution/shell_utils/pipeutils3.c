@@ -25,7 +25,6 @@ void	cleanup_pipes_on_error(int **pipfds, int i)
 	{
 		close(pipfds[j][0]);
 		close(pipfds[j][1]);
-		// free(pipfds[j]);
 		j++;
 	}
 }
@@ -66,7 +65,6 @@ void	fill_pipes(int **pipfds, int nb_pipes)
 		}
 		if (pipe(pipfds[i]) == -1)
 		{
-			// free(pipfds[i]);
 			cleanup_pipes_on_error(pipfds, i);
 			perror("pipe failed");
 			ft_exit_withclear(EXIT_FAILURE);

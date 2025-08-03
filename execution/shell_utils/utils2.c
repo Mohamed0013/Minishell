@@ -6,14 +6,9 @@ char	*dup_and_check(t_list *current, char **result, int *i)
 
 	index = *i;
 	result[index] = ft_strdup((char *)current->content);
-	ft_gc_add(result[index]); // Assuming ft_gc_add is a custom garbage collector function
+	ft_gc_add(result[index]);
 	if (!result[index])
-	{
-		// while (--index >= 0)
-		// 	free(result[index]);
-		// free(result);
 		return (NULL);
-	}
 	*i = index;
 	return ("Ok");
 }

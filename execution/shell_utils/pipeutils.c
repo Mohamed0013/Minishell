@@ -25,11 +25,7 @@ static int	check_exit_in_pipeline(t_ast *ast)
 
 	first_cmd = get_args(ast->args);
 	if (first_cmd && strcmp(first_cmd[0], "exit") == 0)
-	{
-		// free_split(first_cmd);
 		return (2);
-	}
-	// free_split(first_cmd);
 	return (0);
 }
 
@@ -49,13 +45,12 @@ static int	wait_for_processes(pid_t *pids, int count, t_execute *exec)
 		else if (WIFSIGNALED(status))
 		{
 			last_status = 128 + WTERMSIG(status);
-			if ((last_status == 128 + SIGINT || last_status == 128 + SIGQUIT) && j == count -1)
+			if ((last_status == 128 + SIGINT
+					|| last_status == 128 + SIGQUIT) && j == count -1)
 				write(1, "\n", 1);
 		}
 		else if (WIFSTOPPED(status))
-		{	
 			last_status = 128 + WSTOPSIG(status);
-		}
 		j++;
 	}
 	exec->exit_status = last_status;

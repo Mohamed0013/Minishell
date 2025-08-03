@@ -50,23 +50,15 @@ int	shell_execute(t_ast *ast, char **env, int status)
 
 	data.exec = ft_malloc(sizeof(t_execute));
 	if (!data.exec || !ast)
-	{
 		return (1);
-	}
 	current_env = env_to_array(g_data.env_list);
 	if (!current_env)
 		current_env = env;
 	exec_utils(&data, ast, status);
 	if (data.nb_pipes == 0 && exec_utils2(&data, ast, current_env, env) == 1)
-	{
-		// if (current_env)
-		// 	free_split(current_env);
 		return (data.ret);
-	}
 	data.ret = handle_pipes(ast, data.nb_pipes, data.exec, current_env);
 	data.exit_status = data.exec->exit_status;
 	free_exec(data.exec);
-	// if (current_env)
-	// 	free_split(current_env);
 	return (data.exit_status);
 }

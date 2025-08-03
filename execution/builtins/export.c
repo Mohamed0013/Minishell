@@ -98,10 +98,7 @@ int	ft_export(t_env **env, char **args)
 		if (validate_and_split(args[i], &name, &value))
 			ret = 1;
 		else
-		{
 			update_or_add_env(env, name, value);
-			// check_and_free(value, name);
-		}
 		i++;
 	}
 	return (ret);
