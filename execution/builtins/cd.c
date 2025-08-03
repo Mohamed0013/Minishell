@@ -8,8 +8,8 @@ static int	check3(char *current_dir, char **new_dir)
 	if (!*new_dir)
 	{
 		printf("minishell: cd: error retrieving current directory\
-			: getcwd: cannot access parent directories: No such \
-			file or directory\n");
+: getcwd: cannot access parent directories: No such \
+file or directory\n");
 		last_slash = strrchr(current_dir, '/');
 		if (last_slash)
 		{
@@ -38,15 +38,15 @@ static int	check(char **current_dir, char **new_dir)
 	if (stat("..", &parent_stat) == -1)
 	{
 		printf("minishell: cd: error retrieving parent directory:\
-				%s\n", strerror(errno));
+%s\n", strerror(errno));
 		return (1);
 	}
 	*current_dir = getcwd(NULL, 0);
 	if (!*current_dir)
 	{
 		printf("minishell: cd: error retrieving current directory\
-			: getcwd: cannot access parent directories: No such\
-				file or directory\n");
+: getcwd: cannot access parent directories: No such\
+file or directory\n");
 		return (1);
 	}
 	if (check2() == 1)
