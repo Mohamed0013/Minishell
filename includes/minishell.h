@@ -162,6 +162,7 @@ char					**env_to_array(t_env *env_list);
 int						ft_export(t_env **env, char **args);
 int						ft_env(t_env *env_list, char **args);
 int						ft_unset(t_env **env, char **args);
+int						ft_exit(char **args);
 
 void					execute(t_command *cmd, char **env);
 

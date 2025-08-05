@@ -29,7 +29,7 @@ int	exec_builtin_part2(char **args, t_list *redirections)
 	{
 		if (redirections)
 			ft_lstclear(&redirections, free);
-		return (2);
+		return (ft_exit(args));
 	}
 	return (-1);
 }

@@ -27,5 +27,6 @@ int		handle_variable_expansion(t_expand_ctx *ctx);
 void	init_expand_ctx(t_expand_ctx *ctx,
 			const char *arg, t_env *env, t_token *token);
 int		process_env_variable(char **value, int *len);
+void	split_expanded_token(t_token *token, const char *expanded_value);
 
 #endif

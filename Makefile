@@ -11,6 +11,7 @@ INCLUDES = -Iincludes -I$(LIBFT_DIR)/includes
 SRC = ./execution/builtins/cd.c \
 ./execution/builtins/echo.c \
 ./execution/builtins/env.c \
+./execution/builtins/exit.c \
 ./execution/builtins/export.c \
 ./execution/builtins/pwd.c \
 ./execution/builtins/utils/utils1.c \
@@ -47,6 +48,7 @@ SRC = ./execution/builtins/cd.c \
 ./expansion/utils/init_context.c \
 ./expansion/utils/process_env_var.c \
 ./expansion/utils/quoted_str.c \
+./expansion/utils/split_expansion.c \
 ./tokens/token_utils.c\
 ./tokens/token_utils2.c\
 ./tokens/token_utils3.c\

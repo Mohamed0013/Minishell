@@ -2,10 +2,11 @@
 
 int	ft_exit_withclear(int code)
 {
-	t_env	*env;
-
-	env = g_data.env_list;
+	if (g_data.env_list)
+	{
+		free_env_list(g_data.env_list);
+		g_data.env_list = NULL;
+	}
 	ft_gc_clear();
-	free_env_list(env);
 	exit(code);
 }

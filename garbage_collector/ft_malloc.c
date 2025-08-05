@@ -29,11 +29,15 @@ void	*ft_malloc(size_t size)
 
 void	ft_gc_clear(void)
 {
+	t_list	**head;
 	t_list	*current;
 
-	current = *gc_ptr();
+	head = gc_ptr();
+	if (!*head)  // Already cleared
+		return;
+	current = *head;
 	ft_lstclear(&current, free);
-	*gc_ptr() = NULL;
+	*head = NULL;
 }
 
 void	ft_gc_add(void *ptr)

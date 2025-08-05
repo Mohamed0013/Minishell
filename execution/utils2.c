@@ -42,8 +42,6 @@ void	update_or_add_env(t_env **env, char *name, char *value)
 		{
 			free(current->value);
 			current->value = ft_strdup(value);
-			free(name);
-			free(value);
 			return ;
 		}
 		current = current->next;
@@ -51,8 +49,6 @@ void	update_or_add_env(t_env **env, char *name, char *value)
 	new = lst_new_env(name, value);
 	if (!new)
 	{
-		free(name);
-		free(value);
 		return ;
 	}
 	lst_add_env(env, new);

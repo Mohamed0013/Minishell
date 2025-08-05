@@ -10,7 +10,7 @@ char	*expand_arg(const char *arg, t_env *env, t_token *token)
 		return (NULL);
 	len = ft_strlen(arg);
 	max_expand_len = len * 32 + 1;
-	ctx.result = ft_malloc(max_expand_len);
+	ctx.result = malloc(max_expand_len);
 	if (!ctx.result)
 		return (NULL);
 	init_expand_ctx(&ctx, arg, env, token);

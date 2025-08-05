@@ -15,6 +15,7 @@ static int	handle_input_redirect(t_redir *redir_info)
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
 		close(fd);
+		perror("minishell: dup2 failed");
 		return (1);
 	}
 	close(fd);
@@ -26,7 +27,7 @@ static int	handle_output_redirect(t_redir *redir_info)
 	int	flags;
 	int	fd;
 
-	if (redir_info->type == 3)
+	if (redir_info->type == TOKEN_APPEND)
 		flags = O_WRONLY | O_CREAT | O_APPEND;
 	else
 		flags = O_WRONLY | O_CREAT | O_TRUNC;
@@ -56,12 +57,12 @@ int	handle_redirections(t_list *redirections)
 	while (redir)
 	{
 		redir_info = (t_redir *)redir->content;
-		if (redir_info->type == 1)
+		if (redir_info->type == TOKEN_REDIRECT_IN)
 		{
 			if (handle_input_redirect(redir_info) != 0)
 				return (1);
 		}
-		else if (redir_info->type == 2 || redir_info->type == 3)
+		else if (redir_info->type == TOKEN_REDIRECT_OUT || redir_info->type == TOKEN_APPEND)
 		{
 			if (handle_output_redirect(redir_info) != 0)
 				return (1);
