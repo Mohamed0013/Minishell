@@ -18,7 +18,6 @@ void	free_env_list(t_env *env)
 
 void	minishell(int *value, char **env, char *input, t_ast *cmd)
 {
-	int (ret) = 0;
 	while (1)
 	{
 		initial_signals();
@@ -33,10 +32,10 @@ void	minishell(int *value, char **env, char *input, t_ast *cmd)
 			continue ;
 		cmd = parser(input);
 		if (cmd)
-			ret = shell_execute(cmd, env, *value);
+			*value = shell_execute(cmd, env, *value);
 		free(input);
 		ft_gc_clear();
-		if (ret == 2)
+		if (*value == 2)
 			return ;
 	}
 }

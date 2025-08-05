@@ -4,7 +4,7 @@ t_env	*lst_new_env(char *name, char *value)
 {
 	t_env	*new;
 
-	new = ft_malloc(sizeof(t_env));
+	new = malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
 	new->name = ft_strdup(name);

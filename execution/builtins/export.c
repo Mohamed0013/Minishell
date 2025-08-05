@@ -63,6 +63,8 @@ void	print_env_sorted(t_env *env_list)
 	t_env	*temp;
 	t_env	**arr;
 
+	if (!env_list)
+		return ;
 	count = 0;
 	temp = env_list;
 	while (temp)
@@ -87,10 +89,7 @@ int	ft_export(t_env **env, char **args)
 	i = 1;
 	ret = 0;
 	if (!args || !args[1])
-	{
-		print_env_sorted(*env);
-		return (0);
-	}
+		return (print_env_sorted(*env), 0);
 	while (args[i])
 	{
 		name = NULL;
@@ -98,7 +97,10 @@ int	ft_export(t_env **env, char **args)
 		if (validate_and_split(args[i], &name, &value))
 			ret = 1;
 		else
+		{
 			update_or_add_env(env, name, value);
+			check_and_free(value, name);
+		}
 		i++;
 	}
 	return (ret);

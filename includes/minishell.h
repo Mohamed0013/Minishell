@@ -53,7 +53,7 @@ typedef struct s_command
 	struct s_command	*next;
 }						t_command;
 
-typedef enum
+typedef enum e_token_type
 {
 	TOKEN_WORD,
 	TOKEN_PIPE,
@@ -143,12 +143,7 @@ void					add_command(t_command **head, t_command *new_cmd);
 void					shell_loop(t_command *cmd, char **env);
 
 /* Syntax validation */
-bool					check_syntax(const char *input);
-bool					file_syntax(const char *input);
-bool					validate_syntax(const char *input);
-bool					unclosed_quotes(const char *input);
 bool					is_blank_line(const char *s);
-bool					pipe_syntax(const char *input);
 
 /* Minishell-specific utils */
 char					*join_path(char *path, char *bin);
@@ -187,11 +182,8 @@ int						ft_split_size(char **split);
 int						get_len(char **s);
 
 /* Quote handling */
-char					*process_quotes(const char *input);
-bool					has_unclosed_quotes(const char *input);
 
 void					free_env_list(t_env *env);
-void					cleanup(void);
 
 bool					is_blank_line(const char *s);
 t_env					*env_from_array(char **env);
@@ -218,14 +210,12 @@ t_token					*tokenize(const char *input);
 void					free_ast(t_ast *ast);
 void					free_ast_list(t_ast *head);
 void					add_ast_node(t_ast **head, t_ast *new_node);
-char					*ft_token_gettype(t_token_type type);
 bool					ft_token_is_redirection(t_token_type type);
 void					print_ast(t_ast *ast);
 int						ft_lst_push(t_list **head, void *value);
 void					add_token(t_token **head, t_token *new_token);
 void					free_tokens(t_token *head);
 t_token					*tokenize_input(const char *input);
-bool					unclosed_quotes(const char *input);
 void					print_tokens(t_token *tokens);
 void					free_commands(t_ast *cmd);
 
@@ -290,13 +280,19 @@ void					fill_arr(t_env **arr, t_env *temp, t_env *swap,
 							int count);
 void					check_and_free(char *value, char *name);
 void					print_util(int i, int count, t_env **arr);
-int ft_exit_withclear(int code);
 
+int						ft_exit_withclear(int code);
+bool					ft_token_is_redirection(t_token_type type);
+t_ast					*create_ast_node(void);
+void					add_ast_node(t_ast **head, t_ast *new_node);
+bool					ft_token_is_redirection(t_token_type type);
+int						ft_lst_push(t_list **head, void *value);
+void					free_ast(t_ast *ast);
 
 // garbge collector 
-t_list ** gc_ptr();
-void * ft_malloc(size_t size);
-void ft_gc_clear();
-void ft_gc_add(void *ptr);
+t_list					**gc_ptr(void);
+void					*ft_malloc(size_t size);
+void					ft_gc_clear(void);
+void					ft_gc_add(void *ptr);
 
 #endif

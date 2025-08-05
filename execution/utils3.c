@@ -92,8 +92,10 @@ int	validate_and_split(char *arg, char **name, char **value)
 		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 		ft_putstr_fd(arg, STDERR_FILENO);
 		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-		free(*name);
-		free(*value);
+		if (*name)
+			free(*name);
+		if (*value)
+			free(*value);
 		return (1);
 	}
 	return (0);

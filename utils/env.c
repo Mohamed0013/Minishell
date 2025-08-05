@@ -52,44 +52,59 @@ t_env	*env_from_array(char **env)
 	return (head);
 }
 
-char	**env_to_array(t_env *env_list)
+int	get_count(t_env *current)
 {
-	t_env	*current;
-	char	**env_array;
-	char	*temp;
-	int		count;
-	int		i;
+	int	count;
 
 	count = 0;
-	current = env_list;
 	while (current)
 	{
 		if (current->name && current->value)
 			count++;
 		current = current->next;
 	}
-	env_array = malloc(sizeof(char *) * (count + 1));
-	ft_gc_add(env_array);
-	if (!env_array)
-		return (NULL);
-	i = 0;
-	current = env_list;
+	return (count);
+}
+
+int	loop_env(t_env *current, char **env_array, int count)
+{
+	char	*temp;
+
+	int	(i) = 0;
 	while (current && i < count)
 	{
 		if (current->name && current->value)
 		{
 			temp = ft_strjoin(current->name, "=");
 			if (!temp)
-				return (NULL);
+				return (1);
 			env_array[i] = ft_strjoin(temp, current->value);
 			ft_gc_add(env_array[i]);
 			free(temp);
 			if (!env_array[i])
-				return (NULL);
+				return (1);
 			i++;
 		}
 		current = current->next;
 	}
 	env_array[i] = NULL;
+	return (0);
+}
+
+char	**env_to_array(t_env *env_list)
+{
+	t_env	*current;
+	char	**env_array;
+	int		count;
+
+	current = env_list;
+	count = get_count(current);
+	env_array = malloc(sizeof(char *) * (count + 1));
+	ft_gc_add(env_array);
+	if (!env_array)
+		return (NULL);
+	current = env_list;
+	if (loop_env(current, env_array, count) == 1)
+		return (NULL);
 	return (env_array);
 }
