@@ -163,6 +163,7 @@ int						validate_and_split(char *arg, char **name,
 t_env					*env_from_array(char **env);
 char					**env_to_array(t_env *env_list);
 int						ft_export(t_env **env, char **args);
+int						ft_exit(char **args);
 int						ft_env(t_env *env_list, char **args);
 int						ft_unset(t_env **env, char **args);
 
