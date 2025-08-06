@@ -48,6 +48,25 @@ static void	do_word_splitting(t_token *token, char *expanded)
 	free(expanded);
 }
 
+static int	is_export_assignment(t_token *token)
+{
+	t_token	*first_token;
+
+	if (!token)
+		return (0);
+	// Find the first token in the command
+	first_token = token;
+	while (first_token->prev)
+		first_token = first_token->prev;
+	
+	// Check if first token is "export" and current token has '='
+	if (first_token && first_token->value 
+		&& ft_strcmp(first_token->value, "export") == 0
+		&& token->value && ft_strchr(token->value, '='))
+		return (1);
+	return (0);
+}
+
 void	expand(t_env *env, t_token *token)
 {
 	t_token	*current;
@@ -63,7 +82,8 @@ void	expand(t_env *env, t_token *token)
 			expanded = expand_arg(current->value, env, current);
 			if (expanded)
 			{
-				if (ft_strchr(expanded, ' ') && !current->is_quoted)
+				if (ft_strchr(expanded, ' ') && !current->is_quoted 
+					&& !is_export_assignment(current))
 				{
 					do_word_splitting(current, expanded);
 				}
