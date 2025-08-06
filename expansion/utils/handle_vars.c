@@ -13,18 +13,18 @@ static void	extract_var_name(const char *arg, size_t start, char *var_name)
 int	handle_variable_expansion(t_expand_ctx *ctx)
 {
 	size_t		var_start;
-	char		var_name[128];
+	char		var_name[1024];
 	const char	*val;
 	size_t		vlen;
 	size_t		var_len;
 
-	if (ctx->in_squote || !prev_not_redirect(ctx->token)
-		|| (!ft_isalpha(ctx->arg[ctx->i + 1]) && ctx->arg[ctx->i + 1] != '_'))
+	if (ctx->in_squote || (!ft_isalpha(ctx->arg[ctx->i + 1]) && ctx->arg[ctx->i
+			+ 1] != '_'))
 		return (0);
 	var_start = ctx->i + 1;
 	var_len = 0;
-	while (ft_isalnum(ctx->arg[var_start + var_len])
-		|| ctx->arg[var_start + var_len] == '_')
+	while (ft_isalnum(ctx->arg[var_start + var_len]) || ctx->arg[var_start
+		+ var_len] == '_')
 		var_len++;
 	extract_var_name(ctx->arg, var_start, var_name);
 	val = get_env_value(ctx->env, var_name);

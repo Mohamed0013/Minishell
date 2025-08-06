@@ -58,6 +58,7 @@ int	shell_execute(t_ast *ast, char **env, int status)
 	if (data.nb_pipes == 0 && exec_utils2(&data, ast, current_env, env) == 1)
 		return (data.ret);
 	data.ret = handle_pipes(ast, data.nb_pipes, data.exec, current_env);
+	// it does not return (exit code of the last command in the pipeline);
 	data.exit_status = data.exec->exit_status;
 	free_exec(data.exec);
 	return (data.exit_status);

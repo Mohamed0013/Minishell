@@ -9,7 +9,6 @@ void	split_expanded_token(t_token *token, const char *expanded_value)
 
 	if (!expanded_value || !ft_strchr(expanded_value, ' '))
 		return ;
-	
 	words = ft_split(expanded_value, ' ');
 	if (!words || !words[0])
 	{
@@ -17,11 +16,9 @@ void	split_expanded_token(t_token *token, const char *expanded_value)
 			free_split(words);
 		return ;
 	}
-	
 	// Replace current token value with first word
 	free(token->value);
 	token->value = ft_strdup(words[0]);
-	
 	// Insert remaining words as new tokens after current token
 	current = token;
 	i = 1;
@@ -33,17 +30,14 @@ void	split_expanded_token(t_token *token, const char *expanded_value)
 		new_token->value = ft_strdup(words[i]);
 		new_token->type = TOKEN_WORD;
 		new_token->is_quoted = 0;
-		
 		// Insert after current
 		new_token->next = current->next;
 		new_token->prev = current;
 		if (current->next)
 			current->next->prev = new_token;
 		current->next = new_token;
-		
 		current = new_token;
 		i++;
 	}
-	
 	free_split(words);
 }

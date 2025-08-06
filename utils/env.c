@@ -70,7 +70,7 @@ int	loop_env(t_env *current, char **env_array, int count)
 {
 	char	*temp;
 
-	int	(i) = 0;
+	int(i) = 0;
 	while (current && i < count)
 	{
 		if (current->name && current->value)

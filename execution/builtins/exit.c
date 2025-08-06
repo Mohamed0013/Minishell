@@ -24,7 +24,6 @@ int	ft_exit(char **args)
 
 	exit_code = g_data.exit_status;
 	ft_putstr_fd("exit\n", 2);
-	
 	if (args[1])
 	{
 		if (!is_numeric(args[1]))
@@ -40,14 +39,12 @@ int	ft_exit(char **args)
 			// Handle overflow/underflow like bash
 			exit_code = exit_code & 255;
 		}
-		
 		if (args[2])
 		{
 			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-			return (1);  // Don't exit, just return error
+			return (1); // Don't exit, just return error
 		}
 	}
-	
 	ft_exit_withclear(exit_code);
-	return (exit_code);  // This line should never be reached
+	return (exit_code); // This line should never be reached
 }

@@ -81,32 +81,27 @@ void	print_env_sorted(t_env *env_list)
 
 int	ft_export(t_env **env, char **args)
 {
-	int		i;
-	int		ret;
 	char	*name;
 	char	*value;
 
+	int(i), (ret);
 	i = 1;
 	ret = 0;
 	if (!args || !args[1])
-		return (print_env_sorted(*env), 0);
+	{
+		print_env_sorted(*env);
+		return (0);
+	}
 	while (args[i])
 	{
 		name = NULL;
 		value = NULL;
 		if (validate_and_split(args[i], &name, &value))
-		{
 			ret = 1;
-			// validate_and_split already freed name and value on error
-		}
 		else
 		{
 			update_or_add_env(env, name, value);
-			// Free after using in update_or_add_env
-			if (name)
-				free(name);
-			if (value)
-				free(value);
+			check_and_free(value, name);
 		}
 		i++;
 	}

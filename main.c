@@ -16,7 +16,7 @@ void	free_env_list(t_env *env)
 	}
 }
 
-void	minishell(int *value, char **env, char *input, t_ast *cmd)
+void	minishell(char **env, char *input, t_ast *cmd)
 {
 	while (1)
 	{
@@ -32,11 +32,9 @@ void	minishell(int *value, char **env, char *input, t_ast *cmd)
 			continue ;
 		cmd = parser(input);
 		if (cmd)
-			*value = shell_execute(cmd, env, *value);
+			g_data.exit_status = shell_execute(cmd, env, g_data.exit_status);
 		free(input);
 		ft_gc_clear();
-		if (*value == 2)
-			return ;
 	}
 }
 
@@ -44,16 +42,14 @@ int	main(int ac, char **av, char **env)
 {
 	char	*input;
 	t_ast	*cmd;
-	int		value;
 
 	input = NULL;
 	cmd = NULL;
-	value = 0;
 	(void)av;
 	if (ac > 1)
 		return (0);
 	g_data.env_list = env_from_array(env);
-	minishell(&value, env, input, cmd);
+	minishell(env, input, cmd);
 	clear_history();
-	ft_exit_withclear(value);
+	ft_exit_withclear(g_data.exit_status);
 }

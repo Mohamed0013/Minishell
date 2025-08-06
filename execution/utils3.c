@@ -48,9 +48,9 @@ static int	execute_external_cmd(t_execute *exec, char **cmd, t_list *redir,
 	else if (WIFSIGNALED(data.status))
 	{
 		exec->exit_status = 128 + WTERMSIG(data.status);
-		if (exec->exit_status == 128 + SIGINT
-			|| exec->exit_status == 128 + SIGQUIT)
-			write (1, "\n", 1);
+		if (exec->exit_status == 128 + SIGINT || exec->exit_status == 128
+			+ SIGQUIT)
+			write(1, "\n", 1);
 	}
 	else if (WIFSTOPPED(data.status))
 		exec->exit_status = 128 + WSTOPSIG(data.status);

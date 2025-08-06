@@ -46,10 +46,6 @@ void	free_tokens(t_token *head)
 	while (current)
 	{
 		next = current->next;
-		if (current->value)
-			free(current->value);
-		// Don't free current - it was allocated with ft_malloc
-		// and will be freed by garbage collector
 		current = next;
 	}
 }

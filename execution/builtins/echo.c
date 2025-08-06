@@ -12,8 +12,8 @@ static int	empty_arg(char **arguments)
 
 void	execute_echo(char **arguments, int status)
 {
-	int (i) = 1;
-	int (newline) = 1;
+	int(i) = 1;
+	int(newline) = 1;
 	if (empty_arg(arguments) == 1)
 		return ;
 	if (arguments[i] && strcmp(arguments[i], "-n") == 0)

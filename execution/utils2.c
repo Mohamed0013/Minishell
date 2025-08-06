@@ -48,9 +48,7 @@ void	update_or_add_env(t_env **env, char *name, char *value)
 	}
 	new = lst_new_env(name, value);
 	if (!new)
-	{
 		return ;
-	}
 	lst_add_env(env, new);
 }
 
@@ -73,7 +71,7 @@ int	ft_unset(t_env **env, char **args)
 	t_env	*current;
 	t_env	*prev;
 
-	int (i) = 1;
+	int(i) = 1;
 	if (!args)
 		return (0);
 	while (args[i])

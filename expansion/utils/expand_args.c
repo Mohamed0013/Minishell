@@ -1,6 +1,6 @@
 #include "../expansion.h"
 
-char	*expand_arg(const char *arg, t_env *env, t_token *token)
+char	*expand_arg(const char *arg, t_env *env)
 {
 	t_expand_ctx	ctx;
 	size_t			len;
@@ -10,10 +10,10 @@ char	*expand_arg(const char *arg, t_env *env, t_token *token)
 		return (NULL);
 	len = ft_strlen(arg);
 	max_expand_len = len * 32 + 1;
-	ctx.result = malloc(max_expand_len);
+	ctx.result = ft_malloc(max_expand_len);
 	if (!ctx.result)
 		return (NULL);
-	init_expand_ctx(&ctx, arg, env, token);
+	init_expand_ctx(&ctx, arg, env);
 	while (ctx.arg[ctx.i])
 	{
 		if (ctx.arg[ctx.i] == '\'' && handle_single_quote(&ctx))

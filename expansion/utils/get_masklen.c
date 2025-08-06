@@ -13,8 +13,8 @@ int	mask_len(t_token *token)
 	{
 		if (*value == '\'' || *value == '"')
 			process_quoted_string(&value, &len);
-		else if (*value == '$' && (isalpha(*(value + 1))
-				|| *(value + 1) == '_'))
+		else if (*value == '$' && (isalpha(*(value + 1)) || *(value
+					+ 1) == '_'))
 			process_env_variable(&value, &len);
 		else
 		{

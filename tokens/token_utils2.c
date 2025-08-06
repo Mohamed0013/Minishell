@@ -1,33 +1,5 @@
 #include "tokens.h"
 
-static void	check_to_inc(t_ddata *ddata, int *i)
-{
-	if (ddata->ptr[*i + 1] == '>')
-	{
-		add_token(&ddata->head, create_token(NULL, TOKEN_APPEND, 0));
-		*i += 2;
-	}
-	else
-	{
-		add_token(&ddata->head, create_token(NULL, TOKEN_REDIRECT_OUT, 0));
-		(*i)++;
-	}
-}
-
-static void	check_to_inc2(t_ddata *ddata, int *i)
-{
-	if (ddata->ptr[*i + 1] == '<')
-	{
-		add_token(&ddata->head, create_token(NULL, TOKEN_HEREDOC, 0));
-		*i += 2;
-	}
-	else
-	{
-		add_token(&ddata->head, create_token(NULL, TOKEN_REDIRECT_IN, 0));
-		(*i)++;
-	}
-}
-
 int	condition6(t_ddata *ddata, const char *input, int *i, int in_quote)
 {
 	t_token	*new_token;
@@ -48,7 +20,16 @@ int	condition6(t_ddata *ddata, const char *input, int *i, int in_quote)
 		*i += ddata->len;
 		ddata->len = 0;
 	}
-	check_to_inc(ddata, i);
+	if (ddata->ptr[*i + 1] == '>')
+	{
+		add_token(&ddata->head, create_token(NULL, TOKEN_APPEND, 0));
+		*i += 2;
+	}
+	else
+	{
+		add_token(&ddata->head, create_token(NULL, TOKEN_REDIRECT_OUT, 0));
+		(*i)++;
+	}
 	return (1);
 }
 
@@ -72,7 +53,16 @@ int	condition5(t_ddata *ddata, const char *input, int *i, int in_quote)
 		*i += ddata->len;
 		ddata->len = 0;
 	}
-	check_to_inc2(ddata, i);
+	if (ddata->ptr[*i + 1] == '<')
+	{
+		add_token(&ddata->head, create_token(NULL, TOKEN_HEREDOC, 0));
+		*i += 2;
+	}
+	else
+	{
+		add_token(&ddata->head, create_token(NULL, TOKEN_REDIRECT_IN, 0));
+		(*i)++;
+	}
 	return (1);
 }
 

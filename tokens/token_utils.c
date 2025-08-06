@@ -35,8 +35,8 @@ int	condition2(t_ddata *ddata, int *i, int *in_quote)
 		*in_quote = 2;
 	quote_char = ddata->ptr[*i + ddata->len];
 	ddata->len++;
-	while (ddata->ptr[*i + ddata->len] && ddata->ptr[*i + ddata->len]
-		!= quote_char)
+	while (ddata->ptr[*i + ddata->len] && ddata->ptr[*i
+		+ ddata->len] != quote_char)
 		ddata->len++;
 	if (ddata->ptr[*i + ddata->len] == quote_char)
 		ddata->len++;

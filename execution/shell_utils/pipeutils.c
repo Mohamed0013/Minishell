@@ -45,8 +45,8 @@ static int	wait_for_processes(pid_t *pids, int count, t_execute *exec)
 		else if (WIFSIGNALED(status))
 		{
 			last_status = 128 + WTERMSIG(status);
-			if ((last_status == 128 + SIGINT
-					|| last_status == 128 + SIGQUIT) && j == count -1)
+			if ((last_status == 128 + SIGINT || last_status == 128 + SIGQUIT)
+				&& j == count - 1)
 				write(1, "\n", 1);
 		}
 		else if (WIFSTOPPED(status))
