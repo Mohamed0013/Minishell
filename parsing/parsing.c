@@ -50,9 +50,7 @@ static int	handle_pipe_token(t_ast **ast, t_ast **curr, t_token *current)
 	if (current->next->type != TOKEN_WORD
 		&& !ft_token_is_redirection(current->next->type))
 	{
-		ft_putstr_fd("Syntax error: Pipe not followed by a command or\
-			redirection.\n",
-						2);
+		ft_putstr_fd("Syntax error\n", 2);
 		return (0);
 	}
 	new_node = create_ast_node();
@@ -69,7 +67,7 @@ static int	handle_pipe_token(t_ast **ast, t_ast **curr, t_token *current)
 static int	parse_loop(t_token *current, t_ast *curr, t_token *tokens,
 		t_ast *ast)
 {
-	int(ret) = 0;
+	int (ret) = 0;
 	while (current && current->type != TOKEN_EOF)
 	{
 		if (current->type == TOKEN_WORD)

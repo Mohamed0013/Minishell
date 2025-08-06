@@ -17,6 +17,8 @@
 # include <unistd.h>
 
 # define MAX_CMD_LENGTH 1024
+#define HEREDOC_MSG "minishell: heredoc: EOF reached withoutdelimiter\n"
+#define HEREDOC_TMP_FILE "/tmp/heredoc.tmp"
 
 typedef struct execute_s
 {
@@ -171,7 +173,6 @@ void					execute_echo(char **arguments, int status);
 void					handle_append_redirection(char *command, char **env);
 void					handle_output_redirection(char *command, char **env);
 void					handle_input_redirection(char *command, char **env);
-// void					handle_heredoc(char *command, char **env);
 
 void					free_split(char **split);
 int						get_len(char **s);
@@ -222,7 +223,6 @@ void					free_commands(t_ast *cmd);
 
 int						shell_execute(t_ast *ast, char **env, int status);
 
-// int						ft_strcmp(char *s1, char *s2);
 void					free_split(char **split);
 void					free_commands(t_ast *cmd);
 int						str_ichr(const char *str, char c);
@@ -291,7 +291,7 @@ int						ft_lst_push(t_list **head, void *value);
 void					free_ast(t_ast *ast);
 
 char					*handle_heredoc(char *delimiter);
-// garbge collector
+
 t_list					**gc_ptr(void);
 void					*ft_malloc(size_t size);
 void					ft_gc_clear(void);

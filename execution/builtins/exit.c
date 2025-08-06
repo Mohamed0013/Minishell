@@ -36,15 +36,14 @@ int	ft_exit(char **args)
 		else
 		{
 			exit_code = ft_atoi(args[1]);
-			// Handle overflow/underflow like bash
 			exit_code = exit_code & 255;
 		}
 		if (args[2])
 		{
 			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-			return (1); // Don't exit, just return error
+			return (1);
 		}
 	}
 	ft_exit_withclear(exit_code);
-	return (exit_code); // This line should never be reached
+	return (exit_code);
 }

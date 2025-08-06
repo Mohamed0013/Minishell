@@ -84,7 +84,7 @@ int	ft_export(t_env **env, char **args)
 	char	*name;
 	char	*value;
 
-	int(i), (ret);
+	int (i), (ret);
 	i = 1;
 	ret = 0;
 	if (!args || !args[1])

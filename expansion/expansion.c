@@ -17,7 +17,6 @@ void	expand(t_env *env, t_token *token)
 			expanded = expand_arg(current->value, env);
 			if (expanded)
 			{
-				free(current->value);
 				current->value = expanded;
 			}
 		}

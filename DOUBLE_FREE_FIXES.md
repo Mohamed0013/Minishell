@@ -13,7 +13,7 @@ void	ft_gc_clear(void)
 	t_list	*current;
 
 	head = gc_ptr();
-	if (!*head)  // Already cleared
+	if (!*head)  
 		return;
 	current = *head;
 	ft_lstclear(&current, free);
@@ -34,12 +34,12 @@ void	ft_gc_clear(void)
 if (validate_and_split(args[i], &name, &value))
 {
     ret = 1;
-    // validate_and_split already freed name and value on error
+    
 }
 else
 {
     update_or_add_env(env, name, value);
-    // Free after using in update_or_add_env
+    
     if (name)
         free(name);
     if (value)

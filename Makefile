@@ -11,13 +11,16 @@ INCLUDES = -Iincludes -I$(LIBFT_DIR)/includes
 SRC = ./execution/builtins/cd.c \
 ./execution/builtins/echo.c \
 ./execution/builtins/env.c \
+./execution/builtins/exit.c \
 ./execution/builtins/export.c \
 ./execution/builtins/pwd.c \
 ./execution/builtins/utils/utils1.c \
 ./execution/builtins/utils/utils2.c \
 ./execution/builtins/utils/utils3.c \
 ./execution/exec_utils.c \
+./execution/exit_clear.c \
 ./execution/redir_utils/utils.c \
+./execution/redir_utils/utils2.c \
 ./execution/shell.c \
 ./execution/shell_utils/pipeutils.c \
 ./execution/shell_utils/pipeutils2.c \
@@ -29,16 +32,6 @@ SRC = ./execution/builtins/cd.c \
 ./execution/utils2.c \
 ./execution/utils3.c \
 ./expansion/expansion.c \
-./main.c \
-./main_utils.c \
-./parsing/parsing.c \
-./parsing/help_parsing.c \
-./parsing/help_parsing2.c \
-./tokens/tokenizer.c \
-./utils/empty_line.c \
-./utils/env.c \
-./execution/exit_clear.c \
-./garbage_collector/ft_malloc.c \
 ./expansion/utils/check_utils.c \
 ./expansion/utils/expand_args.c \
 ./expansion/utils/get_env_value.c \
@@ -48,9 +41,19 @@ SRC = ./execution/builtins/cd.c \
 ./expansion/utils/init_context.c \
 ./expansion/utils/process_env_var.c \
 ./expansion/utils/quoted_str.c \
-./tokens/token_utils.c\
-./tokens/token_utils2.c\
-./tokens/token_utils3.c\
+./expansion/utils/split_expansion.c \
+./garbage_collector/ft_malloc.c \
+./main.c \
+./main_utils.c \
+./parsing/help_parsing.c \
+./parsing/parsing.c \
+./parsing/help_parsing2.c \
+./tokens/token_utils.c \
+./tokens/token_utils2.c \
+./tokens/token_utils3.c \
+./tokens/tokenizer.c \
+./utils/empty_line.c \
+./utils/env.c
 
 
 # Object files
@@ -89,3 +92,4 @@ re: fclean all
 
 # Phony targets
 .PHONY: all clean fclean re libft
+

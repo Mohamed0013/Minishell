@@ -1,18 +1,18 @@
 #include "../includes/minishell.h"
 
-char	*ft_strchr(const char *s, int c)
-{
-	int	i;
+// char	*ft_strchr(const char *s, int c)
+// {
+// 	int	i;
 
-	i = 0;
-	while ((char)c != s[i])
-	{
-		if (!s[i])
-			return (NULL);
-		i++;
-	}
-	return ((char *)&s[i]);
-}
+// 	i = 0;
+// 	while ((char)c != s[i])
+// 	{
+// 		if (!s[i])
+// 			return (NULL);
+// 		i++;
+// 	}
+// 	return ((char *)&s[i]);
+// }
 
 char	*str_ndup(char *str, unsigned int n)
 {
@@ -70,7 +70,7 @@ int	loop_env(t_env *current, char **env_array, int count)
 {
 	char	*temp;
 
-	int(i) = 0;
+	int (i) = 0;
 	while (current && i < count)
 	{
 		if (current->name && current->value)
