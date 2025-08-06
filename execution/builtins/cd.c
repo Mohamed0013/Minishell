@@ -38,8 +38,7 @@ static int	check(char **current_dir, char **new_dir)
 	if (stat("..", &parent_stat) == -1)
 	{
 		printf("minishell: cd: error retrieving parent directory:\
-%s\n",
-				strerror(errno));
+		%s\n", strerror(errno));
 		return (1);
 	}
 	*current_dir = getcwd(NULL, 0);

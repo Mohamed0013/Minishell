@@ -9,10 +9,10 @@ int	first_peace(t_ddata *ddata, const char *input, int in_quote, int *i)
 		return (0);
 	}
 	if ((ddata->ptr[*i + ddata->len] == '\'' || ddata->ptr[*i
-			+ ddata->len] == '\"') && (condition2(ddata, i, &in_quote)))
+				+ ddata->len] == '\"') && (condition2(ddata, i, &in_quote)))
 		return (2);
 	if ((ddata->ptr[*i + ddata->len] == ' ' || ddata->ptr[*i
-			+ ddata->len] == '\t'))
+				+ ddata->len] == '\t'))
 	{
 		if (!condition3(ddata, input, i, in_quote))
 			return (1);
@@ -55,13 +55,15 @@ t_token	*tokenize_loop(t_ddata *ddata, const char *input)
 	in_quote = 0;
 	while (1)
 	{
-		if ((ret = first_peace(ddata, input, in_quote, &i)) == 0)
+		ret = first_peace(ddata, input, in_quote, &i);
+		if (ret == 0)
 			break ;
 		else if (ret == 1)
 			return (NULL);
 		else if (ret == 2)
 			continue ;
-		if ((ret = second_peace(ddata, input, in_quote, &i)) == 1)
+		ret = second_peace(ddata, input, in_quote, &i);
+		if (ret == 1)
 			return (NULL);
 		else if (ret == 2)
 			continue ;

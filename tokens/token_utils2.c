@@ -13,9 +13,7 @@ int	condition6(t_ddata *ddata, const char *input, int *i, int in_quote)
 		new_token = create_token(substr, TOKEN_WORD, in_quote);
 		ft_gc_add(substr);
 		if (!new_token)
-		{
 			return (0);
-		}
 		add_token(&ddata->head, new_token);
 		*i += ddata->len;
 		ddata->len = 0;
@@ -23,13 +21,11 @@ int	condition6(t_ddata *ddata, const char *input, int *i, int in_quote)
 	if (ddata->ptr[*i + 1] == '>')
 	{
 		add_token(&ddata->head, create_token(NULL, TOKEN_APPEND, 0));
-		*i += 2;
+		*i += 1;
 	}
 	else
-	{
 		add_token(&ddata->head, create_token(NULL, TOKEN_REDIRECT_OUT, 0));
-		(*i)++;
-	}
+	(*i)++;
 	return (1);
 }
 

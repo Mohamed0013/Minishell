@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-
 volatile sig_atomic_t	*ft_sigint_track(void)
 {
 	static volatile sig_atomic_t	signal;

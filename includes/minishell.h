@@ -17,8 +17,8 @@
 # include <unistd.h>
 
 # define MAX_CMD_LENGTH 1024
-#define HEREDOC_MSG "minishell: heredoc: EOF reached withoutdelimiter\n"
-#define HEREDOC_TMP_FILE "/tmp/heredoc.tmp"
+# define HEREDOC_MSG "minishell: heredoc: EOF reached withoutdelimiter\n"
+# define HEREDOC_TMP_FILE "/tmp/heredoc.tmp"
 
 typedef struct execute_s
 {
