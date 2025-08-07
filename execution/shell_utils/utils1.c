@@ -40,7 +40,16 @@ int	execute_single_command(t_exec_data *data, t_ast *ast, char **env)
 {
 	data->full_command = get_args(ast->args);
 	if (!data->full_command)
+	{
+		// Handle redirection-only commands (like '>""')
+		if (ast->redirections)
+		{
+			if (handle_redirections(ast->redirections) != 0)
+				return (1);
+			return (0);
+		}
 		return (1);
+	}
 	data->ret = execute_command(data->exec, data->full_command,
 			ast->redirections, env);
 	return (data->ret);

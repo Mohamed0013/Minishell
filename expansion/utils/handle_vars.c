@@ -18,7 +18,7 @@ int	handle_variable_expansion(t_expand_ctx *ctx)
 	size_t		vlen;
 	size_t		var_len;
 
-	if (ctx->in_squote || !prev_not_redirect(ctx->token)
+	if (ctx->in_squote 
 		|| (!ft_isalpha(ctx->arg[ctx->i + 1]) && ctx->arg[ctx->i + 1] != '_'))
 		return (0);
 	var_start = ctx->i + 1;
@@ -28,6 +28,8 @@ int	handle_variable_expansion(t_expand_ctx *ctx)
 		var_len++;
 	extract_var_name(ctx->arg, var_start, var_name);
 	val = get_env_value(ctx->env, var_name);
+	if (!val)
+		val = "";  // Undefined variables expand to empty string
 	vlen = ft_strlen(val);
 	ft_memcpy(ctx->result + ctx->j, val, vlen);
 	ctx->j += vlen;

@@ -18,6 +18,8 @@ typedef struct s_expand_ctx
 int		process_quoted_string(char **value, int *len);
 bool	prev_not_heredoc(t_token *token);
 bool	prev_not_redirect(t_token *token);
+bool	is_redirection_filename(t_token *token);
+int		check_ambiguous_redirect(t_token *token, char *expanded);
 char	*expand_arg(const char *arg, t_env *env, t_token *token);
 char	*get_env_value(t_env *env, char *var_name);
 int		mask_len(t_token *token);

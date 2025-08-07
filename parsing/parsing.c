@@ -31,6 +31,18 @@ static int	handle_redirection_token(t_ast *curr, t_token *current)
 			return (0);
 		return (2);
 	}
+	else if (current->next && ft_token_is_redirection(current->next->type))
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+		ft_putstr_fd(current->next->value, 2);
+		ft_putstr_fd("'\n", 2);
+		return (-1);
+	}
+	else if (!current->next || current->next->type == TOKEN_EOF)
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+		return (-1);
+	}
 	return (0);
 }
 
@@ -61,6 +73,7 @@ t_ast	*parser(const char *input)
 	t_token	(*tokens), (*current);
 	t_ast	(*ast), (*curr);
 	int		ret;
+	int		previous_exit_status;
 
 	tokens = tokenize(input);
 	current = tokens;
@@ -69,7 +82,14 @@ t_ast	*parser(const char *input)
 		ft_putstr_fd("Error tokenizing input.\n", 2);
 		return (NULL);
 	}
+	previous_exit_status = g_data.exit_status;
 	expand(g_data.env_list, tokens);
+	// Check if expansion failed due to ambiguous redirect
+	if (g_data.exit_status != previous_exit_status)
+	{
+		free_tokens(tokens);
+		return (NULL);
+	}
 	ast = NULL;
 	curr = create_ast_node();
 	ast = curr;
@@ -87,6 +107,11 @@ t_ast	*parser(const char *input)
 		else if (ft_token_is_redirection(current->type))
 		{
 			ret = handle_redirection_token(curr, current);
+			if (ret == -1)
+			{
+				g_data.exit_status = 2;
+				return (free_tokens(tokens), NULL);
+			}
 			if (ret == 0)
 				return (free_tokens(tokens), NULL);
 			if (ret == 2)

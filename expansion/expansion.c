@@ -82,8 +82,17 @@ void	expand(t_env *env, t_token *token)
 			expanded = expand_arg(current->value, env, current);
 			if (expanded)
 			{
+				// Check for ambiguous redirect before word splitting
+				if (check_ambiguous_redirect(current, expanded))
+				{
+					free(expanded);
+					g_data.exit_status = 1;
+					return ;
+				}
+				
 				if (ft_strchr(expanded, ' ') && !current->is_quoted 
-					&& !is_export_assignment(current))
+					&& !is_export_assignment(current)
+					&& !is_redirection_filename(current))
 				{
 					do_word_splitting(current, expanded);
 				}

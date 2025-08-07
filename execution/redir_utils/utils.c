@@ -36,7 +36,14 @@ static int	handle_output_redirect(t_redir *redir_info)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(redir_info->filename, 2);
-		ft_putstr_fd(": Permission denied\n", 2);
+		if (errno == ENOENT)
+			ft_putstr_fd(": No such file or directory\n", 2);
+		else if (errno == EACCES)
+			ft_putstr_fd(": Permission denied\n", 2);
+		else if (errno == EISDIR)
+			ft_putstr_fd(": Is a directory\n", 2);
+		else
+			ft_putstr_fd(": Permission denied\n", 2);
 		return (1);
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
