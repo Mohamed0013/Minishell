@@ -21,6 +21,7 @@ SRC = ./execution/builtins/cd.c \
 ./execution/exit_clear.c \
 ./execution/redir_utils/utils.c \
 ./execution/redir_utils/utils2.c \
+./execution/redir_utils/remove_quotes.c \
 ./execution/shell.c \
 ./execution/shell_utils/pipeutils.c \
 ./execution/shell_utils/pipeutils2.c \
