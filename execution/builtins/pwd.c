@@ -14,11 +14,14 @@
 
 static int	print_pwd_error(const char *msg)
 {
-	char *prefix = "pwd: error retrieving current directory: getcwd: ";
-	char *tmp;
-	char *full_msg;
+	char	*prefix;
+	char	*tmp;
+	char	*full_msg;
 
+	prefix = ft_strdup("pwd: error retrieving \
+current directory: getcwd: ");
 	tmp = ft_strjoin(prefix, msg);
+	free(prefix);
 	if (!tmp)
 		return (1);
 	full_msg = ft_strjoin(tmp, "\n");
@@ -33,6 +36,7 @@ static int	print_pwd_error(const char *msg)
 int	execute_pwd(void)
 {
 	char	*cwd;
+	char	*msg;
 
 	cwd = getcwd(NULL, 0);
 	if (cwd != NULL)
@@ -44,16 +48,16 @@ int	execute_pwd(void)
 	else
 	{
 		if (errno == ENOENT)
-			return print_pwd_error("cannot access parent directories: No such file or directory");
+			return (print_pwd_error("cannot access parent \
+directories: No such file or directory"));
 		else if (errno == EACCES)
-			return print_pwd_error("Permission denied");
+			return (print_pwd_error("Permission denied"));
 		else if (errno == ENAMETOOLONG)
-			return print_pwd_error("File name too long");
+			return (print_pwd_error("File name too long"));
 		else
 		{
-			// For generic errors, use strerror(errno)
-			char *msg = strerror(errno);
-			return print_pwd_error(msg);
+			msg = strerror(errno);
+			return (print_pwd_error(msg));
 		}
 	}
 }

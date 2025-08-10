@@ -66,7 +66,7 @@ int	exec_builtin_part1(char **args, int exit_status)
 	return (-1);
 }
 
-void print_cd_error(char *arg)
+void	print_cd_error(char *arg)
 {
 	char	*part1;
 	char	*part2;
