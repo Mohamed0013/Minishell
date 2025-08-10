@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moel-yag <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 12:41:31 by moel-yag          #+#    #+#             */
-/*   Updated: 2025/08/07 12:41:31 by moel-yag         ###   ########.fr       */
+/*   Created: 2025/08/10 14:56:51 by mohdahma          #+#    #+#             */
+/*   Updated: 2025/08/10 15:00:34 by mohdahma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	check(char **current_dir, char **new_dir)
 	if (stat("..", &parent_stat) == -1)
 	{
 		printf("minishell: cd: error retrieving parent directory:\
-		%s\n", strerror(errno));
+%s\n", strerror(errno));
 		return (1);
 	}
 	*current_dir = getcwd(NULL, 0);
@@ -82,7 +82,7 @@ static int	f_check(void)
 	home = getenv("HOME");
 	if (!home)
 	{
-		fprintf(stderr, "minishell: cd: HOME not set\n");
+		write(2, "minishell: cd: HOME not set\n", 30);
 		return (1);
 	}
 	if (chdir(home) == -1)
@@ -113,5 +113,5 @@ void	execute_cd(char **arguments)
 	}
 	if (chdir(arguments[1]) == -1)
 		fprintf(stderr, "minishell: cd: %s: %s\n", arguments[1],
-			strerror(errno));
+strerror(errno));
 }
