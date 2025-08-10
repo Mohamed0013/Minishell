@@ -12,6 +12,24 @@
 
 #include "../includes/minishell.h"
 
+static int	print_pwd_error(const char *msg)
+{
+	char *prefix = "pwd: error retrieving current directory: getcwd: ";
+	char *tmp;
+	char *full_msg;
+
+	tmp = ft_strjoin(prefix, msg);
+	if (!tmp)
+		return (1);
+	full_msg = ft_strjoin(tmp, "\n");
+	free(tmp);
+	if (!full_msg)
+		return (1);
+	write(2, full_msg, strlen(full_msg));
+	free(full_msg);
+	return (1);
+}
+
 int	execute_pwd(void)
 {
 	char	*cwd;
@@ -26,17 +44,16 @@ int	execute_pwd(void)
 	else
 	{
 		if (errno == ENOENT)
-			fprintf(stderr, "pwd: error retrieving current directory: \
-getcwd: cannot access parent directories: No such file \
-or directory\n");
+			return print_pwd_error("cannot access parent directories: No such file or directory");
 		else if (errno == EACCES)
-			fprintf(stderr, "pwd: error retrieving current directory: \
-getcwd: Permission denied\n");
+			return print_pwd_error("Permission denied");
 		else if (errno == ENAMETOOLONG)
-			fprintf(stderr, "pwd: error retrieving current directory: \
-getcwd: File name too long\n");
+			return print_pwd_error("File name too long");
 		else
-			perror("pwd");
-		return (1);
+		{
+			// For generic errors, use strerror(errno)
+			char *msg = strerror(errno);
+			return print_pwd_error(msg);
+		}
 	}
 }
