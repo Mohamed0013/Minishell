@@ -1,12 +1,12 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*												                            */
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 14:56:51 by mohdahma          #+#    #+#             */
-/*   Updated: 2025/08/10 15:00:34 by mohdahma         ###   ########.fr       */
+/*   Updated: 2025/08/10 15:06:10 by mohdahma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static int	f_check(void)
 	home = getenv("HOME");
 	if (!home)
 	{
-		write(2, "minishell: cd: HOME not set\n", 30);
+		write(2, "minishell: cd: HOME not set\n", 29);
 		return (1);
 	}
 	if (chdir(home) == -1)
@@ -112,6 +112,5 @@ void	execute_cd(char **arguments)
 		return ;
 	}
 	if (chdir(arguments[1]) == -1)
-		fprintf(stderr, "minishell: cd: %s: %s\n", arguments[1],
-strerror(errno));
+		print_cd_error(arguments[1]);
 }

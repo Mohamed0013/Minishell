@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moel-yag <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 12:41:43 by moel-yag          #+#    #+#             */
-/*   Updated: 2025/08/07 12:41:43 by moel-yag         ###   ########.fr       */
+/*   Updated: 2025/08/10 15:08:35 by mohdahma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,5 +308,7 @@ t_list					**gc_ptr(void);
 void					*ft_malloc(size_t size);
 void					ft_gc_clear(void);
 void					ft_gc_add(void *ptr);
+
+void					print_cd_error(char *arg);
 
 #endif
