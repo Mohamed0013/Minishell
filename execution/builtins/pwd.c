@@ -1,8 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/10 14:56:21 by mohdahma          #+#    #+#             */
+/*   Updated: 2025/08/10 14:56:22 by mohdahma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
+
+static int	print_pwd_error(const char *msg)
+{
+	char	*prefix;
+	char	*tmp;
+	char	*full_msg;
+
+	prefix = ft_strdup("pwd: error retrieving \
+current directory: getcwd: ");
+	tmp = ft_strjoin(prefix, msg);
+	free(prefix);
+	if (!tmp)
+		return (1);
+	full_msg = ft_strjoin(tmp, "\n");
+	free(tmp);
+	if (!full_msg)
+		return (1);
+	write(2, full_msg, strlen(full_msg));
+	free(full_msg);
+	return (1);
+}
 
 int	execute_pwd(void)
 {
 	char	*cwd;
+	char	*msg;
 
 	cwd = getcwd(NULL, 0);
 	if (cwd != NULL)
@@ -14,17 +48,16 @@ int	execute_pwd(void)
 	else
 	{
 		if (errno == ENOENT)
-			fprintf(stderr, "pwd: error retrieving current directory: \
-getcwd: cannot access parent directories: No such file \
-or directory\n");
+			return (print_pwd_error("cannot access parent \
+directories: No such file or directory"));
 		else if (errno == EACCES)
-			fprintf(stderr, "pwd: error retrieving current directory: \
-getcwd: Permission denied\n");
+			return (print_pwd_error("Permission denied"));
 		else if (errno == ENAMETOOLONG)
-			fprintf(stderr, "pwd: error retrieving current directory: \
-getcwd: File name too long\n");
+			return (print_pwd_error("File name too long"));
 		else
-			perror("pwd");
-		return (1);
+		{
+			msg = strerror(errno);
+			return (print_pwd_error(msg));
+		}
 	}
 }

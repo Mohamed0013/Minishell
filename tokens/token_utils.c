@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: moel-yag <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/07 12:41:46 by moel-yag          #+#    #+#             */
+/*   Updated: 2025/08/07 12:41:46 by moel-yag         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "tokens.h"
 
 int	condition3(t_ddata *ddata, const char *input, int *i, int in_quote)
@@ -11,11 +23,9 @@ int	condition3(t_ddata *ddata, const char *input, int *i, int in_quote)
 		if (!substr)
 			return (0);
 		new_token = create_token(substr, TOKEN_WORD, in_quote);
+		ft_gc_add(substr);
 		if (!new_token)
-		{
-			free(substr);
 			return (0);
-		}
 		add_token(&ddata->head, new_token);
 		*i += ddata->len;
 		ddata->len = 0;
@@ -35,8 +45,8 @@ int	condition2(t_ddata *ddata, int *i, int *in_quote)
 		*in_quote = 2;
 	quote_char = ddata->ptr[*i + ddata->len];
 	ddata->len++;
-	while (ddata->ptr[*i + ddata->len] && ddata->ptr[*i + ddata->len]
-		!= quote_char)
+	while (ddata->ptr[*i + ddata->len] && ddata->ptr[*i
+			+ ddata->len] != quote_char)
 		ddata->len++;
 	if (ddata->ptr[*i + ddata->len] == quote_char)
 		ddata->len++;
@@ -55,9 +65,9 @@ int	condition1(t_ddata *ddata, const char *input, int *i, int in_quote)
 		if (!substr)
 			return (0);
 		new_token = create_token(substr, TOKEN_WORD, in_quote);
+		ft_gc_add(substr);
 		if (!new_token)
 		{
-			free(substr);
 			return (0);
 		}
 		add_token(&ddata->head, new_token);

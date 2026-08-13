@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: moel-yag <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/07 12:41:42 by moel-yag          #+#    #+#             */
+/*   Updated: 2025/08/07 12:41:42 by moel-yag         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_list	**gc_ptr(void)
@@ -29,15 +41,11 @@ void	*ft_malloc(size_t size)
 
 void	ft_gc_clear(void)
 {
-	t_list	**head;
 	t_list	*current;
 
-	head = gc_ptr();
-	if (!*head)  // Already cleared
-		return;
-	current = *head;
+	current = *gc_ptr();
 	ft_lstclear(&current, free);
-	*head = NULL;
+	*gc_ptr() = NULL;
 }
 
 void	ft_gc_add(void *ptr)
@@ -45,6 +53,8 @@ void	ft_gc_add(void *ptr)
 	t_list	**head;
 	t_list	*new_node;
 
+	if (!ptr)
+		return ;
 	head = gc_ptr();
 	new_node = ft_lstnew(ptr);
 	if (!new_node)

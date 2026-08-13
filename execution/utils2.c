@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils2.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/07 12:41:30 by mohdahma          #+#    #+#             */
+/*   Updated: 2025/08/10 14:55:11 by mohdahma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 t_env	*lst_new_env(char *name, char *value)
@@ -48,9 +60,7 @@ void	update_or_add_env(t_env **env, char *name, char *value)
 	}
 	new = lst_new_env(name, value);
 	if (!new)
-	{
 		return ;
-	}
 	lst_add_env(env, new);
 }
 

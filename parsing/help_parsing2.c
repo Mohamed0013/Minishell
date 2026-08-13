@@ -1,23 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_clear.c                                       :+:      :+:    :+:   */
+/*   help_parsing2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moel-yag <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 12:41:22 by mohdahma          #+#    #+#             */
-/*   Updated: 2025/08/10 14:54:54 by mohdahma         ###   ########.fr       */
+/*   Created: 2025/08/07 12:41:45 by moel-yag          #+#    #+#             */
+/*   Updated: 2025/08/07 12:41:45 by moel-yag         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	ft_exit_withclear(int code)
-{
-	t_env	*env;
-
-	env = g_data.env_list;
-	ft_gc_clear();
-	free_env_list(env);
-	exit(code);
-}

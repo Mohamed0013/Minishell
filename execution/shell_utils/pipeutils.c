@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipeutils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/10 14:55:59 by mohdahma          #+#    #+#             */
+/*   Updated: 2025/08/10 14:56:00 by mohdahma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static int	handle_child_process(t_ast *current, t_execute *exec, int i,
@@ -24,7 +36,7 @@ static int	check_exit_in_pipeline(t_ast *ast)
 	char	**first_cmd;
 
 	first_cmd = get_args(ast->args);
-	if (first_cmd && strcmp(first_cmd[0], "exit") == 0)
+	if (first_cmd && ft_strcmp(first_cmd[0], "exit") == 0)
 		return (2);
 	return (0);
 }
@@ -45,8 +57,8 @@ static int	wait_for_processes(pid_t *pids, int count, t_execute *exec)
 		else if (WIFSIGNALED(status))
 		{
 			last_status = 128 + WTERMSIG(status);
-			if ((last_status == 128 + SIGINT
-					|| last_status == 128 + SIGQUIT) && j == count -1)
+			if ((last_status == 128 + SIGINT || last_status == 128 + SIGQUIT)
+				&& j == count - 1)
 				write(1, "\n", 1);
 		}
 		else if (WIFSTOPPED(status))

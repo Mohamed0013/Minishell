@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils2.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/10 14:57:09 by mohdahma          #+#    #+#             */
+/*   Updated: 2025/08/10 15:08:09 by mohdahma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../includes/minishell.h"
 
 int	is_builtin(char *command)
@@ -52,4 +64,24 @@ int	exec_builtin_part1(char **args, int exit_status)
 		return (0);
 	}
 	return (-1);
+}
+
+void	print_cd_error(char *arg)
+{
+	char	*part1;
+	char	*part2;
+	char	*part3;
+	char	*part4;
+	char	*final_msg;
+
+	part1 = ft_strjoin("minishell: cd: ", arg);
+	part2 = ft_strjoin(part1, ": ");
+	free(part1);
+	part3 = ft_strjoin(part2, strerror(errno));
+	free(part2);
+	part4 = ft_strjoin(part3, "\n");
+	free(part3);
+	final_msg = part4;
+	write(2, final_msg, strlen(final_msg));
+	free(final_msg);
 }

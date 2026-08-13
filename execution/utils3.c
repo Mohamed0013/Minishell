@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils3.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/07 12:41:30 by mohdahma          #+#    #+#             */
+/*   Updated: 2025/08/10 14:55:16 by mohdahma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 static void	execute_child_external(t_external_data *data, char **cmd,
@@ -48,9 +60,9 @@ static int	execute_external_cmd(t_execute *exec, char **cmd, t_list *redir,
 	else if (WIFSIGNALED(data.status))
 	{
 		exec->exit_status = 128 + WTERMSIG(data.status);
-		if (exec->exit_status == 128 + SIGINT
-			|| exec->exit_status == 128 + SIGQUIT)
-			write (1, "\n", 1);
+		if (exec->exit_status == 128 + SIGINT || exec->exit_status == 128
+			+ SIGQUIT)
+			write(1, "\n", 1);
 	}
 	else if (WIFSTOPPED(data.status))
 		exec->exit_status = 128 + WSTOPSIG(data.status);

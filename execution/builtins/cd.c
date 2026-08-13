@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*												                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/10 14:56:51 by mohdahma          #+#    #+#             */
+/*   Updated: 2025/08/10 15:06:10 by mohdahma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static int	check3(char *current_dir, char **new_dir)
@@ -70,7 +82,7 @@ static int	f_check(void)
 	home = getenv("HOME");
 	if (!home)
 	{
-		fprintf(stderr, "minishell: cd: HOME not set\n");
+		write(2, "minishell: cd: HOME not set\n", 29);
 		return (1);
 	}
 	if (chdir(home) == -1)
@@ -90,7 +102,7 @@ void	execute_cd(char **arguments)
 		f_check();
 		return ;
 	}
-	if (strcmp(arguments[1], "..") == 0)
+	if (ft_strcmp(arguments[1], "..") == 0)
 	{
 		if (check(&current_dir, &new_dir) == 0)
 		{
@@ -100,6 +112,5 @@ void	execute_cd(char **arguments)
 		return ;
 	}
 	if (chdir(arguments[1]) == -1)
-		fprintf(stderr, "minishell: cd: %s: %s\n", arguments[1],
-			strerror(errno));
+		print_cd_error(arguments[1]);
 }

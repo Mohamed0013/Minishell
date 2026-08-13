@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/07 12:41:14 by mohdahma          #+#    #+#             */
+/*   Updated: 2025/08/10 14:54:48 by mohdahma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	exec_utils(t_exec_data *data, t_ast *ast, int status)
@@ -10,7 +22,7 @@ void	exec_utils(t_exec_data *data, t_ast *ast, int status)
 
 int	exec_utils2(t_exec_data *data, t_ast *ast, char **current_env, char **env)
 {
-	(void) env;
+	(void)env;
 	data->ret = execute_single_command(data, ast, current_env);
 	return (1);
 }

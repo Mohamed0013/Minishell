@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_utils3.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: moel-yag <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/07 12:41:47 by moel-yag          #+#    #+#             */
+/*   Updated: 2025/08/07 12:41:47 by moel-yag         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "tokens.h"
 
 t_token	*create_token(char *value, t_token_type type, int is_quoted)
@@ -46,10 +58,6 @@ void	free_tokens(t_token *head)
 	while (current)
 	{
 		next = current->next;
-		if (current->value)
-			free(current->value);
-		// Don't free current - it was allocated with ft_malloc
-		// and will be freed by garbage collector
 		current = next;
 	}
 }

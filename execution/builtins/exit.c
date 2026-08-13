@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/10 14:56:33 by mohdahma          #+#    #+#             */
+/*   Updated: 2025/08/10 14:56:34 by mohdahma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	is_numeric(char *str)
@@ -24,7 +36,6 @@ int	ft_exit(char **args)
 
 	exit_code = g_data.exit_status;
 	ft_putstr_fd("exit\n", 2);
-	
 	if (args[1])
 	{
 		if (!is_numeric(args[1]))
@@ -37,17 +48,12 @@ int	ft_exit(char **args)
 		else
 		{
 			exit_code = ft_atoi(args[1]);
-			// Handle overflow/underflow like bash
 			exit_code = exit_code & 255;
 		}
-		
 		if (args[2])
-		{
-			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-			return (1);  // Don't exit, just return error
-		}
+			return (ft_putstr_fd("minishell: exit:\
+			too many arguments\n", 2), 1);
 	}
-	
 	ft_exit_withclear(exit_code);
-	return (exit_code);  // This line should never be reached
+	return (exit_code);
 }

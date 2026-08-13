@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: moel-yag <moel-yag@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/07 12:41:43 by moel-yag          #+#    #+#             */
+/*   Updated: 2025/08/10 18:00:52 by moel-yag         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -17,6 +29,8 @@
 # include <unistd.h>
 
 # define MAX_CMD_LENGTH 1024
+# define HEREDOC_MSG "minishell: heredoc: EOF reached withoutdelimiter\n"
+# define HEREDOC_TMP_FILE "/tmp/heredoc.tmp"
 
 typedef struct execute_s
 {
@@ -55,7 +69,7 @@ typedef struct s_command
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,
+	TOKEN_WORD = 0,
 	TOKEN_PIPE,
 	TOKEN_REDIRECT_IN,
 	TOKEN_REDIRECT_OUT,
@@ -105,8 +119,9 @@ typedef struct s_external_data
 
 typedef struct s_redir
 {
-	int					type;
+	t_token_type		type;
 	char				*filename;
+	char				*value;
 }						t_redir;
 
 typedef struct s_ast
@@ -157,12 +172,11 @@ int						is_valid_env_name(const char *name);
 void					update_or_add_env(t_env **env, char *name, char *value);
 int						validate_and_split(char *arg, char **name,
 							char **value);
-t_env					*env_from_array(char **env);
 char					**env_to_array(t_env *env_list);
 int						ft_export(t_env **env, char **args);
+int						ft_exit(char **args);
 int						ft_env(t_env *env_list, char **args);
 int						ft_unset(t_env **env, char **args);
-int						ft_exit(char **args);
 
 void					execute(t_command *cmd, char **env);
 
@@ -171,7 +185,6 @@ void					execute_echo(char **arguments, int status);
 void					handle_append_redirection(char *command, char **env);
 void					handle_output_redirection(char *command, char **env);
 void					handle_input_redirection(char *command, char **env);
-void					handle_heredoc(char *command, char **env);
 
 void					free_split(char **split);
 int						get_len(char **s);
@@ -222,7 +235,6 @@ void					free_commands(t_ast *cmd);
 
 int						shell_execute(t_ast *ast, char **env, int status);
 
-int						ft_strcmp(char *s1, char *s2);
 void					free_split(char **split);
 void					free_commands(t_ast *cmd);
 int						str_ichr(const char *str, char c);
@@ -290,10 +302,14 @@ bool					ft_token_is_redirection(t_token_type type);
 int						ft_lst_push(t_list **head, void *value);
 void					free_ast(t_ast *ast);
 
-// garbge collector 
+char					*handle_heredoc(char *delimiter);
+
 t_list					**gc_ptr(void);
 void					*ft_malloc(size_t size);
 void					ft_gc_clear(void);
 void					ft_gc_add(void *ptr);
+
+void					print_cd_error(char *arg);
+char					*remove_outer_quotes(const char *str);
 
 #endif

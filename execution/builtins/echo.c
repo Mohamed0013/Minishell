@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mohdahma <mohdahma@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/10 14:56:45 by mohdahma          #+#    #+#             */
+/*   Updated: 2025/08/10 14:56:46 by mohdahma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static int	empty_arg(char **arguments)
@@ -10,18 +22,36 @@ static int	empty_arg(char **arguments)
 	return (0);
 }
 
+static int	is_arg_n(char *arg)
+{
+	int	i;
+
+	if (!arg || !*arg)
+		return (0);
+	if (arg[0] != '-' || arg[1] != 'n')
+		return (0);
+	i = 1;
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	execute_echo(char **arguments, int status)
 {
 	int (i) = 1;
 	int (newline) = 1;
 	if (empty_arg(arguments) == 1)
 		return ;
-	if (arguments[i] && strcmp(arguments[i], "-n") == 0)
+	if (is_arg_n(arguments[i]) == 1)
 	{
 		newline = 0;
 		i++;
 	}
-	else if (arguments[i] && strcmp(arguments[i], "$?") == 0)
+	else if (ft_strcmp(arguments[i], "$?") == 0)
 	{
 		printf("%d", status);
 		if (newline)
